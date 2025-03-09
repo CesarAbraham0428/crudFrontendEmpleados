@@ -1,0 +1,30 @@
+.menu-container {
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease-in-out;
+   /* Añade un padding para asegurar el espacio entre el contenido y la parte superior */
+}
+
+.w-64 {
+  width: 270px; /* Aumenta el ancho del menú */
+  line-height: 5.4;
+  height:auto;
+
+}
+
+button {
+  font-size: 28px;
+  z-index: 50; /* Asegura que el botón esté por encima del menú */
+  position: fixed; /* Lo mantiene en una posición fija */
+  left: 1rem;
+  top: 1em;
+}
+
+.custom-menu .p-menu-item-link {
+  padding-left: 2rem; /* Asegura que los items no estén pegados a la izquierda */
+}
+

@@ -1,0 +1,29 @@
+.p-floatlabel{
+    margin-bottom: 1.4em;
+}
+.p-autocomplete{
+    margin-bottom: 1.4em;
+}
+.label-container {
+    display: inline-block;
+    width: 45%; /* Ajusta el ancho de los labels */
+    margin-right: 10px; /* Espacio entre los campos */
+}
+
+  .main-container {
+    margin-left: 270px;
+    padding: 20px; 
+    transition: margin-left 0.3s ease; /* Suaviza el desplazamiento si el menú es dinámico */
+    margin-right: 60px;
+   
+  }
+
+input,label, p-autocomplete, p-datepicker {
+    width: 80%; 
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    margin-left: 35px;
+}
+.contenedor-botones {
+  display: flex;
+  justify-content: flex-end;
+}
