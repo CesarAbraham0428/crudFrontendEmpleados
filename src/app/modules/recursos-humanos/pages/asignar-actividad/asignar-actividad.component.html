@@ -1,1 +1,45 @@
-<p>asignar-actividad works!</p>
+<div class="main-container">
+  <p-card header="Actividades" subheader="Subtítulo">
+    <!-- Autocomplete para actividad -->
+    <div class="label-container">
+      <p-floatlabel>
+        <p-autocomplete [(ngModel)]="puestoSeleccionado" [virtualScroll]="true" [suggestions]="filteredItems" 
+                        [virtualScrollItemSize]="34" (completeMethod)="filterItems($event)" filter="true" 
+                        optionLabel="label" placeholder="Seleccionar Actividad" [dropdown]="true" />
+      </p-floatlabel>
+    </div>
+
+    <!-- Autocomplete para departamento -->
+    <div class="label-container">
+      <p-floatlabel>
+        <p-autocomplete [(ngModel)]="puestoSeleccionado" [virtualScroll]="true" [suggestions]="filteredItems" 
+                        [virtualScrollItemSize]="34" (completeMethod)="filterItems($event)" filter="true" 
+                        optionLabel="label" placeholder="Seleccionar Departamento" [dropdown]="true" />
+      </p-floatlabel>
+    </div>
+
+    <h3><p-divider align="left" type="solid"><b>Asignar Empleado</b></p-divider></h3>
+
+    <!-- Tabla de empleados con participación y checkbox -->
+    <p-table [value]="empleados">
+        <ng-template pTemplate="body" let-emp let-i="rowIndex">
+          <tr>
+            <td>{{ emp.actividad }}</td>
+            <td>{{ emp.nombreEmpleado }}</td>
+            <td>
+              <p-checkbox 
+                [(ngModel)]="emp.participacion" 
+                (onChange)="editarParticipacion(emp)" 
+                [binary]="true">
+              </p-checkbox>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      
+      <div class="contenedor-botones">
+        <button class="boton" pButton pRipple severity="info" (click)="activarEdicion()">
+          <span pButtonLabel>Editar</span>
+        </button>
+      </div>
+      

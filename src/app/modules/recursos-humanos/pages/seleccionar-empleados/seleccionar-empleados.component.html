@@ -1,0 +1,21 @@
+<p-table [value]="empleados" selectionMode="multiple" [(selection)]="empleadosSeleccionados">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Clave Empleado</th>
+      <th>Nombre Empleado</th>
+      <th>Seleccionar</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-emp>
+    <tr>
+      <td>{{ emp.clave }}</td>
+      <td>{{ emp.nombre }}</td>
+      <td>
+        <p-checkbox [(ngModel)]="emp.selected" [binary]="true"></p-checkbox>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+  <p-button label="Guardar" (click)="guardar()"></p-button>
+  

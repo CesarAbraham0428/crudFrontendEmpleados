@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LoginService {
-    private role: string = 'empleado'; 
+    private role: string = 'recursos humanos'; 
   
   getRole() {
     return this.role;

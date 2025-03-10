@@ -34,7 +34,7 @@ import { Select } from 'primeng/select';
 @Component({
   selector: 'app-crear-empleado',
   standalone: true,
-  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,Select],
+  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule],
   templateUrl: './crear-empleado.component.html',
   styleUrl: './crear-empleado.component.scss'
 })
