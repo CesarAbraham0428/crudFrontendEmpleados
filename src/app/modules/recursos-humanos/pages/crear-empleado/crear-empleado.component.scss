@@ -9,7 +9,6 @@
     width: 45%; /* Ajusta el ancho de los labels */
     margin-right: 10px; /* Espacio entre los campos */
 }
-
   .main-container {
     margin-left: 270px;
     padding: 20px; 
@@ -18,7 +17,7 @@
    
   }
 
-input,label, p-autocomplete, p-datepicker {
+input,label,p-inputmask , p-autocomplete, p-datepicker {
     width: 80%; 
     box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
     margin-left: 35px;
@@ -27,3 +26,30 @@ input,label, p-autocomplete, p-datepicker {
   display: flex;
   justify-content: flex-end;
 }
+.correo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el input y el botón */
+}
+
+.telefono-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el input y el botón */
+}
+
+.telefono-container {
+  display: flex;
+  align-items: center;
+  width: 27em;
+}
+.correo-container {
+  display: flex;
+  align-items: center;
+  width: 27em;
+}
+
+.eliminar-btn {
+  margin-left: 8px; /* Espacio entre el input y el botón */
+}
+

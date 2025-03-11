@@ -1,5 +1,8 @@
 import { Component, OnInit,ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
+import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
+import { Empleado } from '../../../../models/empleado/empleado';
+
 //Importaciones de PrimeNG
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { PanelModule } from 'primeng/panel';
@@ -21,6 +24,7 @@ import { CardModule } from 'primeng/card';
 import { Table } from 'primeng/table';
 
 
+
 @Component({
   selector: 'app-empleado-list',
   standalone: true,
@@ -29,10 +33,12 @@ import { Table } from 'primeng/table';
   styleUrl: './empleado-list.component.scss'
 })
 export class EmpleadoListComponent implements OnInit {
+
   @ViewChild('dt1') dt1!: Table; 
   selectedAgent: any[] = [];
 selectedStatus: string = '';
-  customers: any[] = []; // Debes asignarle datos reales en ngOnInit
+customers: Empleado[] = [];
+
   loading: boolean = false;
   
   filterGlobalValue(event: Event) {
@@ -51,68 +57,27 @@ selectedStatus: string = '';
   ];
   activityValues: number[] = [0, 100];
 
-  constructor(private router: Router) {}
+  constructor(private empleadoService: EmpleadoService, private router: Router) {}
 
-  
 
   ngOnInit() {
     this.loadCustomers();
   }
 
-  loadCustomers() {
-    // Simula la carga de datos, en producción reemplázalo con un servicio HTTP
+  loadCustomers(): void {
     this.loading = true;
-    setTimeout(() => {
-      this.customers = [
-        {
-          id: 1,
-          name: 'John Doe',
-          country: { name: 'USA', code: 'us' },
-          representative: { name: 'Alice', image: 'avatar1.png' },
-          date: new Date(),
-          balance: 1000,
-          status: 'Active',
-          activity: 75,
-          verified: true
-        }, 
-        {
-          id: 2,
-          name: 'Cati',
-          country: { name: 'USA', code: 'us' },
-          representative: { name: 'Alice', image: 'avatar1.png' },
-          date: new Date(),
-          balance: 1000,
-          status: 'Active',
-          activity: 75,
-          verified: true
-        },
-        {
-          id: 3,
-          name: 'Pedro',
-          country: { name: 'USA', code: 'us' },
-          representative: { name: 'Alice', image: 'avatar1.png' },
-          date: new Date(),
-          balance: 1000,
-          status: 'Active',
-          activity: 75,
-          verified: true
-        },
-        {
-          id: 1,
-          name: 'Juan',
-          country: { name: 'USA', code: 'us' },
-          representative: { name: 'Alice', image: 'avatar1.png' },
-          date: new Date(),
-          balance: 1000,
-          status: 'Active',
-          activity: 75,
-          verified: true
-        }
-      ];
-      this.loading = false;
-    }, 1000);
+    this.empleadoService.getEmpleados().subscribe(
+      (data) => {
+        this.customers = data;  // Ahora `data` es directamente un array de `Empleado`
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error al cargar los empleados', error);
+        this.loading = false;
+      }
+    );
   }
-  
+
 
   getSeverity(status: string): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {
     switch(status) {
@@ -134,6 +99,14 @@ selectedStatus: string = '';
      redirigir() {
       this.router.navigate(['recursos-humanos/alta-empleado']);
 }
+  // Editar empleado
+  editarEmpleado(id: string) {
+    this.router.navigate(['recursos-humanos/editar-empleado', id]);
+  }
 
+  // Eliminar empleado
+  eliminarEmpleado(id: string) {
+    // Lógica de eliminación
+  }
 
 }
