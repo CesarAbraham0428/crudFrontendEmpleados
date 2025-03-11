@@ -1,36 +1,52 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
+import {environment} from '../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Empleado } from '../../../models/empleado/empleado';
+import { tap, map} from 'rxjs/operators';
 
+
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadoService {
 
-  constructor() { }
 
-  private empleados = [
-    { id: 1, clave: 'E001', nombre: 'Juan Pérez'},
-    { id: 2, clave: 'E002', nombre: 'María Gómez' },
-    { id: 3, clave: 'E003', nombre: 'Carlos López'},
-    { id: 4, clave: 'E004', nombre: 'Ana Ramírez'}
-  ];
+  private apiUrl = `${environment.baseUrl}/empleado`;
 
-  getEmpleados(): Observable<any[]> {
-    return of(this.empleados); // Devuelve los empleados como un Observable
+
+  constructor(private http:HttpClient) { }
+
+
+
+  getEmpleados(): Observable<Empleado[]> {
+    return this.http.get<{ empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
+      map(response => response.empleados), // Extrae el array "empleados" del objeto
+      tap(data => console.log('Empleados recibidos:', data))  // Agrega este log
+    );
   }
+
+  /*
+  getEmpleados(): Observable<Empleado[]> {
+    return this.http.get<Empleado[]>(`${this.apiUrl}/obtenerEmpleados`).pipe(
+      tap(data => console.log('Empleados recibidos:', data))  // Agrega este log
+    );
+  }*/
+
 
 
   private empleadosActividades: EmpleadoActividad[] = [
-    { id: 1, actividad: 'Actividad 1', claveEmpleado: 'E001', nombreEmpleado: 'Juan Pérez', participacion: true },
-    { id: 2, actividad: 'Actividad 2', claveEmpleado: 'E002', nombreEmpleado: 'María Gómez', participacion: false },
-    { id: 3, actividad: 'Actividad 1', claveEmpleado: 'E003', nombreEmpleado: 'Carlos López', participacion: true },
-    { id: 4, actividad: 'Actividad 3', claveEmpleado: 'E004', nombreEmpleado: 'Ana Ramírez', participacion: false },
+    { id: 1, actividad: 'Seguridad', claveEmpleado: 'E001', nombreEmpleado: 'Juan Pérez', participacion: true },
+    { id: 2, actividad: 'Capacitación', claveEmpleado: 'E002', nombreEmpleado: 'María Gómez', participacion: false },
+    { id: 3, actividad: 'Mantenimiento', claveEmpleado: 'E003', nombreEmpleado: 'Carlos López', participacion: true },
+    { id: 4, actividad: 'Administración', claveEmpleado: 'E004', nombreEmpleado: 'Ana Ramírez', participacion: false },
   ];
 
-  // Obtener lista de empleados con actividades y participación
+  // Obtener lista de empleados con actividades
   obtenerEmpleadoActividad(): Observable<EmpleadoActividad[]> {
-    return of(this.empleadosActividades); // Simulamos la respuesta del servidor
+    return of([...this.empleadosActividades]); // Retorna una copia del array
   }
 
   // Actualizar el estado de participación

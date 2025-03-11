@@ -1,3 +1,4 @@
+import { provideHttpClient,withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -15,10 +16,11 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
         options: {
             prefix: 'p',
-            darkModeSelector: 'ligth',
+            darkModeSelector: 'light',
             cssLayer: false
         }
     }
-})
+}),
+provideHttpClient( withFetch(),withInterceptorsFromDi())
 ]
 };
