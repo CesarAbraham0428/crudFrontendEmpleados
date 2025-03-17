@@ -1,1 +1,23 @@
-<p>ver-actividades works!</p>
+
+<div class="main-container">
+    <p-card header="Mis Acividades" subheader="Subtítulo" >
+    
+        <p></p>
+        <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Nombre de Actividad</th>
+                    <th>Estatus</th>
+                </tr>
+
+            </ng-template>
+            <ng-template #body let-product>
+                <tr>
+                    <td>{{ product.NombreActividad }}</td>
+                    <td>{{ product.Estatus }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+    </div>
+  
