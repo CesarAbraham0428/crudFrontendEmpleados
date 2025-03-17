@@ -1,0 +1,108 @@
+
+<div class="main-container">
+    <p-card header=" Mi perfil" subheader="Subtítulo" >
+        <p-fieldset legend="Contraseña">   
+                 
+            <div class="label-container">       
+                    <p-floatlabel  variant="on">
+                        <p-password  [toggleMask]="true" />
+                      <label for="Contraseña"></label>
+                  </p-floatlabel> 
+                  </div>
+                
+    
+                  <div class="label-container">
+                 <p-floatlabel variant="on">
+                    <p-password  [toggleMask]="true" />
+                    <label for=" Nueva Contraseña"></label>
+                 </p-floatlabel>
+                </div>
+        </p-fieldset>
+
+
+        <p-fieldset legend="Domicilio">   
+      
+            <div class="label-container">
+          <p-floatlabel>  
+        <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsCiudad" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCiudad($event)" optionLabel="label" placeholder="Ciudad" [dropdown]="true" />
+        </p-floatlabel>
+        </div>
+        
+        <div class="label-container">
+        <p-floatlabel>  
+          <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsCiudad" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCiudad($event)" optionLabel="label" placeholder="Código Postal" [dropdown]="true" />
+          </p-floatlabel>
+        </div>
+             
+        <div class="label-container">
+        <p-floatlabel variant="on">
+            <input pInputText  id="on_label"  autocomplete="off" apppKeyFilter="alpha" />
+            <label for="on_label">Calle</label>
+        </p-floatlabel>
+      </div>
+      
+      <div class="label-container">
+        <p-floatlabel variant="on">
+          <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="alpha" />
+          <label for="on_label">Colonia</label>
+      </p-floatlabel>
+      </div>
+      
+      <div class="label-container">
+      <p-floatlabel variant="on">
+        <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="num" />
+      <label for="on_label">No.Ext</label>
+      </p-floatlabel>
+      </div>
+      <div class="label-container">
+      <p-floatlabel variant="on">
+        <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="num" />
+      <label for="on_label">No.Int</label>
+      </p-floatlabel>
+      </div>
+      </p-fieldset>
+      
+    
+   <p-fieldset legend="Contacto">   
+    <div class="label-container">       
+       <p-floatlabel  variant="on">
+         <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
+         <label for="nombre">Nombre del Curso</label>
+     </p-floatlabel> 
+     </div>
+
+
+
+
+
+     <div class="label-container">
+    <p-floatlabel variant="on">
+     <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
+   <label for="FechaInicio">Fecha de Inicio</label>
+    </p-floatlabel>
+   </div>
+</p-fieldset>
+
+<p-fieldset legend="ReferenciaFamiliar">   
+    <div class="label-container">       
+       <p-floatlabel  variant="on">
+         <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
+         <label for="nombre">Nombre del Curso</label>
+     </p-floatlabel> 
+     </div>
+
+
+     <div class="label-container">
+    <p-floatlabel variant="on">
+     <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
+   <label for="FechaInicio">Fecha de Inicio</label>
+    </p-floatlabel>
+   </div>
+</p-fieldset>
+                
+    </p-card> 
+</div> 
+
+        <p></p>
+  
+  

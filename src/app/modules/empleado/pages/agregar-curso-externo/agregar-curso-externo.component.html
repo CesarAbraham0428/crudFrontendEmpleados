@@ -1,0 +1,47 @@
+
+<div class="main-container">
+    <p-card header=" Crear Cursos Externos" subheader="Subtítulo" >
+ 
+                 <div class="label-container">       
+                    <p-floatlabel  variant="on">
+                      <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
+                      <label for="nombre">Nombre del Curso</label>
+                  </p-floatlabel> 
+                  </div>
+
+                  <div class="label-container">
+                    <p-floatlabel>  
+                      <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsTipoDocumento" [virtualScrollItemSize]="34" (completeMethod)="filterItemsTipoDocumento($event)" optionLabel="label" placeholder="Tipo de Documento" [dropdown]="true" />
+                      </p-floatlabel>
+                    </div>
+                 
+                  <div class="label-container">
+                 <p-floatlabel variant="on">
+                  <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
+                <label for="FechaInicio">Fecha de Inicio</label>
+                 </p-floatlabel>
+                </div>
+
+                <div class="label-container">
+                    <p-floatlabel variant="on">
+                     <p-datepicker inputId="FechaFinalizacion" showIcon iconDisplay="input" />
+                   <label for="FechaFinalizacion">Fecha de Finalización</label>
+                    </p-floatlabel>
+                   </div>
+                
+                   <div class="contenedor-botones">
+                    <button pButton pRipple severity="danger" (click)="redirigirC()">
+                        <span pButtonLabel>Cancelar</span>
+                    </button>
+                
+                    <button pButton pRipple severity="info">
+                        <span pButtonLabel>Guardar</span>
+                    </button>
+                </div>
+                
+    </p-card> 
+</div> 
+
+        <p></p>
+  
+  

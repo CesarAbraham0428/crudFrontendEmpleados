@@ -1,1 +1,33 @@
-<p>curso-list works!</p>
+
+<div class="main-container">
+    <p-card header="Mis cursos Externos" subheader="Subtítulo" >
+        
+        <div class="contenedor-botones">
+            <button pButton pRipple severity="info" (click)="redirigir()" >
+              ➕ <span pButtonLabel>Agregar Curso Externo</span>
+            </button>
+        </div>
+        <p></p>
+        <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Curso</th>
+                    <th>Tipo de Documento</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Finalización</th>
+                    <th>Curso</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-product>
+                <tr>
+                    <td>{{ product.Curso }}</td>
+                    <td>{{ product.TipoDocumento }}</td>
+                    <td>{{ product.FechaInicio}}</td>
+                    <td>{{ product.FechaFinalizacion}}</td>
+                    <td>{{ product.Curso}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+    </div>
+  
