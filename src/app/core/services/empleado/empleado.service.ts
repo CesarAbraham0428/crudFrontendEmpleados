@@ -16,6 +16,7 @@ export class EmpleadoService {
 
   private apiUrl = `${environment.baseUrl}/empleado`;
 
+  private baseUrl = `${environment.baseUrl}/auth`;
 
   constructor(private http:HttpClient) { }
 
@@ -28,14 +29,9 @@ export class EmpleadoService {
     );
   }
 
-  /*
-  getEmpleados(): Observable<Empleado[]> {
-    return this.http.get<Empleado[]>(`${this.apiUrl}/obtenerEmpleados`).pipe(
-      tap(data => console.log('Empleados recibidos:', data))  // Agrega este log
-    );
-  }*/
-
-
+  registrarEmpleado(empleado: Empleado): Observable<any> {
+    return this.http.post(`${this.baseUrl}/registrar`, empleado);
+  }
 
   private empleadosActividades: EmpleadoActividad[] = [
     { id: 1, actividad: 'Seguridad', claveEmpleado: 'E001', nombreEmpleado: 'Juan Pérez', participacion: true },

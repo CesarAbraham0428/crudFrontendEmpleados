@@ -1,5 +1,4 @@
 export interface Empleado {
-  _id: string;
   ClaveEmpleado: string;
   Nombre: string;
   ApP: string;
@@ -18,34 +17,34 @@ export interface Empleado {
   ReferenciaFamiliar: ReferenciaFamiliar[];
   createdAt: string;
   updatedAt: string;
-  __v: number;
-  Domicilio: Domicilio;
+  Domicilio: Domicilio; 
 }
 
 
-interface CursoExterno {
+export interface CursoExterno {
     Nombre: string;
     TipoCurso: string;
     FechaInicio: string;
     FechaFin: string;
-    _id: string;
   }
   
-  interface ActividadEmpresa {
+  enum EstatusActividad {
+    Paticipo= 0,
+    NoParticipo = 1
+  }
+
+ export interface ActividadEmpresa {
     NombreActividad: string;
-    Estatus: number;
-    _id: string;
+    Estatus: EstatusActividad;
   }
-  
-  interface ReferenciaFamiliar {
+  export interface ReferenciaFamiliar {
     NombreFamiliar: string;
     Parentesco: string;
     Telefono: string[];
     CorreoElectronico: string;
-    _id: string;
   }
   
-  interface Domicilio {
+  export interface Domicilio {
     Calle: string;
     NumeroExterior: string;
     NumeroInterior: string;

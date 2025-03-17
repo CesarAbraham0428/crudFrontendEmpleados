@@ -1,5 +1,6 @@
 import { Component,OnInit } from '@angular/core';
 
+
 //Importaciones de PrimeNG
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { InputTextModule } from 'primeng/inputtext';

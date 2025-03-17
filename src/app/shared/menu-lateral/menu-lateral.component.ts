@@ -47,7 +47,7 @@ export class MenuLateralComponent {
       label: 'Cursos',
       icon: 'pi pi-fw pi-home',
       //command: () => this.navigateTo('/recursos-humanos/cursos')
-      command: () => this.navigateTo(this.role === 'recursos humanos' ? '/recursos-humanos/cursos-internos' : '/empleado/cursos-externos')
+      command: () => this.navigateTo(this.role === 'recursos humanos' ? '/recursos-humanos/cursos-internos' : '/empleado/cursos-externos-list')
 
     },
     { label: 'Actividades', icon: 'pi pi-users',  
@@ -59,7 +59,7 @@ export class MenuLateralComponent {
       {
       label: 'Mi perfil',
       icon: 'pi pi-fw pi-home',
-      command: () => this.navigateTo('/recursos-humanos/actividades')
+      command: () => this.navigateTo('/empleado/perfil')
     },
     {
       label: 'Cerrar sesión',
