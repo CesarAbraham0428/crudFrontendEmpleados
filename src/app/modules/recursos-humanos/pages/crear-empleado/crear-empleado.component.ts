@@ -1,17 +1,11 @@
- interface Familiar {
-  nombreFamiliar: string;
-  parentesco: string;
-  telefonos: string[];
-  correos: string[];
-  editando: boolean; 
-}
-
-
-
 import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
+import { Empleado, ReferenciaFamiliar, Domicilio } from '../../../../models/empleado/empleado';  // Importa todos los modelos necesarios
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { Observable } from 'rxjs';
+import {Departamento,Ciudad,Parentesco,Puesto} from '../../../../models/cargarDatos/cargarDatos';
 
 //Importaciones de PrimeNG
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -28,6 +22,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { InputMaskModule } from 'primeng/inputmask';
+import { PasswordModule } from 'primeng/password';
+
 
 
 
@@ -35,107 +31,189 @@ import { InputMaskModule } from 'primeng/inputmask';
 @Component({
   selector: 'app-crear-empleado',
   standalone: true,
-  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule],
+  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule,PasswordModule],
   templateUrl: './crear-empleado.component.html',
   styleUrl: './crear-empleado.component.scss'
 })
 export class CrearEmpleadoComponent implements OnInit {
-  puestoSeleccionado: any; // Valor seleccionado en el autocompletado
-  departamentoSeleccionado: any; // Valor seleccionado en el autocompletado
-  ciudadSeleccionada: any; // Valor seleccionado en el autocompletado
+
+  nuevoEmpleado: Empleado = {
+    ClaveEmpleado: '',  // Se generará en el backend
+    Nombre: '',
+    ApP: '',
+    ApM: '',
+    FechaNacimiento: '',
+    RFC: '',
+    Sexo: '',
+    Departamento: '',
+    Puesto: '',
+    Telefono: [''],
+    CorreoElectronico: [''],
+    Password: '',  
+    Rol: '',
+    CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],  // ✅ Agrega un objeto vacío con estructura
+    ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],  // ✅ Incluye al menos un objeto válido
+    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }], // ✅ Estructura correcta
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    Domicilio: {
+      Calle: '',
+      NumeroExterior: '',
+      NumeroInterior: '',
+      Colonia: '',
+      CodigoPostal: '',
+      Ciudad: ''
+    }
+  };
+
+  // Propiedades para almacenar referencias familiares
+   nuevaReferenciaFamiliar() {
+    this.nuevoEmpleado.ReferenciaFamiliar.push({
+      NombreFamiliar: '',
+      Parentesco: '',
+      Telefono: [''], 
+      CorreoElectronico: '' 
+    });
+  }
+
+  filteredItemsDepartamento: any[] = [];
+  filteredItemsPuesto: any[] = [];
+  filteredItemsCiudad: any[] = [];
+  filteredItemsParentesco: any[] = [];
+
+
   CPSeleccionado: any; // Valor seleccionado en el autocompletado
   Seleccionado: any; // Valor seleccionado en el autocompletado
-  filteredItems: any[] = []; // Lista filtrada
   filteredItemsSexo: any[] = []; // Lista filtrada
   sexoSeleccionado: string = '';
   filteredItemsRol: any[] = []; // Lista filtrada
   RolSeleccionado: string = '';
  
- 
 
- dependientes: Familiar[] = [];
-
-
- usuario = {
-  Nombre: '',
-  ApP: '',
-  ApM: '',
-  FechaNacimiento: '',
-  RFC: '',
-  Correos: [''],  // Inicia con un campo de correo
-  Telefonos: [''],// Inicia con un campo de teléfono
-  editando: false
-};
 
 // Agregar otro correo
 agregarCorreoU() {
-  this.usuario.Correos.push('');
+  this.nuevoEmpleado.CorreoElectronico.push('');
 }
 
 // Agregar otro teléfono
 agregarTelefonoU() {
-  this.usuario.Telefonos.push('');
+  this.nuevoEmpleado.Telefono.push('');
 }
 
-// Registrar usuario
-registrarUsuario() {
-  console.log("Usuario Registrado:", this.usuario);
-  // Aquí harías la petición al backend con el objeto `this.usuario`
-}
+ constructor(private router: Router, private empleadoService: EmpleadoService,private cargaDatosService: CargaDatosService) {}
 
-
-
- constructor(private router: Router) {}
-
-  
-
- ngOnInit() {
-
- }
-
- agregarDependiente() {
-  this.dependientes.push({
-    nombreFamiliar: '',
-    parentesco: '',
-    telefonos: [''],
-    correos: [''],
-    editando: true // Nuevo campo para indicar que está en edición
+ // Método para registrar el empleado
+ registrarEmpleado(): void {
+  console.log('Datos enviados:', this.nuevoEmpleado); 
+  this.empleadoService.registrarEmpleado(this.nuevoEmpleado).subscribe({
+    next: (empleado) => {
+      console.log('Empleado registrado:', empleado);
+      // Limpiar el formulario si el registro fue exitoso
+      this.limpiarFormulario();
+    },
+    error: (error) => {
+      console.error('Error al registrar el empleado:', error);
+    }
   });
 }
 
 
- // Agregar un campo de teléfono en un dependiente
- agregarTelefono(dependiente: Familiar) {
-  dependiente.telefonos.push('');
+// Método para limpiar el formulario del empleado
+limpiarFormulario(): void {
+  this.nuevoEmpleado = {
+    ClaveEmpleado: '',
+    Nombre: '',
+    ApP: '',
+    ApM: '',
+    FechaNacimiento: '',
+    RFC: '',
+    Sexo: '',
+    Departamento: '',
+    Puesto: '',
+    Telefono: [],
+    CorreoElectronico: [],
+    Password: '',
+    Rol: '',
+    CursoExterno: [],
+    ActividadEmpresa: [],
+    ReferenciaFamiliar: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    Domicilio: {
+      Calle: '',
+      NumeroExterior: '',
+      NumeroInterior: '',
+      Colonia: '',
+      CodigoPostal: '',
+      Ciudad: ''
+    }
+  };
 }
 
-// Agregar un campo de correo en un dependiente
-agregarCorreo(dependiente: Familiar) {
-  dependiente.correos.push('');
+ngOnInit() {
+  this.cargaDatosService.getDepartamentos().subscribe(data => {
+    // Verifica que data sea un objeto y que tenga la propiedad "departamentos" 
+    if (data && data.departamentos) {
+      this.filteredItemsDepartamento = data.departamentos.map((item:Departamento) => ({
+        label: item.NombreDepartamento,
+        value: item.NombreDepartamento
+      }));
+    } else {
+      console.error('La respuesta del backend no tiene la estructura esperada:', data);
+    }
+  });
+
+  this.cargaDatosService.getCiudades().subscribe(data => {
+    if (data && data.ciudades) {
+      this.filteredItemsCiudad = data.ciudades.map((item:Ciudad) => ({
+        label: item.nombreCiudad,
+        value: item.nombreCiudad
+      }));
+    } else {
+      console.error('La respuesta del backend no tiene la estructura esperada:', data);
+    }
+  });
+
+  this.cargaDatosService.getParentescos().subscribe(data => {
+    if (data && data.parentesco) {
+      this.filteredItemsParentesco = data.parentesco.map((item:Parentesco) => ({
+        label: item.Parentesco,
+        value: item.Parentesco
+      }));
+    } else {
+      console.error('La respuesta del backend no tiene la estructura esperada:', data);
+    }
+  });
+
+  this.cargaDatosService.getPuestos().subscribe(data => {
+    if (data && data.puestos) {
+      this.filteredItemsPuesto = data.puestos.map((item:Puesto) => ({
+        label: item.NombrePuesto,
+        value: item.NombrePuesto
+      }));
+    } else {
+      console.error('La respuesta del backend no tiene la estructura esperada:', data);
+    }
+  });
 }
 
-// Eliminar un dependiente de la lista
-eliminarDependiente(index: number) {
-  this.dependientes.splice(index, 1);
-}
-// Eliminar un dependiente de la lista
 
-// Guarda los cambios y desactiva el modo edición
-guardarDependiente(dependiente: Familiar) {
-  dependiente.editando = false;
+eliminarReferencia(index: number): void {
+  this.nuevoEmpleado.ReferenciaFamiliar.splice(index, 1);
 }
 
+agregarTelefono(referencia: any): void {
+  referencia.Telefono.push('');
+}
 
-  items: any[] = [
-    { label: 'Recursos Humanos' },
-    { label: 'Tecnologias', value: 'Tecnologias' },
-    { label: 'Opción 3', value: '3' },
-  ];
+eliminarTelefono(referencia: any, indice: number): void {
+  if (indice >= 0 && indice < referencia.Telefono.length) {
+    referencia.Telefono.splice(indice, 1);
+  }
+}
 
-  cols: any[] = [
-    { label: 'Recursos Humanos' },
-    { label: 'Opción 3' }
-  ];
+
 
   allItems = [
     { label: "Masculino", value: "M" },
@@ -146,12 +224,36 @@ guardarDependiente(dependiente: Familiar) {
     { label: "Recursos Humanos", value: "RH" }
   ];
 
-  filterItems(event: any) {
+
+
+  filterItemsDepartamento(event: any) {
     const query = event.query.toLowerCase();
-    this.filteredItems = this.items.filter(item =>
+    this.filteredItemsDepartamento = this.filteredItemsDepartamento.filter(item =>
       item.label.toLowerCase().includes(query)
     );
   }
+
+  filterItemsCiudad(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsCiudad = this.filteredItemsCiudad.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+
+  filterItemsParentesco(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsParentesco = this.filteredItemsParentesco.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+
+  filterItemsPuesto(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsPuesto = this.filteredItemsPuesto.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+
 
   filterItemssSexo(event: any) {
     const query = event.query.toLowerCase();
@@ -169,16 +271,20 @@ guardarDependiente(dependiente: Familiar) {
   redirigir() {
     this.router.navigate(['recursos-humanos/listaEmpleado']);
 }
+
 eliminarCorreo(index: number) {
   // Eliminar el correo en el índice especificado
-  this.usuario.Correos.splice(index, 1);
+  this.nuevoEmpleado.CorreoElectronico.splice(index, 1);
 }
-eliminarTelefono(index: number) {
+eliminarTelefonoU(index: number) {
   // Eliminar el correo en el índice especificado
-  this.usuario.Telefonos.splice(index, 1);
+  this.nuevoEmpleado.Telefono.splice(index, 1);
 }
+
 
 trackByFn(index: number, item: any): any {
   return index; // o algún identificador único del elemento
 }
+
+
 }
