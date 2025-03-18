@@ -5,6 +5,8 @@ import { MenuLateralComponent } from './shared/menu-lateral/menu-lateral.compone
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { RecursosHumanosModule } from './modules/recursos-humanos/recursos-humanos.module';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 
@@ -19,7 +21,9 @@ import { RecursosHumanosModule } from './modules/recursos-humanos/recursos-human
    AvatarModule,
    RecursosHumanosModule,
   ], 
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: []
 })
 export class AppModule {}

@@ -48,9 +48,9 @@ export class LoginComponent {
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión exitoso' });
         setTimeout(() => {
           if (role === 'recursos-humanos') {
-            this.router.navigate(['/recursos-humanos']);
+            this.router.navigate(['/empleado/perfil']);
           } else if (role === 'empleado') {
-            this.router.navigate(['/empleado']);
+            this.router.navigate(['/empleado/perfil']);
           } else {
             console.error('Rol desconocido:', role);
             this.errorMessage = 'Rol no reconocido. Contacta al administrador.';

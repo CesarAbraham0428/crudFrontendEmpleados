@@ -44,10 +44,10 @@ export class AuthService {
   }
 
   login(credentials: { CorreoElectronico: string; Password: string }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials, { withCredentials: true }).pipe(
       tap((response) => {
-        const user = { id: response.usuario._id, role: response.usuario.rol.toLowerCase() }; // Usamos "rol" y normalizamos
-        console.log('Usuario construido:', user); // Depuración
+        const user = { id: response.usuario._id, role: response.usuario.rol.toLowerCase() };
+        console.log('Usuario construido:', user);
         this.userSubject.next(user);
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user', JSON.stringify(user));

@@ -54,4 +54,12 @@ export class EmpleadoService {
     }
     return of(false);
   }
+
+  //Abraham
+
+  obtenerInfoPersonal(): Observable<{ infoPersonalEmpleado: Empleado[] }> {
+    return this.http.get<{ infoPersonalEmpleado: Empleado[] }>(`${this.apiUrl}/obtenerInfoPersonal`,
+      { withCredentials: true } // Incluye las credenciales (cookies)
+    );
+  }
 }
