@@ -21,31 +21,31 @@
     <p-fieldset legend="Domicilio" *ngIf="empleado?.Domicilio">
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio?.Calle || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Domicilio.Calle || 'No disponible'" readonly />
           <label>Calle</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio?.NumeroExterior || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Domicilio.NumeroExterior || 'No disponible'" readonly />
           <label>Número Exterior</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio?.Colonia || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Domicilio.Colonia || 'No disponible'" readonly />
           <label>Colonia</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio?.CodigoPostal || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Domicilio.CodigoPostal || 'No disponible'" readonly />
           <label>Código Postal</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio?.Ciudad || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Domicilio.Ciudad || 'No disponible'" readonly />
           <label>Ciudad</label>
         </p-floatlabel>
       </div>
@@ -55,13 +55,13 @@
     <p-fieldset legend="Contacto" *ngIf="empleado">
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Telefono?.join(', ') || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.Telefono.join(', ') || 'No disponible'" readonly />
           <label>Teléfonos</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.CorreoElectronico?.join(', ') || 'No disponible'" readonly />
+          <input pInputText [value]="empleado.CorreoElectronico.join(', ') || 'No disponible'" readonly />
           <label>Correos Electrónicos</label>
         </p-floatlabel>
       </div>
@@ -79,7 +79,7 @@
           </div>
           <div class="label-container">
             <p-floatlabel>
-              <input pInputText [value]="referencia.Telefono?.join(', ') || 'No disponible'" readonly />
+              <input pInputText [value]="referencia.Telefono.join(', ') || 'No disponible'" readonly />
               <label>Teléfonos</label>
             </p-floatlabel>
           </div>

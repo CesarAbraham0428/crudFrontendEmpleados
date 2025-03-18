@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
 import { Empleado } from '../../../../models/empleado/empleado';
@@ -19,6 +20,7 @@ import { MessageService } from 'primeng/api';
   selector: 'app-perfil',
   standalone: true,
   imports: [
+    CommonModule,  // Asegurar que CommonModule está importado
     PanelModule, CardModule, FieldsetModule, FloatLabelModule, AutoCompleteModule,
     FormsModule, InputMaskModule, DatePickerModule, TableModule, ButtonModule,
     InputTextModule, PasswordModule
@@ -57,7 +59,7 @@ export class PerfilComponent implements OnInit {
       Ciudad: ''
     }
   };
-
+  
   filteredItemsCiudad: any[] = [];
 
   constructor(
@@ -72,12 +74,21 @@ export class PerfilComponent implements OnInit {
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
       next: (data) => {
-        this.empleado = data.infoPersonalEmpleado[0]; // Asigna la información del empleado
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Información personal cargada'
-        });
+        const empleadoData = data.infoPersonalEmpleado?.[0]; // Accede al primer objeto del array
+        if (empleadoData) {
+          this.empleado = { ...this.empleado, ...empleadoData }; // Fusiona los datos
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Información personal cargada'
+          });
+        } else {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atención',
+            detail: 'No se encontró información personal'
+          });
+        }
       },
       error: (err) => {
         console.error('Error al obtener la información personal:', err);
@@ -89,4 +100,5 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
+  
 }

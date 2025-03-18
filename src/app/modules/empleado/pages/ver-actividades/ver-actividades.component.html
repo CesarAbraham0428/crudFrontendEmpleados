@@ -1,23 +1,19 @@
-
 <div class="main-container">
-    <p-card header="Mis Acividades" subheader="Subtítulo" >
-    
-        <p></p>
-        <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template #header>
+    <p-card header="Mis Actividades" subheader="Lista de actividades asignadas">
+        <p-table [value]="products" [style]="{ 'min-width': '50rem' }">
+            
+            <ng-template pTemplate="header">
                 <tr>
                     <th>Nombre de Actividad</th>
                     <th>Estatus</th>
                 </tr>
-
             </ng-template>
-            <ng-template #body let-product>
+            <ng-template pTemplate="body" let-product>
                 <tr>
                     <td>{{ product.NombreActividad }}</td>
-                    <td>{{ product.Estatus }}</td>
+                    <td>{{ product.Estatus === 0 ? 'Pendiente' : 'Completada' }}</td>
                 </tr>
             </ng-template>
         </p-table>
     </p-card>
-    </div>
-  
+</div>
