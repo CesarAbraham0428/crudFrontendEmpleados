@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
-import {environment} from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import {environment} from '../../../../environments/environment';
+
+import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
 import { Empleado } from '../../../models/empleado/empleado';
+import { ActividadEmpresa } from '../../../models/empleado/empleado';
+import { CursoExterno } from '../../../models/empleado/empleado';
+
 import { tap, map} from 'rxjs/operators';
 
-
- 
 @Injectable({
   providedIn: 'root'
 })
@@ -19,8 +21,6 @@ export class EmpleadoService {
   private baseUrl = `${environment.baseUrl}/auth`;
 
   constructor(private http:HttpClient) { }
-
-
 
   getEmpleados(): Observable<Empleado[]> {
     return this.http.get<{empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
@@ -41,12 +41,38 @@ export class EmpleadoService {
 
   actualizarParticipacion(ClaveEmpleado: string, NombreActividad: string, participacion: number): Observable<any> {
     const body = {
-      ClaveEmpleado,        // 'ClaveEmpleado' en vez de '_id' en el backend
+      ClaveEmpleado,        
       NombreActividad,
-      participacion,     // 0 para no participar, 1 para participar
+      participacion,    
     };
 
     return this.http.put(`${this.apiUrl}/actualizarParticipacion`, body); // Hacemos una solicitud PUT al backend
   }
+
+  //Abraham
+
+  obtenerInfoPersonal(): Observable<{ infoPersonalEmpleado: Empleado[] }> {
+    return this.http.get<{ infoPersonalEmpleado: Empleado[] }>(
+      `${this.apiUrl}/obtenerInfoPersonal`,
+      { withCredentials: true } // Asegura el envío de cookies para autenticación
+    );
+  }
+
+  obtenerCursosExternos(): Observable<{ cursosExternos: { CursoExterno: CursoExterno[] }[] }> {
+    return this.http.get<{ cursosExternos: { CursoExterno: CursoExterno[] }[] }>(
+      `${this.apiUrl}/obtenerCursoExterno`,
+      { withCredentials: true }
+    );
+  }
+  
+
+  obtenerActividadesEmpresa(): Observable<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }> {
+    return this.http.get<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }>(
+      `${this.apiUrl}/obtenerActividadesEmpleado`,
+      { withCredentials: true }
+    );
+  }
+  
+
   
 }

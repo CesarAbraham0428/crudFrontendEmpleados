@@ -1,33 +1,36 @@
-
 <div class="main-container">
-    <p-card header="Mis cursos Externos" subheader="Subtítulo" >
+    <p-card header="Mis cursos Externos">
         
         <div class="contenedor-botones">
-            <button pButton pRipple severity="info" (click)="redirigir()" >
+            <button pButton pRipple severity="info" (click)="redirigir()">
               ➕ <span pButtonLabel>Agregar Curso Externo</span>
             </button>
         </div>
         <p></p>
-        <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template #header>
+        
+        @if (cursos.length > 0) {
+          <p-table [value]="cursos">
+              <ng-template pTemplate="header">
                 <tr>
-                    <th>Curso</th>
-                    <th>Tipo de Documento</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha de Finalización</th>
-                    <th>Curso</th>
+                  <th>Curso</th>
+                  <th>Tipo de Documento</th>
+                  <th>Fecha de Inicio</th>
+                  <th>Fecha de Finalización</th>
                 </tr>
-            </ng-template>
-            <ng-template #body let-product>
+              </ng-template>
+              <ng-template pTemplate="body" let-curso>
                 <tr>
-                    <td>{{ product.Curso }}</td>
-                    <td>{{ product.TipoDocumento }}</td>
-                    <td>{{ product.FechaInicio}}</td>
-                    <td>{{ product.FechaFinalizacion}}</td>
-                    <td>{{ product.Curso}}</td>
+                  <td>{{ curso.Nombre }}</td>
+                  <td>{{ curso.TipoCurso }}</td>
+                  <td>{{ curso.FechaInicio | formatoFecha }}</td>
+                  <td>{{ curso.FechaFin | formatoFecha }}</td>
                 </tr>
-            </ng-template>
-        </p-table>
+              </ng-template>
+          </p-table>
+        } @else {
+          <div class="no-cursos">
+            No hay cursos externos registrados.
+          </div>
+        }
     </p-card>
-    </div>
-  
+</div>

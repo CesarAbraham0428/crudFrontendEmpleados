@@ -1,11 +1,11 @@
 <!-- Botón para colapsar o expandir el menú (siempre visible) -->
-<button (click)="toggleMenu()" 
+<button *ngIf="isVisible" (click)="toggleMenu()" 
     class="p-2 bg-gray-200 fixed left-4 top-4 z-50 rounded-full shadow-lg cursor-pointer">
   ☰ 
 </button>
 
 <!-- Contenedor del menú -->
-<div [ngClass]="{ 'w-64': !colapsado, 'w-0': colapsado, 'invisible': colapsado }" 
+<div *ngIf="isVisible" [ngClass]="{ 'w-64': !colapsado, 'w-0': colapsado, 'invisible': colapsado }" 
      class="menu-container fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 overflow-hidden">
   <p-menu *ngIf="!colapsado" [model]="items"  class="w-full custom-menu" >
     <ng-template #start>

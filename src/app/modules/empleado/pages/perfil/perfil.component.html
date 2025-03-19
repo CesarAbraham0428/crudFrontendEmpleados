@@ -1,108 +1,96 @@
-
 <div class="main-container">
-    <p-card header=" Mi perfil" subheader="Subtítulo" >
-        <p-fieldset legend="Contraseña">   
-                 
-            <div class="label-container">       
-                    <p-floatlabel  variant="on">
-                        <p-password  [toggleMask]="true" />
-                      <label for="Contraseña"></label>
-                  </p-floatlabel> 
-                  </div>
-                
-    
-                  <div class="label-container">
-                 <p-floatlabel variant="on">
-                    <p-password  [toggleMask]="true" />
-                    <label for=" Nueva Contraseña"></label>
-                 </p-floatlabel>
-                </div>
+  <p-card header="Mi perfil" subheader="Información personal">
+    <!-- Bloque para cambiar contraseña -->
+    <p-fieldset legend="Cambiar contraseña">
+      <div class="label-container">
+        <p-floatlabel variant="on">
+          <p-password [toggleMask]="true" placeholder="Contraseña actual" />
+          <label for="Contraseña"></label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel variant="on">
+          <p-password [toggleMask]="true" placeholder="Nueva contraseña" />
+          <label for="Nueva Contraseña"></label>
+        </p-floatlabel>
+      </div>
+      <button pButton type="button" label="Cambiar contraseña" class="p-button-success"></button>
+    </p-fieldset>
+
+    <!-- Bloque de domicilio -->
+    <p-fieldset legend="Domicilio" *ngIf="empleado?.Domicilio">
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Domicilio.Calle || 'No disponible'" readonly />
+          <label>Calle</label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Domicilio.NumeroExterior || 'No disponible'" readonly />
+          <label>Número Exterior</label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Domicilio.Colonia || 'No disponible'" readonly />
+          <label>Colonia</label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Domicilio.CodigoPostal || 'No disponible'" readonly />
+          <label>Código Postal</label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Domicilio.Ciudad || 'No disponible'" readonly />
+          <label>Ciudad</label>
+        </p-floatlabel>
+      </div>
+    </p-fieldset>
+
+    <!-- Bloque de contacto -->
+    <p-fieldset legend="Contacto" *ngIf="empleado">
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.Telefono.join(', ') || 'No disponible'" readonly />
+          <label>Teléfonos</label>
+        </p-floatlabel>
+      </div>
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="empleado.CorreoElectronico.join(', ') || 'No disponible'" readonly />
+          <label>Correos Electrónicos</label>
+        </p-floatlabel>
+      </div>
+    </p-fieldset>
+
+    <!-- Bloque de referencia familiar -->
+    <p-fieldset legend="Referencia Familiar" *ngIf="empleado?.ReferenciaFamiliar">
+      <div *ngFor="let referencia of empleado.ReferenciaFamiliar">
+        <p-fieldset [legend]="referencia.NombreFamiliar">
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [value]="referencia.Parentesco || 'No disponible'" readonly />
+              <label>Parentesco</label>
+            </p-floatlabel>
+          </div>
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [value]="referencia.Telefono.join(', ') || 'No disponible'" readonly />
+              <label>Teléfonos</label>
+            </p-floatlabel>
+          </div>
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [value]="referencia.CorreoElectronico || 'No disponible'" readonly />
+              <label>Correo Electrónico</label>
+            </p-floatlabel>
+          </div>
         </p-fieldset>
-
-
-        <p-fieldset legend="Domicilio">   
-      
-            <div class="label-container">
-          <p-floatlabel>  
-        <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsCiudad" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCiudad($event)" optionLabel="label" placeholder="Ciudad" [dropdown]="true" />
-        </p-floatlabel>
-        </div>
-        
-        <div class="label-container">
-        <p-floatlabel>  
-          <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsCiudad" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCiudad($event)" optionLabel="label" placeholder="Código Postal" [dropdown]="true" />
-          </p-floatlabel>
-        </div>
-             
-        <div class="label-container">
-        <p-floatlabel variant="on">
-            <input pInputText  id="on_label"  autocomplete="off" apppKeyFilter="alpha" />
-            <label for="on_label">Calle</label>
-        </p-floatlabel>
       </div>
-      
-      <div class="label-container">
-        <p-floatlabel variant="on">
-          <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="alpha" />
-          <label for="on_label">Colonia</label>
-      </p-floatlabel>
-      </div>
-      
-      <div class="label-container">
-      <p-floatlabel variant="on">
-        <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="num" />
-      <label for="on_label">No.Ext</label>
-      </p-floatlabel>
-      </div>
-      <div class="label-container">
-      <p-floatlabel variant="on">
-        <input pInputText id="on_label"  autocomplete="off" apppKeyFilter="num" />
-      <label for="on_label">No.Int</label>
-      </p-floatlabel>
-      </div>
-      </p-fieldset>
-      
-    
-   <p-fieldset legend="Contacto">   
-    <div class="label-container">       
-       <p-floatlabel  variant="on">
-         <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
-         <label for="nombre">Nombre del Curso</label>
-     </p-floatlabel> 
-     </div>
-
-
-
-
-
-     <div class="label-container">
-    <p-floatlabel variant="on">
-     <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
-   <label for="FechaInicio">Fecha de Inicio</label>
-    </p-floatlabel>
-   </div>
-</p-fieldset>
-
-<p-fieldset legend="ReferenciaFamiliar">   
-    <div class="label-container">       
-       <p-floatlabel  variant="on">
-         <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
-         <label for="nombre">Nombre del Curso</label>
-     </p-floatlabel> 
-     </div>
-
-
-     <div class="label-container">
-    <p-floatlabel variant="on">
-     <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
-   <label for="FechaInicio">Fecha de Inicio</label>
-    </p-floatlabel>
-   </div>
-</p-fieldset>
-                
-    </p-card> 
-</div> 
-
-        <p></p>
-  
-  
+    </p-fieldset>
+  </p-card>
+</div>
