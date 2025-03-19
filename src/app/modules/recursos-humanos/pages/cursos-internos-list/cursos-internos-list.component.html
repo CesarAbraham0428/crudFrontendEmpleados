@@ -1,0 +1,50 @@
+
+<div class="main-container">
+    <p-card header="Cursos Empresariales" subheader="Subtítulo" >
+
+        <p-floatlabel  variant="on">
+            <p-autocomplete [(ngModel)]="cursosSeleccionados" [virtualScroll]="true" [suggestions]="filteredItemsCursos" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCursos($event)" filter="true" optionLabel="label" placeholder="Nombre del Curso" [dropdown]="true" />
+        </p-floatlabel> 
+
+        <div class="label-container">
+            <p-floatlabel variant="on">
+             <p-datepicker [(ngModel)]="fechaInicio" inputId="FechaNacimiento" showIcon iconDisplay="input" />
+             <label for="FechaInicio">Fecha de Inicio</label>
+         </p-floatlabel>
+         </div>
+         <div class="label-container">
+             <p-floatlabel variant="on">
+              <p-datepicker [(ngModel)]="fechaTermino" inputId="FechaNacimiento" showIcon iconDisplay="input" />
+              <label for="FechaTermino">Fecha de Termino</label>
+          </p-floatlabel>
+          </div>
+
+        <div class="contenedor-botones">
+            <button pButton pRipple severity="info" (click)="redirigir()" >
+              ➕ <span pButtonLabel>Nuevo Curso</span>
+            </button>
+        </div>
+        <p></p>
+        <p-table [value]="products" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Curso</th>
+                    <th>Tipo de Documento</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Finalización</th>
+                    <th>Curso</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-product>
+                <tr>
+                    <td>{{ product.Curso }}</td>
+                    <td>{{ product.TipoDocumento }}</td>
+                    <td>{{ product.FechaInicio}}</td>
+                    <td>{{ product.FechaFinalizacion}}</td>
+                    <td>{{ product.Curso}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+    </div>
+  

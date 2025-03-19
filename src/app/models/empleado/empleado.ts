@@ -29,8 +29,8 @@ export interface CursoExterno {
   }
   
   enum EstatusActividad {
-    Paticipo= 0,
-    NoParticipo = 1
+    NoPaticipo= 0,
+    Participo = 1
   }
 
  export interface ActividadEmpresa {
@@ -52,3 +52,10 @@ export interface CursoExterno {
     CodigoPostal: string;
     Ciudad: string;
   }
+
+  export interface CargaEmpleadoCursos {
+    ClaveEmpleado: string;
+    Nombre: string;
+    selected?: boolean; 
+  }
+  

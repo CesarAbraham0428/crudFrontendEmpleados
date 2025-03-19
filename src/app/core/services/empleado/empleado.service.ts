@@ -23,7 +23,7 @@ export class EmpleadoService {
 
 
   getEmpleados(): Observable<Empleado[]> {
-    return this.http.get<{ empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
+    return this.http.get<{empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
       map(response => response.empleados), // Extrae el array "empleados" del objeto
       tap(data => console.log('Empleados recibidos:', data))  // Agrega este log
     );
@@ -33,25 +33,20 @@ export class EmpleadoService {
     return this.http.post(`${this.baseUrl}/registrar`, empleado);
   }
 
-  private empleadosActividades: EmpleadoActividad[] = [
-    { id: 1, actividad: 'Seguridad', claveEmpleado: 'E001', nombreEmpleado: 'Juan Pérez', participacion: true },
-    { id: 2, actividad: 'Capacitación', claveEmpleado: 'E002', nombreEmpleado: 'María Gómez', participacion: false },
-    { id: 3, actividad: 'Mantenimiento', claveEmpleado: 'E003', nombreEmpleado: 'Carlos López', participacion: true },
-    { id: 4, actividad: 'Administración', claveEmpleado: 'E004', nombreEmpleado: 'Ana Ramírez', participacion: false },
-  ];
 
-  // Obtener lista de empleados con actividades
-  obtenerEmpleadoActividad(): Observable<EmpleadoActividad[]> {
-    return of([...this.empleadosActividades]); // Retorna una copia del array
+  obtenerEmpleadosFiltrados(NombreActividad: string, NombreDepartamento: string): Observable<EmpleadoActividad[]> {
+    const url = `${this.apiUrl}/obtenerActividades?NombreActividad=${NombreActividad}&NombreDepartamento=${NombreDepartamento}`;
+    return this.http.get<EmpleadoActividad[]>(url);
   }
 
-  // Actualizar el estado de participación
-  actualizarParticipacion(id: number, participacion: boolean): Observable<boolean> {
-    const empleado = this.empleadosActividades.find(emp => emp.id === id);
-    if (empleado) {
-      empleado.participacion = participacion;
-      return of(true); // Simulamos una respuesta exitosa
-    }
-    return of(false);
+  actualizarParticipacion(ClaveEmpleado: string, NombreActividad: string, participacion: number): Observable<any> {
+    const body = {
+      ClaveEmpleado,        // 'ClaveEmpleado' en vez de '_id' en el backend
+      NombreActividad,
+      participacion,     // 0 para no participar, 1 para participar
+    };
+
+    return this.http.put(`${this.apiUrl}/actualizarParticipacion`, body); // Hacemos una solicitud PUT al backend
   }
+  
 }

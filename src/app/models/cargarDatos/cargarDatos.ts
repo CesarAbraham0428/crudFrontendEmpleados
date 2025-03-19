@@ -17,3 +17,21 @@ export interface Departamento {
     _id: string;
     NombrePuesto: string;
   }
+
+  export interface Actividad{
+    _id: string;
+    NombreActividad: string;
+  }
+
+  export interface Documento{
+    _id: string;
+    TipoDocumento: string;
+  }
+
+  export interface Curso{
+    _id: string;
+    NombreCurso: string;
+  }
+
+
+

@@ -28,4 +28,16 @@ export class CargaDatosService {
   getPuestos(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/puestos`);
   }
+
+  getActividades(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/actividades`);
+  }
+  
+  getTipoDocumento(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/documentos`);
+  }
+
+  getCurso(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/nombrecursos`);
+  }
 }

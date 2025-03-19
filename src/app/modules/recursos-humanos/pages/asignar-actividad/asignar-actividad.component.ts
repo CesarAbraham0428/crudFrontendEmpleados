@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
 import { EmpleadoActividad } from '../../../../models/empleado-actividad/empleado-actividad.model';
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { Ciudad,Departamento,Actividad } from '../../../../models/cargarDatos/cargarDatos';
 
 // Importaciones de PrimeNG
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -33,56 +35,116 @@ export class AsignarActividadComponent implements OnInit {
 
   
 
-  puestoSeleccionado: any; // Valor seleccionado en el autocompletado
+  actividadSeleccionada: any; // Valor seleccionado en el autocompletado
   departamentoSeleccionado: any; // Valor seleccionado en el autocompletado
+  
   filteredItems: any[] = []; // Lista filtrada
+  filteredItemsDepartamento: any[] = [];
+  filteredItemsActividades: any[] = [];
 
-  constructor(private empleadoService: EmpleadoService) {}
+  constructor(private empleadoService: EmpleadoService, private cargaDatosService: CargaDatosService) {}
 
   ngOnInit(): void {
     this.obtenerEmpleados();
-  }
 
-  obtenerEmpleados(): void {
-    this.empleadoService.obtenerEmpleadoActividad().subscribe((empleados) => {
-      this.empleados = empleados;
+    this.cargaDatosService.getDepartamentos().subscribe(data => {
+      if (data && data.departamentos) {
+        this.filteredItemsDepartamento = data.departamentos.map((item:Departamento) => ({
+          label: item.NombreDepartamento,
+          value: item.NombreDepartamento
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
+    });
+
+
+    this.cargaDatosService.getActividades().subscribe(data => {
+      if (data && data.actividades) {
+        this.filteredItemsActividades = data.actividades.map((item:Actividad) => ({
+          label: item.NombreActividad,
+          value: item.NombreActividad
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
     });
   }
 
- 
-  items: any[] = [
-    { label: 'Recursos Humanos' },
-    { label: 'Tecnologias', value: 'Tecnologias' },
-    { label: 'Opción 3', value: '3' },
-  ];
 
-  cols: any[] = [
-    { label: 'Recursos Humanos' },
-    { label: 'Opción 3' }
-  ];
+ // Llamar al backend para obtener los empleados filtrados
+ obtenerEmpleados(): void {
+  if (this.actividadSeleccionada&& this.departamentoSeleccionado) {
+    this.empleadoService
+      .obtenerEmpleadosFiltrados(this.actividadSeleccionada, this.departamentoSeleccionado)
+      .subscribe((empleados) => {
+        console.log('Empleados filtrados:', empleados);  // Verificar la respuesta
+        this.empleados = empleados;
+      }, error => {
+        console.error('Error al obtener empleados:', error); // En caso de error
+      });
+  }
+}
 
-  filterItems(event: any) {
+  filterItemsDepartamentos(event: any) {
     const query = event.query.toLowerCase();
-    this.filteredItems = this.items.filter(item =>
+    this.filteredItemsDepartamento = this.filteredItemsDepartamento.filter(item =>
       item.label.toLowerCase().includes(query)
     );
   }
 
+
+  filterItemsActividades(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsActividades = this.filteredItemsActividades.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+  
 
   // Cambia el estado de edición
   activarEdicion(): void {
     this.edicionHabilitada = !this.edicionHabilitada;
   }
 
-  // Método para guardar los cambios en la base de datos
+  actualizarParticipacion(emp: EmpleadoActividad): void {
+    // Cambia el valor de 'participacion' a 1 (participa) o 0 (no participa)
+    const participacion = emp.participacion === 1 ? 0 : 1; // Convertimos el valor booleano a 1 o 0
+    const actividad = this.actividadSeleccionada; // La actividad seleccionada
+  
+    if (actividad) {
+      this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, participacion).subscribe(
+        (response) => {
+          console.log(`Participación de ${emp.NombreEmpleado} actualizada a ${participacion}`);
+        },
+        (error) => {
+          console.error('Error al actualizar participación:', error);
+        }
+      );
+    }
+  }
+  
+
+
+
   guardarCambios(): void {
     this.empleados.forEach(emp => {
-      this.empleadoService.actualizarParticipacion(emp.id, emp.participacion).subscribe(resultado => {
-        if (resultado) {
-          console.log(`Participación de ${emp.nombreEmpleado} actualizada a ${emp.participacion ? '1' : '0'}`);
-        }
-      });
+      const estatus = emp.participacion;  // 0 o 1, dependiendo del estado del checkbox
+      const actividad = this.actividadSeleccionada;  // Asegúrate de tener el valor correcto de la actividad seleccionada
+      
+      if (actividad) {
+        // Asegúrate de que el nombre de la actividad esté presente
+        this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, estatus).subscribe(
+          (response) => {
+            console.log(`Participación de ${emp.NombreEmpleado} actualizada a ${estatus}`);
+          },
+          (error) => {
+            console.error('Error al actualizar participación:', error);
+          }
+        );
+      }
     });
     this.edicionHabilitada = false;
   }
+  
 }
