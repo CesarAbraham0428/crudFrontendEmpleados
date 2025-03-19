@@ -51,46 +51,61 @@
       </div>
     </p-fieldset>
 
-    <!-- Bloque de contacto -->
-    <p-fieldset legend="Contacto" *ngIf="empleado">
-      <div class="label-container">
-        <p-floatlabel>
-          <input pInputText [value]="empleado.Telefono.join(', ') || 'No disponible'" readonly />
-          <label>Teléfonos</label>
-        </p-floatlabel>
-      </div>
-      <div class="label-container">
-        <p-floatlabel>
-          <input pInputText [value]="empleado.CorreoElectronico.join(', ') || 'No disponible'" readonly />
-          <label>Correos Electrónicos</label>
-        </p-floatlabel>
-      </div>
-    </p-fieldset>
+<!-- Bloque de contacto -->
+<p-fieldset legend="Contacto" *ngIf="empleado">
+  <div class="contact-section">
+    <div class="contact-header">
+      <span>Correo Electrónico</span>
+      <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewEmail()"></button>
+    </div>
+    <div class="contact-field" *ngFor="let email of empleado.CorreoElectronico; let i = index">
+      <input pInputText [value]="email" readonly />
+      <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removeEmail(i)"></button>
+    </div>
+  </div>
+  
+  <div class="contact-section">
+    <div class="contact-header">
+      <span>Teléfono</span>
+      <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewPhone()"></button>
+    </div>
+    <div class="contact-field" *ngFor="let phone of empleado.Telefono; let i = index">
+      <input pInputText [value]="phone" readonly />
+      <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removePhone(i)"></button>
+    </div>
+  </div>
+</p-fieldset>
 
-    <!-- Bloque de referencia familiar -->
-    <p-fieldset legend="Referencia Familiar" *ngIf="empleado?.ReferenciaFamiliar">
-      <div *ngFor="let referencia of empleado.ReferenciaFamiliar">
-        <p-fieldset [legend]="referencia.NombreFamiliar">
-          <div class="label-container">
-            <p-floatlabel>
-              <input pInputText [value]="referencia.Parentesco || 'No disponible'" readonly />
-              <label>Parentesco</label>
-            </p-floatlabel>
-          </div>
-          <div class="label-container">
-            <p-floatlabel>
-              <input pInputText [value]="referencia.Telefono.join(', ') || 'No disponible'" readonly />
-              <label>Teléfonos</label>
-            </p-floatlabel>
-          </div>
-          <div class="label-container">
-            <p-floatlabel>
-              <input pInputText [value]="referencia.CorreoElectronico || 'No disponible'" readonly />
-              <label>Correo Electrónico</label>
-            </p-floatlabel>
-          </div>
-        </p-fieldset>
+<!-- Bloque de referencia familiar -->
+<p-fieldset legend="Referencia Familiar" *ngIf="empleado?.ReferenciaFamiliar">
+  <div *ngFor="let referencia of empleado.ReferenciaFamiliar; let refIndex = index">
+    <p-fieldset [legend]="referencia.NombreFamiliar">
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="referencia.Parentesco || 'No disponible'" readonly />
+          <label>Parentesco</label>
+        </p-floatlabel>
+      </div>
+      
+      <div class="contact-section">
+        <div class="contact-header">
+          <span>Teléfono</span>
+          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewFamilyPhone(refIndex)"></button>
+        </div>
+        <div class="contact-field" *ngFor="let phone of referencia.Telefono; let i = index">
+          <input pInputText [value]="phone" readonly />
+          <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removeFamilyPhone(refIndex, i)"></button>
+        </div>
+      </div>
+      
+      <div class="label-container">
+        <p-floatlabel>
+          <input pInputText [value]="referencia.CorreoElectronico || 'No disponible'" readonly />
+          <label>Correo Electrónico</label>
+        </p-floatlabel>
       </div>
     </p-fieldset>
+  </div>
+</p-fieldset>
   </p-card>
 </div>

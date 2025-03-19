@@ -1,9 +1,9 @@
 
 .main-container {
     margin-left: 270px;
-    padding: 20px; 
-    transition: margin-left 0.3s ease; 
     margin-right: 60px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
    
   }
   .contenedor-botones {
@@ -18,4 +18,30 @@
     width: 45%; 
     margin-right: 10px;
     margin-bottom: 70px; 
+}
+
+.contact-section {
+  margin-bottom: 1rem;
+}
+
+.contact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.contact-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  
+  input {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+  }
+}
+
+.label-container {
+  margin-bottom: 1rem;
 }
