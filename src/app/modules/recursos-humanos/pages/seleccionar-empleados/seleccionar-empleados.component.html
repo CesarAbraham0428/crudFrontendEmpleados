@@ -1,4 +1,4 @@
-<p-table [value]="empleados" selectionMode="multiple" [(selection)]="empleadosSeleccionados">
+<p-table [value]="empleados" selectionMode="multiple" [(selection)]="empleados">
   <ng-template pTemplate="header">
     <tr>
       <th>Clave Empleado</th>
@@ -8,8 +8,8 @@
   </ng-template>
   <ng-template pTemplate="body" let-emp>
     <tr>
-      <td>{{ emp.clave }}</td>
-      <td>{{ emp.nombre }}</td>
+      <td>{{ emp.ClaveEmpleado }}</td>
+      <td>{{ emp.Nombre }}</td>
       <td>
         <p-checkbox [(ngModel)]="emp.selected" [binary]="true"></p-checkbox>
       </td>

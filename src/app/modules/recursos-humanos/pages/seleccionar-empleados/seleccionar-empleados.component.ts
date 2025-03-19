@@ -1,10 +1,11 @@
-import { Component,Inject} from '@angular/core';
+import { Component,OnInit} from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { Table, TableModule } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
+import { Empleado,CargaEmpleadoCursos } from '../../../../models/empleado/empleado';
 
 
 
@@ -16,9 +17,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './seleccionar-empleados.component.html',
   styleUrl: './seleccionar-empleados.component.scss'
 })
-export class SeleccionarEmpleadosComponent {
-  empleados: any[] = []; // Lista de empleados disponibles
+export class SeleccionarEmpleadosComponent implements OnInit {
   empleadosSeleccionados: any[] = []; // Empleados seleccionados
+  empleados: CargaEmpleadoCursos[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
@@ -27,20 +28,21 @@ export class SeleccionarEmpleadosComponent {
   ) {}
 
   ngOnInit() {
-    this.empleadoService.getEmpleados().subscribe((empleados) => {
-      this.empleados = empleados;
-      if (this.config.data?.empleadosSeleccionados) {
-        this.empleadosSeleccionados = this.config.data.empleadosSeleccionados;
+    this.obtenerEmpleados();
+  }
 
-        // Inicializamos el estado 'selected' de los empleados ya seleccionados
-        this.empleados.forEach(emp => {
-          if (this.empleadosSeleccionados.some(seleccionado => seleccionado.id === emp.id)) {
-            emp.selected = true;
-          }
-        });
-      }
+
+ obtenerEmpleados(): void {
+    this.empleadoService.getEmpleados().subscribe((response: Empleado[]) => {
+      console.log('Empleados recibidos:', response); 
+      this.empleados = response.map((empleado: Empleado) => ({
+        ClaveEmpleado: empleado.ClaveEmpleado,
+        Nombre: `${empleado.Nombre} ${empleado.ApP} ${empleado.ApM}`
+      }));
     });
   }
+  
+
 
   guardar() {
     // Filtramos los empleados seleccionados

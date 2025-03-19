@@ -1,4 +1,9 @@
 import { Component,OnInit } from '@angular/core';
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
+import { Curso,Documento} from '../../../../models/cargarDatos/cargarDatos';
+import { CargaEmpleadoCursos} from '../../../../models/empleado/empleado';
+import { RecursosHumanosService } from '../../../../core/services/recursos-humanos/recursos-humanos.service';
 
 
 //Importaciones de PrimeNG
@@ -32,50 +37,70 @@ import { SeleccionarEmpleadosComponent } from '../seleccionar-empleados/seleccio
 })
 export class CrearCursoComponent implements OnInit {
   puestoSeleccionado: any; // Valor seleccionado en el autocompletado
-  departamentoSeleccionado: any; // Valor seleccionado en el autocompletado
-  ciudadSeleccionada: any; // Valor seleccionado en el autocompletado
-  CPSeleccionado: any; // Valor seleccionado en el autocompletado
+  cursosSeleccionados: any;
+  tipoDocumentoSeleccionado: any;
   Seleccionado: any; // Valor seleccionado en el autocompletado
   filteredItems: any[] = []; // Lista filtrada
   display: boolean = false;
   ref: DynamicDialogRef | undefined;
   empleadosSeleccionados: any[] = []; // Aquí se guardan los empleados seleccionados
+  filteredItemsCursos: any[] = [];
+  filteredItemsTipoDocumento: any[] = [];
+  empleados: CargaEmpleadoCursos[] = [];
+    // Definir las propiedades para las fechas
+    fechaInicio: Date | null = null;
+    fechaTermino: Date | null = null;
+    
+  constructor(private router: Router,public dialogService: DialogService,private empleadoService: EmpleadoService, private cargaDatosService: CargaDatosService,private recursosHumanosServices:RecursosHumanosService) {}
 
 
- 
-  
-  constructor(private router: Router,public dialogService: DialogService) {}
-
-  
 
   ngOnInit() {
+
+    this.cargaDatosService.getCurso().subscribe(data => {
+      if (data && data.nombrecurso) {
+        this.filteredItemsCursos = data.nombrecurso.map((item:Curso) => ({
+          label: item.NombreCurso,
+          value: item.NombreCurso
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
+    });
+
+
+    this.cargaDatosService.getTipoDocumento().subscribe(data => {
+      if (data && data.tipodocumento) {
+        this.filteredItemsTipoDocumento = data.tipodocumento.map((item:Documento) => ({
+          label: item.TipoDocumento,
+          value: item.TipoDocumento
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
+    });
   }
- 
   
-  items: any[] = [
-
-
-    { label: 'Recursos Humanos' },
-    { label: 'Tecnologias', value: 'Tecnologias' },
-    { label: 'Opción 3', value: '3' },
-  ];
-
-  cols: any[] = [
-    { label: 'Recursos Humanos' },
-    { label: 'Opción 3' }
-  ];
-
-  filterItems(event: any) {
+  filterItemsCursos(event: any) {
     const query = event.query.toLowerCase();
-    this.filteredItems = this.items.filter(item =>
+    this.filteredItemsCursos = this.filteredItemsCursos.filter(item =>
       item.label.toLowerCase().includes(query)
     );
   }
+
+  filterItemsTipoDocumento(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsTipoDocumento = this.filteredItemsTipoDocumento.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+  
   redirigir() {
     this.router.navigate(['recursos-humanos/cursos-internos']);
 }
+
 showDialog() {
-  this.display = true; // Muestra el diálogo
+  this.display = true; 
 }
 abrirDialogo() {
     this.ref = this.dialogService.open(SeleccionarEmpleadosComponent, {
@@ -92,4 +117,41 @@ abrirDialogo() {
     });
   }
 
+
+  guardarCurso() {
+    if (!this.empleadosSeleccionados || !Array.isArray(this.empleadosSeleccionados)) {
+      console.error("Error: empleadosSeleccionados no está definido o no es un array");
+      return;
+    }
+  
+    const nuevoCurso = {
+      actividad: this.cursosSeleccionados,
+      tipoDocumento: this.tipoDocumentoSeleccionado,
+      fechaInicio: this.fechaInicio,
+      fechaTermino: this.fechaTermino,
+      empleados: this.empleadosSeleccionados.map(emp => ({ ClaveEmpleado: emp.ClaveEmpleado })) 
+    };
+  
+    console.log("Guardando curso:", nuevoCurso);
+  
+    this.recursosHumanosServices.guardarCurso(nuevoCurso).subscribe(
+      response => {
+        console.log("Curso guardado con éxito", response);
+        this.limpiarFormulario();
+      },
+      error => {
+        console.error("Error al guardar el curso", error);
+      }
+    );
+  }
+  
+  limpiarFormulario() {
+   
+    this.cursosSeleccionados = null;
+    this.tipoDocumentoSeleccionado = null;
+    this.fechaInicio = null;
+    this.fechaTermino = null;
+    this.empleadosSeleccionados = [];
+  }
 }
+

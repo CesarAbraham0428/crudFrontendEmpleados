@@ -3,11 +3,12 @@
     <!-- Filtro por actividad -->
     <div class="label-container">
       <p-floatlabel>
-        <p-autocomplete [(ngModel)]="puestoSeleccionado" 
-                        [suggestions]="filteredItems" 
-                        (completeMethod)="filterItems($event)" 
+        <p-autocomplete [(ngModel)]="actividadSeleccionada" 
+                        [suggestions]="filteredItemsActividades" 
+                        (completeMethod)="filterItemsActividades($event)"
                         optionLabel="label" 
-                        placeholder="Seleccionar Actividad" [dropdown]="true">
+                        placeholder="Seleccionar Actividad" [dropdown]="true"
+                        (ngModelChange)="obtenerEmpleados()" >
         </p-autocomplete>
       </p-floatlabel>
     </div>
@@ -16,10 +17,11 @@
     <div class="label-container">
       <p-floatlabel>
         <p-autocomplete [(ngModel)]="departamentoSeleccionado" 
-                        [suggestions]="filteredItems" 
-                        (completeMethod)="filterItems($event)" 
+                        [suggestions]="filteredItemsDepartamento" 
+                        (completeMethod)="filterItemsDepartamentos($event)" 
                         optionLabel="label" 
-                        placeholder="Seleccionar Departamento" [dropdown]="true">
+                        placeholder="Seleccionar Departamento" [dropdown]="true"
+                        (ngModelChange)="obtenerEmpleados()">
         </p-autocomplete>
       </p-floatlabel>
     </div>
@@ -37,18 +39,19 @@
       </ng-template>
       <ng-template pTemplate="body" let-emp>
         <tr>
-          <td>{{ emp.actividad }}</td>
-          <td>{{ emp.nombreEmpleado }}</td>
           <td>
-            <p-checkbox [(ngModel)]="emp.participacion" 
-                        [disabled]="!edicionHabilitada"
-                        binary="true">
-            </p-checkbox>
+            <ng-container *ngFor="let actividad of emp.ActividadEmpresa">
+              {{ actividad.NombreActividad }}
+              
+            </ng-container>
+          </td>
+          <td>{{ emp.Nombre }}</td>
+          <td>
+            <p-checkbox [(ngModel)]="emp.participacion" [disabled]="!edicionHabilitada" binary="true" (ngModelChange)="actualizarParticipacion(emp)" ></p-checkbox>
           </td>
         </tr>
       </ng-template>
     </p-table>
-
     <!-- Botones de edición y guardado -->
     <div class="contenedor-botones">
       <button pButton pRipple severity="info" (click)="activarEdicion()">
