@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 
 import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
 import { Empleado } from '../../../models/empleado/empleado';
 import { ActividadEmpresa } from '../../../models/empleado/empleado';
 import { CursoExterno } from '../../../models/empleado/empleado';
+
 
 import { tap, map} from 'rxjs/operators';
 
@@ -49,6 +50,19 @@ export class EmpleadoService {
     return this.http.put(`${this.apiUrl}/actualizarParticipacion`, body); // Hacemos una solicitud PUT al backend
   }
 
+
+  getEmpleadoPorClave(ClaveEmpleado: string): Observable<Empleado> {
+    return this.http.get<{empleado: Empleado}>(`${this.apiUrl}/obtenerClave/${ClaveEmpleado}`).pipe(
+      map(response => response.empleado), // Extrae el empleado del objeto de respuesta
+      tap(data => console.log('Empleado recibido:', data))  // Agrega este log para depurar
+    );
+  }
+
+
+  actualizarEmpleado(empleado: Empleado): Observable<Empleado> {
+    return this.http.patch<Empleado>(`${this.apiUrl}/actualizarEmpleadoT/${empleado.ClaveEmpleado}`, empleado);
+  }
+  
   //Abraham
 
   obtenerInfoPersonal(): Observable<{ infoPersonalEmpleado: Empleado[] }> {
@@ -72,6 +86,8 @@ export class EmpleadoService {
       { withCredentials: true }
     );
   }
+
+  
   
 
   

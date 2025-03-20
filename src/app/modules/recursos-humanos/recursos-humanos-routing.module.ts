@@ -26,6 +26,11 @@ const routes: Routes = [
     path: 'crear-curso',  
     loadComponent: () => import('../recursos-humanos/pages/crear-curso/crear-curso.component')
       .then(m => m.CrearCursoComponent)  
+  }, 
+  { 
+    path: 'editar-empleado/:ClaveEmpleado',  
+    loadComponent: () => import('../recursos-humanos/pages/crear-empleado/crear-empleado.component')
+      .then(m => m.CrearEmpleadoComponent)  
   }
 ];
 

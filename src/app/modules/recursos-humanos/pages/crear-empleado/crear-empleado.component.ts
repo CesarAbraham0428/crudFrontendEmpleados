@@ -70,8 +70,24 @@ export class CrearEmpleadoComponent implements OnInit {
       Ciudad: ''
     }
   };
-   rfcInvalido: boolean = false;
-   formInvalid: boolean = false;
+  
+  filteredItemsDepartamento: any[] = [];
+  filteredItemsPuesto: any[] = [];
+  filteredItemsCiudad: any[] = [];
+  filteredItemsParentesco: any[] = [];
+
+
+  CPSeleccionado: any; // Valor seleccionado en el autocompletado
+  Seleccionado: any; // Valor seleccionado en el autocompletado
+  filteredItemsSexo: any[] = []; // Lista filtrada
+  sexoSeleccionado: string = '';
+  filteredItemsRol: any[] = []; // Lista filtrada
+  RolSeleccionado: string = '';
+  uploadedFiles: any[] = [];
+  fotoVistaPrevia: string | ArrayBuffer | null = null;
+  isEditMode: boolean = false;
+  rfcInvalido: boolean = false;
+  formInvalid: boolean = false;
 
   formatearRFC() {
     let valor = this.nuevoEmpleado.RFC.toUpperCase(); // Convierte todo a mayúsculas
@@ -89,7 +105,7 @@ export class CrearEmpleadoComponent implements OnInit {
 
 
   validarRFC(): boolean {
-    const rfcPattern = /^[A-Za-z]{4}-\d{6}$/; // 🔹 4 letras + "-" + 6 números
+    const rfcPattern = /^[A-Za-z]{4}-\d{6}$/; 
     return rfcPattern.test(this.nuevoEmpleado.RFC);
   }
 
@@ -104,22 +120,6 @@ export class CrearEmpleadoComponent implements OnInit {
     });
   }
 
-  filteredItemsDepartamento: any[] = [];
-  filteredItemsPuesto: any[] = [];
-  filteredItemsCiudad: any[] = [];
-  filteredItemsParentesco: any[] = [];
-
-
-  CPSeleccionado: any; // Valor seleccionado en el autocompletado
-  Seleccionado: any; // Valor seleccionado en el autocompletado
-  filteredItemsSexo: any[] = []; // Lista filtrada
-  sexoSeleccionado: string = '';
-  filteredItemsRol: any[] = []; // Lista filtrada
-  RolSeleccionado: string = '';
-  uploadedFiles: any[] = [];
-  fotoVistaPrevia: string | ArrayBuffer | null = null;
-  isEditMode: boolean = false;
- 
 
 
 // Agregar otro correo
@@ -325,8 +325,6 @@ eliminarTelefono(referencia: any, indice: number): void {
     { label: "Empleado", value: "Empleado" },
     { label: "Recursos Humanos", value: "RH" }
   ];
-
-
 
   filterItemsDepartamento(event: any) {
     const query = event.query.toLowerCase();
