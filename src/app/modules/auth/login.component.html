@@ -1,0 +1,42 @@
+<p-toast position="top-right"></p-toast>
+
+<div class="login-container">
+  <p-card header="Iniciar Sesión" class="login-card">
+    <form (ngSubmit)="login()" class="p-fluid">
+      <div class="field">
+        <span class="p-float-label">
+          <input
+            pInputText
+            id="correoElectronico"
+            [(ngModel)]="credentials.CorreoElectronico"
+            name="correoElectronico"
+            required
+          />
+          <label for="correoElectronico">Correo Electrónico</label>
+        </span>
+      </div>
+      <div class="field">
+        <span class="p-float-label">
+          <input
+            pInputText
+            type="password"
+            id="Password"
+            [(ngModel)]="credentials.Password"
+            name="Password"
+            required
+          />
+          <label for="Password">Contraseña</label>
+        </span>
+      </div>
+      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage" class="error-message"></p-message>
+      <button
+        pButton
+        type="submit"
+        label="Iniciar Sesión"
+        [disabled]="isLoading"
+        [loading]="isLoading"
+        class="login-button"
+      ></button>
+    </form>
+  </p-card>
+</div>
