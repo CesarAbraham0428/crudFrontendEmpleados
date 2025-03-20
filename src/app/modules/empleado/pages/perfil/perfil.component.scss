@@ -1,61 +1,268 @@
+/* Variables globales */
+:root {
+  --primary-color: #2196F3;
+  --secondary-color: #f5f5f5;
+  --accent-color: #03A9F4;
+  --danger-color: #f44336;
+  --success-color: #4CAF50;
+  --text-color: #333;
+  --light-text: #757575;
+  --border-radius: 8px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Contenedor principal */
 .main-container {
   margin-left: 270px;
   margin-right: 60px;
-  padding: 20px;
+  padding: 24px;
   transition: margin-left 0.3s ease;
+  background-color: #fafafa;
+  min-height: calc(100vh - 48px);
 }
 
+/* Estilo para la tarjeta principal */
+:host ::ng-deep .p-card {
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  background-color: white;
+  
+  .p-card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .p-card-content {
+    padding: 24px;
+  }
+}
+
+/* Título del encabezado */
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+  padding: 8px 0;
+}
+
+/* Botones de acción */
 .contenedor-botones {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 24px;
+  
+  .p-button {
+    transition: var(--transition);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 
+/* Fieldsets */
+:host ::ng-deep .p-fieldset {
+  margin-bottom: 24px;
+  border-radius: var(--border-radius);
+  border: 1px solid #e0e0e0;
+  
+  .p-fieldset-legend {
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+  }
+  
+  .p-fieldset-content {
+    padding: 16px;
+  }
+}
+
+/* Grid y campos de formulario */
+.p-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8px;
+  
+  .p-col-12 {
+    width: 100%;
+    padding: 8px;
+  }
+  
+  .p-md-6 {
+    @media (min-width: 768px) {
+      width: calc(50% - 16px);
+    }
+  }
+  
+  .p-md-3 {
+    @media (min-width: 768px) {
+      width: calc(25% - 16px);
+    }
+  }
+}
+
+/* Contenedor de etiquetas */
 .label-container {
-  margin-top: 1rem;
+  margin-bottom: 20px;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    width: 48%;
+    margin-right: 2%;
+    display: inline-block;
+  }
+  
+  &:nth-child(even) {
+    margin-right: 0;
+  }
+}
+
+/* Campos de entrada */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-password,
+:host ::ng-deep .p-float-label {
   width: 100%;
 }
 
+:host ::ng-deep .p-float-label {
+  label {
+    font-size: 0.85rem;
+    color: var(--light-text);
+  }
+  
+  input:focus ~ label {
+    color: var(--primary-color);
+  }
+}
+
+:host ::ng-deep .p-float-label input:focus,
+:host ::ng-deep .p-inputtext:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+/* Sección de contacto */
+.contact-group {
+  margin-bottom: 24px;
+  
+  .p-button-text {
+    padding: 8px 16px;
+    margin-top: 8px;
+  }
+}
+
 .contact-section {
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
 }
 
 .contact-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  
+  span {
+    font-weight: 500;
+    color: var(--text-color);
+  }
 }
 
 .contact-field {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
-
-  input {
-    flex-grow: 1;
-    margin-right: 0.5rem;
+  margin-bottom: 12px;
+  
+  :host ::ng-deep .p-inputgroup {
+    width: 100%;
+    
+    .p-inputtext {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .p-button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   }
 }
 
-.p-grid {
-  gap: 10px;
-}
-
-.p-inputgroup {
-  width: 100%;
-}
-
-.p-field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.5rem;
-
-  label {
-    font-weight: bold;
+/* Nueva referencia */
+.nueva-referencia-container {
+  margin-top: 24px;
+  
+  .p-button {
+    margin-top: 16px;
   }
 }
-.p-inputtext {
-  width: 100%;
+
+/* Referencias familiares anidadas */
+.referencia-item {
+  position: relative;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: var(--border-radius);
+  background-color: var(--secondary-color);
+  
+  .referencia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+  
+  .referencia-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .referencia-delete {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* Input groups */
+:host ::ng-deep .p-inputgroup {
+  .p-button-icon-only {
+    width: 3rem;
+  }
+}
+
+/* Modo edición */
+.edit-mode {
+  :host ::ng-deep .p-inputtext {
+    background-color: rgba(33, 150, 243, 0.05);
+    transition: var(--transition);
+    
+    &:focus {
+      background-color: white;
+    }
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.p-fieldset {
+  animation: fadeIn 0.3s ease;
 }
