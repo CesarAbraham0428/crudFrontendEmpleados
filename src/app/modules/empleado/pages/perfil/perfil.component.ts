@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-perfil',
@@ -23,7 +24,7 @@ import { MessageService } from 'primeng/api';
     CommonModule,
     PanelModule, CardModule, FieldsetModule, FloatLabelModule, AutoCompleteModule,
     FormsModule, InputMaskModule, DatePickerModule, TableModule, ButtonModule,
-    InputTextModule, PasswordModule
+    InputTextModule, PasswordModule, ToastModule
   ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
@@ -119,6 +120,14 @@ export class PerfilComponent implements OnInit {
   }
   
   removePhone(index: number) {
+    if (this.empleado.Telefono.length <= 1) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Debe mantener al menos un teléfono en su perfil'
+      });
+      return;
+    }
     if (index >= 0 && index < this.empleado.Telefono.length) {
       this.empleado.Telefono.splice(index, 1);
       // Aquí podrías llamar a un servicio para eliminar el teléfono
@@ -134,6 +143,14 @@ export class PerfilComponent implements OnInit {
   }
   
   removeEmail(index: number) {
+    if (this.empleado.CorreoElectronico.length <= 1) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Debe mantener al menos un correo electrónico en su perfil'
+      });
+      return;
+    }
     if (index >= 0 && index < this.empleado.CorreoElectronico.length) {
       this.empleado.CorreoElectronico.splice(index, 1);
       // Aquí podrías llamar a un servicio para eliminar el correo
@@ -151,11 +168,21 @@ export class PerfilComponent implements OnInit {
   }
   
   removeFamilyPhone(refIndex: number, phoneIndex: number) {
-    if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length &&
-        phoneIndex >= 0 && phoneIndex < this.empleado.ReferenciaFamiliar[refIndex].Telefono.length) {
-      this.empleado.ReferenciaFamiliar[refIndex].Telefono.splice(phoneIndex, 1);
-      // Aquí podrías llamar a un servicio para eliminar el teléfono
-      // this.empleadoService.actualizarTelefonosFamiliares(this.empleado.ReferenciaFamiliar).subscribe();
+    if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length) {
+      const familia = this.empleado.ReferenciaFamiliar[refIndex];
+      if (familia.Telefono.length <= 1) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atención',
+          detail: `La referencia familiar ${familia.NombreFamiliar} debe tener al menos un teléfono`
+        });
+        return;
+      }
+      if (phoneIndex >= 0 && phoneIndex < familia.Telefono.length) {
+        familia.Telefono.splice(phoneIndex, 1);
+        // Aquí podrías llamar a un servicio para eliminar el teléfono
+        // this.empleadoService.actualizarTelefonosFamiliares(this.empleado.ReferenciaFamiliar).subscribe();
+      }
     }
   }
 }
