@@ -82,14 +82,10 @@ export class EmpleadoService {
     return this.http.patch(`${this.apiUrl}/actualizarEmpleado`, { Domicilio: domicilio }, { withCredentials: true });
   }
 
-  actualizarTelefonos(telefonos: string[]): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizarContactos`, { Telefonos: telefonos }, { withCredentials: true });
+  actualizarContactos(operaciones: any[]): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/actualizarContactos`, { operaciones }, { withCredentials: true });
   }
-
-  actualizarCorreos(correos: string[]): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizarCorreos`, { Correos: correos }, { withCredentials: true });
-  }
-
+  
   actualizarReferenciasFamiliares(referencias: any[]): Observable<any> {
     return this.http.put(`${this.apiUrl}/actualizarTelefonosFamiliar/:referenciaId`, { Referencias: referencias }, { withCredentials: true });
   }

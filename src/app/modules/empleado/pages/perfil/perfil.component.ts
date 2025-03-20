@@ -16,6 +16,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
@@ -126,99 +127,116 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  saveChanges() {
-    const updates: Promise<any>[] = [];
-
-    // Actualizar contraseña si cambió
-    if (this.currentPassword && this.newPassword) {
-      updates.push(this.empleadoService.actualizarPassword({
-        Password: this.currentPassword,
-        NuevaPassword: this.newPassword
-      }).toPromise());
-    }
-
-    // Actualizar domicilio si cambió
-    if (JSON.stringify(this.empleado.Domicilio) !== JSON.stringify(this.empleadoOriginal.Domicilio)) {
-      updates.push(this.empleadoService.actualizarDomicilio(this.empleado.Domicilio).toPromise());
-    }
-
-    // Actualizar contactos si cambió
-    if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
-      updates.push(this.empleadoService.actualizarTelefonos(this.empleado.Telefono).toPromise());
-    }
-    if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
-      updates.push(this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).toPromise());
-    }
-
-    // Actualizar referencias familiares si cambió
-    if (JSON.stringify(this.empleado.ReferenciaFamiliar) !== JSON.stringify(this.empleadoOriginal.ReferenciaFamiliar)) {
-      updates.push(this.empleadoService.actualizarReferenciasFamiliares(this.empleado.ReferenciaFamiliar).toPromise());
-    }
-
-    Promise.all(updates)
-      .then(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Perfil actualizado correctamente'
-        });
-        this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
-        this.isEditMode = false;
-        this.currentPassword = '';
-        this.newPassword = '';
-      })
-      .catch(err => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo actualizar el perfil: ' + err.message
-        });
+  async saveChanges() {
+    try {
+      const updates: Promise<any>[] = [];
+      const operaciones: any[] = [];
+  
+      // Actualizar contraseña si cambió
+      if (this.currentPassword && this.newPassword) {
+        updates.push(lastValueFrom(this.empleadoService.actualizarPassword({
+          Password: this.currentPassword,
+          NuevaPassword: this.newPassword
+        })));
+      }
+  
+      // Actualizar domicilio si cambió
+      if (JSON.stringify(this.empleado.Domicilio) !== JSON.stringify(this.empleadoOriginal.Domicilio)) {
+        updates.push(lastValueFrom(this.empleadoService.actualizarDomicilio(this.empleado.Domicilio)));
+      }
+  
+      // Si los correos cambiaron, agregar la operación
+      if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
+        const correosAEliminar = this.empleadoOriginal.CorreoElectronico.filter(correo =>
+          !this.empleado.CorreoElectronico.includes(correo)
+        );
+        const correosAAgregar = this.empleado.CorreoElectronico.filter(correo =>
+          !this.empleadoOriginal.CorreoElectronico.includes(correo)
+        );
+  
+        if (correosAEliminar.length) {
+          operaciones.push({ tipo: "correo", operacion: "eliminar", datos: { correos: correosAEliminar } });
+        }
+        if (correosAAgregar.length) {
+          operaciones.push({ tipo: "correo", operacion: "agregar", datos: { correos: correosAAgregar } });
+        }
+      }
+  
+      // Si los teléfonos cambiaron, agregar la operación
+      if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
+        const telefonosAEliminar = this.empleadoOriginal.Telefono.filter(tel =>
+          !this.empleado.Telefono.includes(tel)
+        );
+        const telefonosAAgregar = this.empleado.Telefono.filter(tel =>
+          !this.empleadoOriginal.Telefono.includes(tel)
+        );
+  
+        if (telefonosAEliminar.length) {
+          operaciones.push({ tipo: "telefono", operacion: "eliminar", datos: { telefonos: telefonosAEliminar } });
+        }
+        if (telefonosAAgregar.length) {
+          operaciones.push({ tipo: "telefono", operacion: "agregar", datos: { telefonos: telefonosAAgregar } });
+        }
+      }
+  
+      // Si hay operaciones de contacto, agregarlas al array de actualizaciones
+      if (operaciones.length > 0) {
+        updates.push(lastValueFrom(this.empleadoService.actualizarContactos(operaciones)));
+      }
+  
+      // Actualizar referencias familiares si cambió
+      if (JSON.stringify(this.empleado.ReferenciaFamiliar) !== JSON.stringify(this.empleadoOriginal.ReferenciaFamiliar)) {
+        updates.push(lastValueFrom(this.empleadoService.actualizarReferenciasFamiliares(this.empleado.ReferenciaFamiliar)));
+      }
+  
+      // Ejecutar todas las actualizaciones
+      await Promise.all(updates);
+  
+      // Notificar éxito
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Perfil actualizado correctamente'
       });
+  
+      // Guardar estado original después de actualizar
+      this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
+      this.isEditMode = false;
+      this.currentPassword = '';
+      this.newPassword = '';
+  
+    } catch (err) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo actualizar el perfil: '
+      });
+      console.error(err);
+    }
   }
+  
 
-  // Métodos para manejar los teléfonos del empleado
   addNewPhone() {
     this.empleado.Telefono.push('');
-    // Aquí podrías llamar a un servicio para guardar el nuevo teléfono
-    // this.empleadoService.actualizarTelefonos(this.empleado.Telefono).subscribe();
   }
 
   removePhone(index: number) {
-    if (this.empleado.Telefono.length <= 1) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atención',
-        detail: 'Debe mantener al menos un teléfono en su perfil'
-      });
-      return;
-    }
-    if (index >= 0 && index < this.empleado.Telefono.length) {
+    if (this.empleado.Telefono.length > 1) {
       this.empleado.Telefono.splice(index, 1);
-      // Aquí podrías llamar a un servicio para eliminar el teléfono
-      // this.empleadoService.actualizarTelefonos(this.empleado.Telefono).subscribe();
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Debe mantener al menos un teléfono' });
     }
   }
 
-  // Métodos para manejar los correos del empleado
   addNewEmail() {
     this.empleado.CorreoElectronico.push('');
-    // Aquí podrías llamar a un servicio para guardar el nuevo correo
-    // this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).subscribe();
   }
 
   removeEmail(index: number) {
-    if (this.empleado.CorreoElectronico.length <= 1) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atención',
-        detail: 'Debe mantener al menos un correo electrónico en su perfil'
-      });
-      return;
-    }
-    if (index >= 0 && index < this.empleado.CorreoElectronico.length) {
+    if (this.empleado.CorreoElectronico.length > 1) {
       this.empleado.CorreoElectronico.splice(index, 1);
-      // Aquí podrías llamar a un servicio para eliminar el correo
-      // this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).subscribe();
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Debe mantener al menos un correo' });
     }
   }
 

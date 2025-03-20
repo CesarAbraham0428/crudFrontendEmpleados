@@ -2,9 +2,8 @@ import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { Empleado, ReferenciaFamiliar, Domicilio } from '../../../../models/empleado/empleado';  // Importa todos los modelos necesarios
+import { Empleado} from '../../../../models/empleado/empleado';
 import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
-import { Observable } from 'rxjs';
 import {Departamento,Ciudad,Parentesco,Puesto} from '../../../../models/cargarDatos/cargarDatos';
 
 //Importaciones de PrimeNG
@@ -23,10 +22,6 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-
-
-
-
 
 @Component({
   selector: 'app-crear-empleado',
@@ -51,9 +46,9 @@ export class CrearEmpleadoComponent implements OnInit {
     CorreoElectronico: [''],
     Password: '',  
     Rol: '',
-    CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],  // ✅ Agrega un objeto vacío con estructura
-    ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],  // ✅ Incluye al menos un objeto válido
-    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }], // ✅ Estructura correcta
+    CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],
+    ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],
+    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }],
     createdAt: new Date().toISOString(),
     Domicilio: {
       Calle: '',
@@ -88,8 +83,6 @@ export class CrearEmpleadoComponent implements OnInit {
   filteredItemsRol: any[] = []; // Lista filtrada
   RolSeleccionado: string = '';
  
-
-
 // Agregar otro correo
 agregarCorreoU() {
   this.nuevoEmpleado.CorreoElectronico.push('');
@@ -116,7 +109,6 @@ agregarTelefonoU() {
     }
   });
 }
-
 
 // Método para limpiar el formulario del empleado
 limpiarFormulario(): void {
@@ -211,8 +203,6 @@ eliminarTelefono(referencia: any, indice: number): void {
   }
 }
 
-
-
   allItems = [
     { label: "Masculino", value: "M" },
     { label: "Femenino", value: "F" }
@@ -221,8 +211,6 @@ eliminarTelefono(referencia: any, indice: number): void {
     { label: "Empleado", value: "Empleado" },
     { label: "Recursos Humanos", value: "RH" }
   ];
-
-
 
   filterItemsDepartamento(event: any) {
     const query = event.query.toLowerCase();
@@ -251,7 +239,6 @@ eliminarTelefono(referencia: any, indice: number): void {
       item.label.toLowerCase().includes(query)
     );
   }
-
 
   filterItemssSexo(event: any) {
     const query = event.query.toLowerCase();
@@ -283,6 +270,5 @@ eliminarTelefonoU(index: number) {
 trackByFn(index: number, item: any): any {
   return index; // o algún identificador único del elemento
 }
-
 
 }
