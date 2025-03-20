@@ -1,36 +1,42 @@
 <div class="main-container">
-    <p-card header="Mis cursos Externos">
-        
-        <div class="contenedor-botones">
-            <button pButton pRipple severity="info" (click)="redirigir()">
-              ➕ <span pButtonLabel>Agregar Curso Externo</span>
-            </button>
-        </div>
-        <p></p>
-        
-        @if (cursos.length > 0) {
-          <p-table [value]="cursos">
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Curso</th>
-                  <th>Tipo de Documento</th>
-                  <th>Fecha de Inicio</th>
-                  <th>Fecha de Finalización</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-curso>
-                <tr>
-                  <td>{{ curso.Nombre }}</td>
-                  <td>{{ curso.TipoCurso }}</td>
-                  <td>{{ curso.FechaInicio | formatoFecha }}</td>
-                  <td>{{ curso.FechaFin | formatoFecha }}</td>
-                </tr>
-              </ng-template>
-          </p-table>
-        } @else {
-          <div class="no-cursos">
-            No hay cursos externos registrados.
-          </div>
-        }
-    </p-card>
+  <p-card header="Mis cursos Externos">
+    <div class="contenedor-botones">
+      <button pButton pRipple severity="info" (click)="redirigir()">
+        ➕ <span pButtonLabel>Agregar Curso Externo</span>
+      </button>
+    </div>
+    <p></p>
+
+    @if (cursos.length > 0) {
+      <p-table [value]="cursos">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Curso</th>
+            <th>Tipo de Curso</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Finalización</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-curso>
+          <tr>
+            <td>{{ curso.Nombre }}</td>
+            <td>{{ curso.TipoCurso }}</td>
+            <td>{{ curso.FechaInicio | formatoFecha }}</td>
+            <td>{{ curso.FechaFin | formatoFecha }}</td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editarCurso(curso)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarCurso(curso._id)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    } @else {
+      <div class="no-cursos">
+        No hay cursos externos registrados.
+      </div>
+    }
+  </p-card>
+
+  <p-toast position="top-right"></p-toast>
 </div>

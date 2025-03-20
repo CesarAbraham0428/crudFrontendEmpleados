@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importa CommonModule completo
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
-import { FieldsetModule } from 'primeng/fieldset';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
 import { CursoExterno } from '../../../../models/empleado/empleado';
 import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
@@ -15,22 +14,25 @@ import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
   selector: 'app-curso-list',
   standalone: true,
   imports: [
-    CommonModule, // Asegúrate de que CommonModule esté aquí
-    PanelModule, 
-    FloatLabelModule, 
-    FieldsetModule, 
-    CardModule, 
-    TableModule, 
-    ButtonModule, 
+    CommonModule,
+    CardModule,
+    TableModule,
+    ButtonModule,
+    ToastModule,
     FormatoFechaPipe
   ],
   templateUrl: './curso-list.component.html',
-  styleUrl: './curso-list.component.scss'
+  styleUrls: ['./curso-list.component.scss'],
+  providers: [MessageService]
 })
 export class CursoListComponent implements OnInit {
   cursos: CursoExterno[] = [];
 
-  constructor(private router: Router, private empleadoService: EmpleadoService) { }
+  constructor(
+    private router: Router,
+    private empleadoService: EmpleadoService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerCursos();
@@ -40,17 +42,47 @@ export class CursoListComponent implements OnInit {
     this.empleadoService.obtenerCursosExternos().subscribe({
       next: (data) => {
         console.log('Datos recibidos:', data);
-        // Extraemos los cursos de la estructura anidada
         this.cursos = data.cursosExternos.flatMap(ce => ce.CursoExterno);
         console.log('Cursos procesados:', this.cursos);
       },
       error: (error) => {
         console.error('Error al obtener los cursos:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los cursos'
+        });
       }
     });
   }
 
   redirigir() {
     this.router.navigate(['empleado/cursos-externos']);
+  }
+
+  editarCurso(curso: CursoExterno) {
+    this.router.navigate(['empleado/cursos-externos'], { state: { curso } });
+  }
+
+  eliminarCurso(cursoId: string) {
+    if (confirm('¿Estás seguro de que deseas eliminar este curso?')) {
+      this.empleadoService.eliminarCursoExterno(cursoId).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Curso eliminado correctamente'
+          });
+          this.obtenerCursos(); // Refrescar la lista
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el curso: ' + (error.error?.details || error.message)
+          });
+        }
+      });
+    }
   }
 }

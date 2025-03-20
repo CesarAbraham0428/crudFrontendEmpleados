@@ -34,6 +34,7 @@ export class AgregarCursoExternoComponent implements OnInit {
   ];
   minDate: Date = new Date();
   editMode: boolean = false;
+  cursoId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +48,20 @@ export class AgregarCursoExternoComponent implements OnInit {
       fechaFinalizacion: ['', Validators.required],
       tipoCurso: ['', Validators.required]
     });
+
+    // Verificar si hay datos para edición
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { curso?: any };
+    if (state?.curso) {
+      this.editMode = true;
+      this.cursoId = state.curso._id;
+      this.formulario.patchValue({
+        nombreCurso: state.curso.Nombre,
+        tipoCurso: state.curso.TipoCurso,
+        fechaInicio: new Date(state.curso.FechaInicio),
+        fechaFinalizacion: new Date(state.curso.FechaFin)
+      });
+    }
   }
 
   ngOnInit(): void {}
@@ -69,27 +84,49 @@ export class AgregarCursoExternoComponent implements OnInit {
       FechaFin: this.formulario.get('fechaFinalizacion')?.value.toISOString().split('T')[0]
     };
 
-    this.empleadoService.agregarCursoExterno(cursoData)
-      .subscribe({
-        next: (response) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: `Curso ${this.editMode ? 'actualizado' : 'agregado'} correctamente`
-          });
-          setTimeout(() => {
-            this.router.navigate(['empleado/cursos-externos-list']);
-          }, 1500);
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo agregar el curso externo: ' + (error.error?.details || error.message)
-          });
-          console.error('Error al agregar curso:', error);
-        }
-      });
+    if (this.editMode && this.cursoId) {
+      this.empleadoService.actualizarCursoExterno(this.cursoId, cursoData)
+        .subscribe({
+          next: (response) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Curso actualizado correctamente'
+            });
+            setTimeout(() => {
+              this.router.navigate(['empleado/cursos-externos-list']);
+            }, 1500);
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo actualizar el curso: ' + (error.error?.details || error.message)
+            });
+          }
+        });
+    } else {
+      this.empleadoService.agregarCursoExterno(cursoData)
+        .subscribe({
+          next: (response) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Curso agregado correctamente'
+            });
+            setTimeout(() => {
+              this.router.navigate(['empleado/cursos-externos-list']);
+            }, 1500);
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'No se pudo agregar el curso: ' + (error.error?.details || error.message)
+            });
+          }
+        });
+    }
   }
 
   cancelar(): void {
