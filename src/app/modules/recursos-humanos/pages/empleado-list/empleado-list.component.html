@@ -111,6 +111,8 @@
                 </td>
                 <td>
                     <button pButton label="Editar" icon="pi pi-pencil" (click)="editarEmpleado(customer._id)"></button>
+                    <button pButton icon="pi pi-pencil" (click)="editarEmpleado(customer.ClaveEmpleado)"></button>
+
                     <button pButton label="Eliminar" icon="pi pi-trash" (click)="eliminarEmpleado(customer._id)"></button>
                 </td>
             </tr>

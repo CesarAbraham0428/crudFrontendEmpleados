@@ -26,21 +26,17 @@ import { PasswordModule } from 'primeng/password';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { ActivatedRoute } from '@angular/router';
-
-
-
 
 
 @Component({
-  selector: 'app-crear-empleado',
+  selector: 'app-editar-empleado',
   standalone: true,
   imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule,PasswordModule,FileUploadModule,ToastModule],
   providers:[MessageService],
-  templateUrl: './crear-empleado.component.html',
-  styleUrl: './crear-empleado.component.scss'
+  templateUrl: './editar-empleado.component.html',
+  styleUrl: './editar-empleado.component.scss'
 })
-export class CrearEmpleadoComponent implements OnInit {
+export class EditarEmpleadoComponent implements OnInit {
 
   nuevoEmpleado: Empleado = {
     ClaveEmpleado: '',  // Se generará en el backend
@@ -118,7 +114,6 @@ export class CrearEmpleadoComponent implements OnInit {
   RolSeleccionado: string = '';
   uploadedFiles: any[] = [];
   fotoVistaPrevia: string | ArrayBuffer | null = null;
-  isEditMode: boolean = false;
  
 
 
@@ -132,7 +127,7 @@ agregarTelefonoU() {
   this.nuevoEmpleado.Telefono.push('');
 }
 
- constructor(private router: Router, private empleadoService: EmpleadoService,private cargaDatosService: CargaDatosService, private messageService: MessageService,private route: ActivatedRoute) {}
+ constructor(private router: Router, private empleadoService: EmpleadoService,private cargaDatosService: CargaDatosService, private messageService: MessageService) {}
  validarFormulario(): boolean {
   if (
     !this.nuevoEmpleado.Nombre ||
@@ -279,30 +274,11 @@ ngOnInit() {
       console.error('La respuesta del backend no tiene la estructura esperada:', data);
     }
   });
-
-
-  //CAMBIE PARA EDITAR 
-  this.route.paramMap.subscribe(params => {
-    const ClaveEmpleado = params.get('ClaveEmpleado'); 
-    if (ClaveEmpleado) {
-      this.isEditMode = true;
-      this.obtenerEmpleadoPorClave(ClaveEmpleado);
-    }
-  });
-
 }
 
 
 eliminarReferencia(index: number): void {
-  if (this.nuevoEmpleado.ReferenciaFamiliar.length > 1) {
-    this.nuevoEmpleado.ReferenciaFamiliar.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos una referencia familiar.'
-    });
-  }
+  this.nuevoEmpleado.ReferenciaFamiliar.splice(index, 1);
 }
 
 agregarTelefono(referencia: any): void {
@@ -374,29 +350,15 @@ eliminarTelefono(referencia: any, indice: number): void {
     this.router.navigate(['recursos-humanos/listaEmpleado']);
 }
 
-eliminarCorreo(index: number): void {
-  if (this.nuevoEmpleado.CorreoElectronico.length > 1) {
-    this.nuevoEmpleado.CorreoElectronico.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos un correo electrónico.'
-    });
-  }
+eliminarCorreo(index: number) {
+  // Eliminar el correo en el índice especificado
+  this.nuevoEmpleado.CorreoElectronico.splice(index, 1);
+}
+eliminarTelefonoU(index: number) {
+  // Eliminar el correo en el índice especificado
+  this.nuevoEmpleado.Telefono.splice(index, 1);
 }
 
-eliminarTelefonoU(index: number): void {
-  if (this.nuevoEmpleado.Telefono.length > 1) {
-    this.nuevoEmpleado.Telefono.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos un teléfono.'
-    });
-  }
-}
 
 trackByFn(index: number, item: any): any {
   return index; // o algún identificador único del elemento
@@ -412,45 +374,6 @@ onFileSelected(event: any) {
   if (file) {
     this.nuevoEmpleado.FotoEmpleado = file; // Asigna el archivo directamente
   }
-}
-
-
-//Edición 
-
-// Cargar datos del empleado si se está editando
-obtenerEmpleadoPorClave(claveEmpleado: string) {
-  this.empleadoService.getEmpleadoPorClave(claveEmpleado).subscribe({
-    next: (response) => {
-      if (response) {
-        this.nuevoEmpleado = response;  // Asignar el empleado recibido al objeto nuevoEmpleado
-      }
-    },
-    error: (error) => {
-      console.error('Error al obtener empleado:', error);
-    }
-  });
-}
-
-
-editarEmpleado(): void {
-  if (!this.validarFormulario()) {
-    return;
-  }
-
-  console.log('Datos enviados para actualizar:', this.nuevoEmpleado);
-
-  // Llamar al servicio para actualizar el empleado
-  this.empleadoService.actualizarEmpleado(this.nuevoEmpleado).subscribe({
-    next: (empleado) => {
-      console.log('Empleado actualizado:', empleado);
-      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empleado actualizado correctamente.' });
-      this.router.navigate(['recursos-humanos/listaEmpleado']); // Redirigir a la lista de empleados
-    },
-    error: (error) => {
-      console.error('Error al actualizar el empleado:', error);
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el empleado.' });
-    }
-  });
 }
 
 }

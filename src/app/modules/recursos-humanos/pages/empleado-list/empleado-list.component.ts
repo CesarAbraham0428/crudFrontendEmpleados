@@ -67,7 +67,7 @@ customers: Empleado[] = [];
   loadCustomers(): void {
     this.loading = true;
     this.empleadoService.getEmpleados().subscribe(
-      (data) => {
+      (data: Empleado[]) => { 
         this.customers = data;  // Ahora `data` es directamente un array de `Empleado`
         this.loading = false;
       },
@@ -99,14 +99,17 @@ customers: Empleado[] = [];
      redirigir() {
       this.router.navigate(['recursos-humanos/alta-empleado']);
 }
-  // Editar empleado
-  editarEmpleado(id: string) {
-    this.router.navigate(['recursos-humanos/editar-empleado', id]);
-  }
+
 
   // Eliminar empleado
   eliminarEmpleado(id: string) {
     // Lógica de eliminación
+  }
+
+
+  //EDITAR EMPLEADO 
+  editarEmpleado(ClaveEmpleado: string) {
+    this.router.navigate(['recursos-humanos/editar-empleado', ClaveEmpleado]);
   }
 
 }
