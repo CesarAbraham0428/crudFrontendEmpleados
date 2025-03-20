@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
 import { Empleado } from '../../../models/empleado/empleado';
 import { ActividadEmpresa } from '../../../models/empleado/empleado';
 import { CursoExterno } from '../../../models/empleado/empleado';
 
-import { tap, map} from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +20,10 @@ export class EmpleadoService {
 
   private baseUrl = `${environment.baseUrl}/auth`;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   getEmpleados(): Observable<Empleado[]> {
-    return this.http.get<{empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
+    return this.http.get<{ empleados: Empleado[] }>(`${this.apiUrl}/obtenerEmpleados`).pipe(
       map(response => response.empleados), // Extrae el array "empleados" del objeto
       tap(data => console.log('Empleados recibidos:', data))  // Agrega este log
     );
@@ -41,9 +41,9 @@ export class EmpleadoService {
 
   actualizarParticipacion(ClaveEmpleado: string, NombreActividad: string, participacion: number): Observable<any> {
     const body = {
-      ClaveEmpleado,        
+      ClaveEmpleado,
       NombreActividad,
-      participacion,    
+      participacion,
     };
 
     return this.http.put(`${this.apiUrl}/actualizarParticipacion`, body); // Hacemos una solicitud PUT al backend
@@ -64,7 +64,7 @@ export class EmpleadoService {
       { withCredentials: true }
     );
   }
-  
+
 
   obtenerActividadesEmpresa(): Observable<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }> {
     return this.http.get<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }>(
@@ -72,8 +72,8 @@ export class EmpleadoService {
       { withCredentials: true }
     );
   }
-  
-  // Nuevos métodos para las actualizaciones
+
+  // Informacion personal
   actualizarPassword(passwordData: { Password: string, NuevaPassword: string }): Observable<any> {
     return this.http.patch(`${this.baseUrl}/actualizarPassword`, passwordData, { withCredentials: true });
   }
@@ -85,9 +85,39 @@ export class EmpleadoService {
   actualizarContactos(operaciones: any[]): Observable<any> {
     return this.http.patch(`${this.apiUrl}/actualizarContactos`, { operaciones }, { withCredentials: true });
   }
+
+  //Referencia Familiar
   
   actualizarReferenciasFamiliares(referencias: any[]): Observable<any> {
     return this.http.put(`${this.apiUrl}/actualizarTelefonosFamiliar/:referenciaId`, { Referencias: referencias }, { withCredentials: true });
   }
-  
+
+  agregarReferenciaFamiliar(referenciaData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/agregarReferenciaFamiliar`, referenciaData, { 
+      withCredentials: true 
+    });
+  }
+
+  eliminarReferenciaFamiliar(referenciaId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminarReferenciaFamiliar/${referenciaId}`, { 
+      withCredentials: true 
+    });
+  }
+
+  //Cursos Externos
+
+  // empleado.service.ts
+  agregarCursoExterno(cursoData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/agregarCursoExterno`, cursoData, { withCredentials: true });
+  }
+
+  actualizarCursoExterno(cursoExternoId: string, cursoData: any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/actualizarCursoExterno/${cursoExternoId}`, cursoData, { withCredentials: true });
+  }
+
+  // Nuevo método para eliminar
+  eliminarCursoExterno(cursoExternoId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminarCursoExterno/${cursoExternoId}`, { withCredentials: true });
+  }
+
 }

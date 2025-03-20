@@ -26,7 +26,7 @@
             <td>{{ curso.FechaFin | formatoFecha }}</td>
             <td>
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editarCurso(curso)"></button>
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarCurso(curso._id)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmarEliminar(curso._id)"></button>
             </td>
           </tr>
         </ng-template>
@@ -39,4 +39,5 @@
   </p-card>
 
   <p-toast position="top-right"></p-toast>
+  <p-confirmDialog header="Confirmación" icon="pi pi-exclamation-triangle" [style]="{width: '425px'}"></p-confirmDialog>
 </div>

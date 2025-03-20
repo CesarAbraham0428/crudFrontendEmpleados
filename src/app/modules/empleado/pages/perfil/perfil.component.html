@@ -32,13 +32,13 @@
     <p-fieldset legend="Domicilio">
       <div class="p-grid p-formgrid">
         <div class="p-field p-col-12 p-md-6" *ngFor="let field of domicilioCampos">
-          <p-floatlabel>
-           <!--  <input pInputText [(ngModel)]="empleado.Domicilio[field]" [readonly]="!isEditMode" class="p-inputtext" /> -->
-            <label>{{ getLabel(field) }}</label>
-          </p-floatlabel>
+          <input pInputText *ngIf="empleado.Domicilio" [(ngModel)]="empleado.Domicilio[field]" [readonly]="!isEditMode"
+            class="p-inputtext" />
+
+          <label>{{ getLabel(field) }}</label>
         </div>
       </div>
-    </p-fieldset>    
+    </p-fieldset>
 
     <!-- Contacto -->
     <p-fieldset legend="Contacto">
@@ -109,6 +109,56 @@
               <label>Correo Electrónico</label>
             </p-floatlabel>
           </div>
+        </p-fieldset>
+      </div>
+    </p-fieldset>
+
+    <!-- perfil.component.html -->
+
+    <!-- Formulario para agregar nueva referencia -->
+    <div class="p-grid" *ngIf="isEditMode">
+      <div class="p-col-12">
+        <p-fieldset legend="Agregar Nueva Referencia Familiar">
+          <div class="p-grid">
+            <div class="p-col-12 p-md-3">
+              <p-floatlabel>
+                <input pInputText [(ngModel)]="nuevaReferencia.NombreFamiliar" />
+                <label>Nombre</label>
+              </p-floatlabel>
+            </div>
+            <div class="p-col-12 p-md-3">
+              <p-floatlabel>
+                <input pInputText [(ngModel)]="nuevaReferencia.Parentesco" />
+                <label>Parentesco</label>
+              </p-floatlabel>
+            </div>
+            <div class="p-col-12 p-md-3">
+              <p-floatlabel>
+                <input pInputText [(ngModel)]="nuevaReferencia.Telefono[0]" />
+                <label>Teléfono</label>
+              </p-floatlabel>
+            </div>
+            <div class="p-col-12 p-md-3">
+              <p-floatlabel>
+                <input pInputText [(ngModel)]="nuevaReferencia.CorreoElectronico" />
+                <label>Correo</label>
+              </p-floatlabel>
+            </div>
+          </div>
+          <button pButton label="Agregar Referencia" (click)="agregarReferenciaFamiliar()" class="p-mt-2"></button>
+        </p-fieldset>
+      </div>
+    </div>
+
+    <!-- Lista de referencias existentes -->
+    <p-fieldset legend="Referencias Familiares">
+      <div *ngFor="let referencia of empleado.ReferenciaFamiliar; let refIndex = index">
+        <p-fieldset [legend]="referencia.NombreFamiliar">
+          <!-- ... contenido existente ... -->
+
+          <!-- Botón para eliminar referencia -->
+          <button pButton icon="pi pi-trash" class="p-button-danger p-button-text"
+            (click)="eliminarReferenciaFamiliar(referencia._id, refIndex)" *ngIf="isEditMode"></button>
         </p-fieldset>
       </div>
     </p-fieldset>

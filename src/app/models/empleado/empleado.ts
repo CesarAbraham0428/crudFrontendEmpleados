@@ -16,7 +16,7 @@ export interface Empleado {
   ActividadEmpresa: ActividadEmpresa[];
   ReferenciaFamiliar: ReferenciaFamiliar[];
   createdAt: string;
-  Domicilio: Domicilio; 
+  Domicilio: Domicilio;
 }
 
 
@@ -37,6 +37,7 @@ export interface CursoExterno {
     Estatus: EstatusActividad;
   }
   export interface ReferenciaFamiliar {
+    _id?: string;
     NombreFamiliar: string;
     Parentesco: string;
     Telefono: string[];
@@ -50,6 +51,7 @@ export interface CursoExterno {
     Colonia: string;
     CodigoPostal: string;
     Ciudad: string;
+    [key: string]: any; // Esto permite acceso dinámico sin errores
   }
 
   export interface CargaEmpleadoCursos {

@@ -61,6 +61,99 @@ export class PerfilComponent implements OnInit {
       Ciudad: ''
     }
   };
+
+  nuevaReferencia = {
+    NombreFamiliar: '',
+    Parentesco: '',
+    Telefono: [''],
+    CorreoElectronico: ''
+  };
+
+  async agregarReferenciaFamiliar() {
+    try {
+      if (!this.nuevaReferencia.NombreFamiliar || !this.nuevaReferencia.Parentesco || 
+          !this.nuevaReferencia.Telefono[0] || !this.nuevaReferencia.CorreoElectronico) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atención',
+          detail: 'Todos los campos son requeridos'
+        });
+        return;
+      }
+  
+      const response = await lastValueFrom(
+        this.empleadoService.agregarReferenciaFamiliar(this.nuevaReferencia)
+      );
+      
+      // Agregar la nueva referencia al array local con el _id del backend
+      this.empleado.ReferenciaFamiliar.push({
+        ...this.nuevaReferencia,
+        _id: response.referenciaActualizada._id // Asegúrate de que la respuesta tenga esta estructura
+      });
+  
+      // Resetear el formulario
+      this.resetNuevaReferencia();
+  
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Referencia familiar agregada correctamente'
+      });
+  
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo agregar la referencia familiar'
+      });
+      console.error(error);
+    }
+  }
+
+  // Método para eliminar una referencia familiar
+  async eliminarReferenciaFamiliar(referenciaId: string | undefined, index: number) {
+    try {
+      if (!referenciaId) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se encontró ID de la referencia'
+        });
+        return;
+      }
+  
+      await lastValueFrom(
+        this.empleadoService.eliminarReferenciaFamiliar(referenciaId)
+      );
+  
+      this.empleado.ReferenciaFamiliar.splice(index, 1);
+  
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Referencia familiar eliminada correctamente'
+      });
+  
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo eliminar la referencia familiar'
+      });
+      console.error(error);
+    }
+  }
+
+  // Método auxiliar para resetear el formulario de nueva referencia
+  private resetNuevaReferencia() {
+    this.nuevaReferencia = {
+      NombreFamiliar: '',
+      Parentesco: '',
+      Telefono: [''],
+      CorreoElectronico: ''
+    };
+  }
+
   empleadoOriginal!: Empleado; // Para guardar el estado original
   isEditMode: boolean = false;
   currentPassword: string = '';
@@ -89,6 +182,8 @@ export class PerfilComponent implements OnInit {
     };
     return labels[field] || field;
   }
+
+  
 
 
   obtenerInformacionPersonal() {
@@ -207,14 +302,12 @@ export class PerfilComponent implements OnInit {
       // Ejecutar todas las actualizaciones
       await Promise.all(updates);
 
-      // Notificar éxito
       this.messageService.add({
         severity: 'success',
         summary: 'Éxito',
         detail: 'Perfil actualizado correctamente'
       });
 
-      // Guardar estado original después de actualizar
       this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
       this.isEditMode = false;
       this.currentPassword = '';
@@ -224,12 +317,12 @@ export class PerfilComponent implements OnInit {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudo actualizar el perfil: '
+        detail: 'No se pudo actualizar el perfil'
       });
       console.error(err);
     }
   }
-
+  
 
   addNewPhone() {
     this.empleado.Telefono.push('');
@@ -254,6 +347,8 @@ export class PerfilComponent implements OnInit {
       this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Debe mantener al menos un correo' });
     }
   }
+
+
 
   // Métodos para manejar los teléfonos de las referencias familiares
   addNewFamilyPhone(refIndex: number) {

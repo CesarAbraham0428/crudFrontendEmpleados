@@ -11,3 +11,20 @@
     justify-content: flex-end;
 
   }
+
+  :host ::ng-deep {
+    .p-confirm-dialog {
+      .p-dialog-header {
+        background-color: #f8d7da; // Fondo rojo suave para la cabecera
+        color: #721c24; // Texto oscuro
+      }
+      .p-button.p-button-danger {
+        background-color: #dc3545; // Botón de aceptar en rojo
+        border-color: #dc3545;
+      }
+      .p-button.p-button-secondary {
+        background-color: #6c757d; // Botón de cancelar en gris
+        border-color: #6c757d;
+      }
+    }
+  }
