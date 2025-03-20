@@ -79,7 +79,6 @@ export class AuthService {
     const user = this.getCurrentUser();
     return user ? user.role : null;
   }
-
   hasRole(role: string): boolean {
     const userRole = this.getRole();
     return userRole === role;

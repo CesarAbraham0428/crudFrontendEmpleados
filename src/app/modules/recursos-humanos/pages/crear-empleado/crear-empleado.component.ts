@@ -55,7 +55,6 @@ export class CrearEmpleadoComponent implements OnInit {
     ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],  // ✅ Incluye al menos un objeto válido
     ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }], // ✅ Estructura correcta
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
     Domicilio: {
       Calle: '',
       NumeroExterior: '',
@@ -139,7 +138,6 @@ limpiarFormulario(): void {
     ActividadEmpresa: [],
     ReferenciaFamiliar: [],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
     Domicilio: {
       Calle: '',
       NumeroExterior: '',

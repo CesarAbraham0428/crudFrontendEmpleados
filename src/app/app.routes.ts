@@ -8,13 +8,13 @@ export const routes: Routes = [
     path: 'recursos-humanos', 
     loadChildren: () => import('./modules/recursos-humanos/recursos-humanos.module').then(m => m.RecursosHumanosModule),
     canActivate: [AuthGuard],
-    data: { role: 'recursos-humanos' } // Solo rol de RH permitido
+    data: { roles: ['rh'] } // Solo rol de RH permitido
   }, 
   { 
     path: 'empleado', 
     loadChildren: () => import('./modules/empleado/empleado.module').then(m => m.EmpleadoModule),
     canActivate: [AuthGuard],
-    data: { role: 'empleado' } // Solo rol de Empleado permitido
+    data: { roles: ['empleado', 'rh'] } // Ambos roles permitidos
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/forbidden' }

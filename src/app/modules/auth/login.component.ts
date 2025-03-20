@@ -47,7 +47,7 @@ export class LoginComponent {
         console.log('Rol después del login:', role);
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión exitoso' });
         setTimeout(() => {
-          if (role === 'recursos-humanos') {
+          if (role === 'rh') {
             this.router.navigate(['/empleado/perfil']);
           } else if (role === 'empleado') {
             this.router.navigate(['/empleado/perfil']);
