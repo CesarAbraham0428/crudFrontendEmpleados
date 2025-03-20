@@ -17,6 +17,7 @@ import { EmpleadoService } from '../../../../core/services/empleado/empleado.ser
 import { Actividad,Departamento } from '../../../../models/cargarDatos/cargarDatos';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -25,6 +26,7 @@ import { DatePickerModule } from 'primeng/datepicker';
   selector: 'app-cursos-internos-list',
   standalone: true,
   imports: [TableModule, PanelModule,CardModule,FieldsetModule,FloatLabelModule,ButtonModule,AutoCompleteModule,FormsModule,DatePickerModule,CommonModule],
+  providers: [MessageService],
   templateUrl: './cursos-internos-list.component.html',
   styleUrl: './cursos-internos-list.component.scss'
 })
@@ -36,7 +38,10 @@ fechaInicio: Date | null = null;
 fechaTermino: Date | null = null;
 cursos: any[] = [];
 
-  constructor(private recursoshumanosService: RecursosHumanosService, private cargaDatosService: CargaDatosService,private router: Router) {}
+  constructor(private recursoshumanosService: RecursosHumanosService, 
+              private cargaDatosService: CargaDatosService,
+              private router: Router,
+              private messageService: MessageService) {}
   
   ngOnInit() {
 
@@ -65,9 +70,12 @@ cursos: any[] = [];
    
     const nombreCurso = this.cursosSeleccionados?.value || this.cursosSeleccionados;
 
-    // Validar que al menos un filtro esté presente
     if (!this.cursosSeleccionados && !this.fechaInicio && !this.fechaTermino) {
-      console.warn('Debes aplicar al menos un filtro para cargar los cursos.');
+      this.messageService.add({ 
+        severity: 'warn', 
+        summary: 'Advertencia', 
+        detail: 'Debes seleccionar al menos un filtro para buscar cursos.' 
+      });
       return;
     }
   
@@ -82,6 +90,14 @@ cursos: any[] = [];
     this.recursoshumanosService.obtenerCursos(filtros).subscribe(
       (data) => {
         this.cursos = data;
+
+        if (this.cursos.length === 0) {
+          this.messageService.add({ 
+            severity: 'info', 
+            summary: 'Sin resultados', 
+            detail: 'No hay cursos que coincidan con los filtros seleccionados.' 
+          });
+        } 
       },
       (error) => {
         console.error('Error al obtener los cursos', error);

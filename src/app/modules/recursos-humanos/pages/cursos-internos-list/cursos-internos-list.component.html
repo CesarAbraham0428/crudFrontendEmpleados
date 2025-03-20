@@ -38,11 +38,7 @@
           🔍 <span pButtonLabel>Aplicar Filtros</span>
         </button>
       </div>
-  
-      <!-- Mensaje si no hay filtros aplicados -->
-      <p *ngIf="!cursos.length" class="mensaje-filtros">
-        Aplica filtros para ver los cursos.
-      </p>
+
   
       <!-- Tabla de cursos -->
       <p-table [value]="cursos" [tableStyle]="{ 'min-width': '50rem' }">
