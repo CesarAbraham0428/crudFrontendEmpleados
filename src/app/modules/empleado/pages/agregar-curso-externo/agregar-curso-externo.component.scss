@@ -1,21 +1,140 @@
-
+// agregar-curso-externo.component.scss
 .main-container {
-    margin-left: 270px;
-    padding: 20px; 
-    transition: margin-left 0.3s ease; 
-    margin-right: 60px;
-   
-  }
-  .contenedor-botones {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 10px; 
+  margin-left: 270px;
+  margin-right: 60px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 40px);
 }
 
-  .label-container {
-    margin-top: 2em;
-    display: inline-block;
-    width: 45%; 
-    margin-right: 10px;
-    margin-bottom: 70px; 
+.form-card {
+  width: 100%;
+  max-width: 550px;
+  margin: 2rem auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+.form-title {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  
+  label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+  
+  input, p-dropdown, p-calendar {
+    width: 100%;
+  }
+  
+  // Estilo personalizado para los inputs
+  ::ng-deep .p-inputtext {
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    
+    &:hover, &:focus {
+      border-color: #4aa3df;
+      box-shadow: 0 0 0 1px rgba(74, 163, 223, 0.1);
+    }
+  }
+  
+  // Estilo para los dropdown
+  ::ng-deep .p-dropdown {
+    border-radius: 8px;
+    
+    .p-dropdown-trigger {
+      padding-right: 0.75rem;
+    }
+  }
+  
+  // Estilo para los calendarios
+  ::ng-deep .p-calendar {
+    width: 100%;
+    
+    .p-inputtext {
+      border-radius: 8px;
+    }
+    
+    .p-button {
+      border-radius: 8px;
+    }
+  }
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.button-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+  
+  // Estilo para los botones
+  ::ng-deep .p-button {
+    border-radius: 8px;
+    padding: 0.5rem 1.25rem;
+    transition: background-color 0.2s, transform 0.1s;
+    
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+    
+    &:not(:disabled):active {
+      transform: translateY(0);
+    }
+    
+    // Estilo para el botón principal
+    &.p-button-primary {
+      background-color: #4aa3df;
+      border-color: #4aa3df;
+      
+      &:not(:disabled):hover {
+        background-color: #3498db;
+        border-color: #3498db;
+      }
+    }
+    
+    // Estilo para el botón secundario
+    &.p-button-secondary.p-button-outlined {
+      color: #7f8c8d;
+      border-color: #bdc3c7;
+      
+      &:not(:disabled):hover {
+        background-color: #f8f9fa;
+        color: #596364;
+      }
+    }
+  }
 }

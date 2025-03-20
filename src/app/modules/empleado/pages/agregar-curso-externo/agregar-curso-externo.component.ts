@@ -1,53 +1,98 @@
-import { Component } from '@angular/core';
-
-
-import { PanelModule } from 'primeng/panel';
-import { CardModule } from 'primeng/card';
-import { FieldsetModule } from 'primeng/fieldset';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { TableModule } from 'primeng/table';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-
-import { KeyFilterModule } from 'primeng/keyfilter';
-import { DividerModule } from 'primeng/divider';
+import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
+import { MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { FormsModule } from '@angular/forms';
-import { SkeletonModule } from 'primeng/skeleton';
-import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-agregar-curso-externo',
   standalone: true,
-  imports: [CardModule,FieldsetModule,FloatLabelModule,ButtonModule,PanelModule,InputTextModule,DatePickerModule,AutoCompleteModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    ButtonModule,
+    ToastModule,
+    SelectModule,
+    DatePickerModule,
+  ],
   templateUrl: './agregar-curso-externo.component.html',
-  styleUrl: './agregar-curso-externo.component.scss'
+  styleUrls: ['./agregar-curso-externo.component.scss'],
+  providers: [MessageService]
 })
-export class AgregarCursoExternoComponent { 
-  constructor(private router: Router) {}
- 
-  filteredItemsTipoDocumento: any[] = []; // Lista filtrada
- 
-  allItems = [
-    { label: "Certificado", value: "Certificado" },
-    { label: "Diploma", value: "Diploma" }
+export class AgregarCursoExternoComponent implements OnInit {
+  formulario: FormGroup;
+  tiposCurso: any[] = [
+    { label: 'Online', value: 'online' },
+    { label: 'Presencial', value: 'presencial' }
   ];
+  minDate: Date = new Date();
+  editMode: boolean = false;
 
-
-
-
-
-  filterItemsTipoDocumento(event: any) {
-    const query = event.query.toLowerCase();
-    this.filteredItemsTipoDocumento = this.allItems.filter(allItems =>
-    allItems.label.toLowerCase().includes(query)
-    );
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private empleadoService: EmpleadoService,
+    private messageService: MessageService
+  ) {
+    this.formulario = this.fb.group({
+      nombreCurso: ['', [Validators.required, Validators.minLength(3)]],
+      fechaInicio: ['', Validators.required],
+      fechaFinalizacion: ['', Validators.required],
+      tipoCurso: ['', Validators.required]
+    });
   }
 
-  
-  redirigirC() {
+  ngOnInit(): void {}
+
+  guardarCurso(): void {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación',
+        detail: 'Por favor, complete todos los campos requeridos'
+      });
+      return;
+    }
+
+    const cursoData = {
+      Nombre: this.formulario.get('nombreCurso')?.value,
+      TipoCurso: this.formulario.get('tipoCurso')?.value,
+      FechaInicio: this.formulario.get('fechaInicio')?.value.toISOString().split('T')[0],
+      FechaFin: this.formulario.get('fechaFinalizacion')?.value.toISOString().split('T')[0]
+    };
+
+    this.empleadoService.agregarCursoExterno(cursoData)
+      .subscribe({
+        next: (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: `Curso ${this.editMode ? 'actualizado' : 'agregado'} correctamente`
+          });
+          setTimeout(() => {
+            this.router.navigate(['empleado/cursos-externos-list']);
+          }, 1500);
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo agregar el curso externo: ' + (error.error?.details || error.message)
+          });
+          console.error('Error al agregar curso:', error);
+        }
+      });
+  }
+
+  cancelar(): void {
     this.router.navigate(['empleado/cursos-externos-list']);
   }
 }

@@ -1,47 +1,62 @@
-
+<!-- agregar-curso-externo.component.html -->
 <div class="main-container">
-    <p-card header=" Crear Cursos Externos" subheader="Subtítulo" >
- 
-                 <div class="label-container">       
-                    <p-floatlabel  variant="on">
-                      <input type="text" pInputText  id="nombre" name="nombreCurso" required autocomplete="off"/>
-                      <label for="nombre">Nombre del Curso</label>
-                  </p-floatlabel> 
-                  </div>
+  <div class="form-card">
+    <h2 class="form-title">Agregar Curso Externo</h2>
+    <form [formGroup]="formulario" (ngSubmit)="guardarCurso()">
+      <div class="form-content">
+        <!-- Nombre del Curso -->
+        <div class="form-field">
+          <label for="nombreCurso">Nombre del Curso *</label>
+          <input pInputText id="nombreCurso" formControlName="nombreCurso"
+            [ngClass]="{ 'p-invalid': formulario.get('nombreCurso')?.invalid && formulario.get('nombreCurso')?.touched }"
+            placeholder="Ingrese el nombre del curso">
+          <small *ngIf="formulario.get('nombreCurso')?.touched && formulario.get('nombreCurso')?.errors?.['required']"
+            class="error-message">El nombre del curso es requerido</small>
+          <small *ngIf="formulario.get('nombreCurso')?.touched && formulario.get('nombreCurso')?.errors?.['minlength']"
+            class="error-message">Mínimo 3 caracteres</small>
+        </div>
 
-                  <div class="label-container">
-                    <p-floatlabel>  
-                      <p-autocomplete  [virtualScroll]="true" [suggestions]="filteredItemsTipoDocumento" [virtualScrollItemSize]="34" (completeMethod)="filterItemsTipoDocumento($event)" optionLabel="label" placeholder="Tipo de Documento" [dropdown]="true" />
-                      </p-floatlabel>
-                    </div>
-                 
-                  <div class="label-container">
-                 <p-floatlabel variant="on">
-                  <p-datepicker inputId="FechaInicio" showIcon iconDisplay="input" />
-                <label for="FechaInicio">Fecha de Inicio</label>
-                 </p-floatlabel>
-                </div>
+        <!-- Tipo de Documento -->
+        <div class="form-field">
+          <label for="tipoCurso">Tipo de Curso *</label>
+          <p-select id="tipoCurso" formControlName="tipoCurso" [options]="tiposCurso"
+            placeholder="Seleccione el tipo de curso" [showClear]="true" styleClass="w-full"
+            [ngClass]="{ 'p-invalid': formulario.get('tipoCurso')?.invalid && formulario.get('tipoCurso')?.touched }"></p-select>
+          <small *ngIf="formulario.get('tipoCurso')?.touched && formulario.get('tipoCurso')?.errors?.['required']"
+            class="error-message">El tipo de curso es requerido</small>
+        </div>
 
-                <div class="label-container">
-                    <p-floatlabel variant="on">
-                     <p-datepicker inputId="FechaFinalizacion" showIcon iconDisplay="input" />
-                   <label for="FechaFinalizacion">Fecha de Finalización</label>
-                    </p-floatlabel>
-                   </div>
-                
-                   <div class="contenedor-botones">
-                    <button pButton pRipple severity="danger" (click)="redirigirC()">
-                        <span pButtonLabel>Cancelar</span>
-                    </button>
-                
-                    <button pButton pRipple severity="info">
-                        <span pButtonLabel>Guardar</span>
-                    </button>
-                </div>
-                
-    </p-card> 
-</div> 
+        <!-- Fecha Inicio -->
+        <div class="form-field">
+          <label for="fechaInicio">Fecha de Inicio *</label>
+          <p-datePicker id="fechaInicio" formControlName="fechaInicio" [minDate]="minDate" [showIcon]="true"
+            dateFormat="dd/mm/yy" placeholder="Seleccione la fecha de inicio" styleClass="w-full"
+            [ngClass]="{ 'p-invalid': formulario.get('fechaInicio')?.invalid && formulario.get('fechaInicio')?.touched }"></p-datePicker>
+          <small *ngIf="formulario.get('fechaInicio')?.touched && formulario.get('fechaInicio')?.errors?.['required']"
+            class="error-message">La fecha de inicio es requerida</small>
+        </div>
 
-        <p></p>
-  
-  
+        <!-- Fecha Finalización -->
+        <div class="form-field">
+          <label for="fechaFinalizacion">Fecha de Finalización *</label>
+          <p-datePicker id="fechaFinalizacion" formControlName="fechaFinalizacion"
+            [minDate]="formulario.get('fechaInicio')?.value || minDate" [showIcon]="true" dateFormat="dd/mm/yy"
+            placeholder="Seleccione la fecha de finalización" styleClass="w-full"
+            [ngClass]="{ 'p-invalid': formulario.get('fechaFinalizacion')?.invalid && formulario.get('fechaFinalizacion')?.touched }"></p-datePicker>
+          <small
+            *ngIf="formulario.get('fechaFinalizacion')?.touched && formulario.get('fechaFinalizacion')?.errors?.['required']"
+            class="error-message">La fecha de finalización es requerida</small>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="button-section">
+        <p-button label="Cancelar" styleClass="p-button-secondary p-button-outlined" (click)="cancelar()"></p-button>
+        <p-button [label]="editMode ? 'Actualizar' : 'Guardar'" styleClass="p-button-primary" type="submit"
+          [disabled]="formulario.invalid" [loading]="formulario.disabled"></p-button>
+      </div>
+    </form>
+  </div>
+
+  <p-toast position="top-right"></p-toast>
+</div>

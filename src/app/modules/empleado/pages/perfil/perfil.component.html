@@ -33,7 +33,7 @@
       <div class="p-grid p-formgrid">
         <div class="p-field p-col-12 p-md-6" *ngFor="let field of domicilioCampos">
           <p-floatlabel>
-            <input pInputText [(ngModel)]="empleado.Domicilio[field]" [readonly]="!isEditMode" class="p-inputtext" />
+           <!--  <input pInputText [(ngModel)]="empleado.Domicilio[field]" [readonly]="!isEditMode" class="p-inputtext" /> -->
             <label>{{ getLabel(field) }}</label>
           </p-floatlabel>
         </div>
