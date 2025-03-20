@@ -1,23 +1,20 @@
-
 .main-container {
-    margin-left: 270px;
-    margin-right: 60px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-   
-  }
-  .contenedor-botones {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 10px; 
+  margin-left: 270px;
+  margin-right: 60px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
 }
 
-  .label-container {
-    margin-top: 2em;
-    display: inline-block;
-    width: 45%; 
-    margin-right: 10px;
-    margin-bottom: 70px; 
+.contenedor-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.label-container {
+  margin-top: 1rem;
+  width: 100%;
 }
 
 .contact-section {
@@ -35,13 +32,30 @@
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
-  
+
   input {
     flex-grow: 1;
     margin-right: 0.5rem;
   }
 }
 
-.label-container {
-  margin-bottom: 1rem;
+.p-grid {
+  gap: 10px;
+}
+
+.p-inputgroup {
+  width: 100%;
+}
+
+.p-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: bold;
+  }
+}
+.p-inputtext {
+  width: 100%;
 }

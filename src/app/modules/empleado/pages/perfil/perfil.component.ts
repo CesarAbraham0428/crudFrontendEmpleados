@@ -17,6 +17,7 @@ import { PasswordModule } from 'primeng/password';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { lastValueFrom } from 'rxjs';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
   selector: 'app-perfil',
@@ -25,7 +26,7 @@ import { lastValueFrom } from 'rxjs';
     CommonModule,
     PanelModule, CardModule, FieldsetModule, FloatLabelModule, AutoCompleteModule,
     FormsModule, InputMaskModule, DatePickerModule, TableModule, ButtonModule,
-    InputTextModule, PasswordModule, ToastModule
+    InputTextModule, PasswordModule, ToastModule, InputGroupModule
   ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
@@ -75,6 +76,20 @@ export class PerfilComponent implements OnInit {
   ngOnInit() {
     this.obtenerInformacionPersonal();
   }
+
+  domicilioCampos = ['Calle', 'NumeroExterior', 'Colonia', 'CodigoPostal', 'Ciudad'];
+
+  getLabel(field: string): string {
+    const labels: { [key: string]: string } = {
+      Calle: 'Calle',
+      NumeroExterior: 'Número Exterior',
+      Colonia: 'Colonia',
+      CodigoPostal: 'Código Postal',
+      Ciudad: 'Ciudad'
+    };
+    return labels[field] || field;
+  }
+
 
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
@@ -131,7 +146,7 @@ export class PerfilComponent implements OnInit {
     try {
       const updates: Promise<any>[] = [];
       const operaciones: any[] = [];
-  
+
       // Actualizar contraseña si cambió
       if (this.currentPassword && this.newPassword) {
         updates.push(lastValueFrom(this.empleadoService.actualizarPassword({
@@ -139,12 +154,12 @@ export class PerfilComponent implements OnInit {
           NuevaPassword: this.newPassword
         })));
       }
-  
+
       // Actualizar domicilio si cambió
       if (JSON.stringify(this.empleado.Domicilio) !== JSON.stringify(this.empleadoOriginal.Domicilio)) {
         updates.push(lastValueFrom(this.empleadoService.actualizarDomicilio(this.empleado.Domicilio)));
       }
-  
+
       // Si los correos cambiaron, agregar la operación
       if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
         const correosAEliminar = this.empleadoOriginal.CorreoElectronico.filter(correo =>
@@ -153,7 +168,7 @@ export class PerfilComponent implements OnInit {
         const correosAAgregar = this.empleado.CorreoElectronico.filter(correo =>
           !this.empleadoOriginal.CorreoElectronico.includes(correo)
         );
-  
+
         if (correosAEliminar.length) {
           operaciones.push({ tipo: "correo", operacion: "eliminar", datos: { correos: correosAEliminar } });
         }
@@ -161,7 +176,7 @@ export class PerfilComponent implements OnInit {
           operaciones.push({ tipo: "correo", operacion: "agregar", datos: { correos: correosAAgregar } });
         }
       }
-  
+
       // Si los teléfonos cambiaron, agregar la operación
       if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
         const telefonosAEliminar = this.empleadoOriginal.Telefono.filter(tel =>
@@ -170,7 +185,7 @@ export class PerfilComponent implements OnInit {
         const telefonosAAgregar = this.empleado.Telefono.filter(tel =>
           !this.empleadoOriginal.Telefono.includes(tel)
         );
-  
+
         if (telefonosAEliminar.length) {
           operaciones.push({ tipo: "telefono", operacion: "eliminar", datos: { telefonos: telefonosAEliminar } });
         }
@@ -178,33 +193,33 @@ export class PerfilComponent implements OnInit {
           operaciones.push({ tipo: "telefono", operacion: "agregar", datos: { telefonos: telefonosAAgregar } });
         }
       }
-  
+
       // Si hay operaciones de contacto, agregarlas al array de actualizaciones
       if (operaciones.length > 0) {
         updates.push(lastValueFrom(this.empleadoService.actualizarContactos(operaciones)));
       }
-  
+
       // Actualizar referencias familiares si cambió
       if (JSON.stringify(this.empleado.ReferenciaFamiliar) !== JSON.stringify(this.empleadoOriginal.ReferenciaFamiliar)) {
         updates.push(lastValueFrom(this.empleadoService.actualizarReferenciasFamiliares(this.empleado.ReferenciaFamiliar)));
       }
-  
+
       // Ejecutar todas las actualizaciones
       await Promise.all(updates);
-  
+
       // Notificar éxito
       this.messageService.add({
         severity: 'success',
         summary: 'Éxito',
         detail: 'Perfil actualizado correctamente'
       });
-  
+
       // Guardar estado original después de actualizar
       this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
       this.isEditMode = false;
       this.currentPassword = '';
       this.newPassword = '';
-  
+
     } catch (err) {
       this.messageService.add({
         severity: 'error',
@@ -214,7 +229,7 @@ export class PerfilComponent implements OnInit {
       console.error(err);
     }
   }
-  
+
 
   addNewPhone() {
     this.empleado.Telefono.push('');
