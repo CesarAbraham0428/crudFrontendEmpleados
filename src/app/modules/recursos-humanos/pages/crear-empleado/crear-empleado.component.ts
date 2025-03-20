@@ -23,6 +23,7 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 
@@ -31,7 +32,7 @@ import { PasswordModule } from 'primeng/password';
 @Component({
   selector: 'app-crear-empleado',
   standalone: true,
-  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule,PasswordModule],
+  imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule,PasswordModule,FileUploadModule],
   templateUrl: './crear-empleado.component.html',
   styleUrl: './crear-empleado.component.scss'
 })
@@ -87,6 +88,7 @@ export class CrearEmpleadoComponent implements OnInit {
   sexoSeleccionado: string = '';
   filteredItemsRol: any[] = []; // Lista filtrada
   RolSeleccionado: string = '';
+  uploadedFiles: any[] = [];
  
 
 
@@ -282,6 +284,12 @@ eliminarTelefonoU(index: number) {
 
 trackByFn(index: number, item: any): any {
   return index; // o algún identificador único del elemento
+}
+
+onUpload(event: any) {
+  for (let file of event.files) {
+    this.uploadedFiles.push(file);
+  }
 }
 
 
