@@ -17,7 +17,7 @@ import { MenuItem } from 'primeng/api';
 export class MenuLateralComponent implements OnInit {
   colapsado: boolean = true;
   items: MenuItem[] = [];
-  isVisible: boolean = true; // Nueva propiedad
+  isVisible: boolean = true;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -30,6 +30,7 @@ export class MenuLateralComponent implements OnInit {
       }
     });
   }
+  
 
   checkVisibility() {
     const currentUrl = this.router.url;
@@ -38,30 +39,37 @@ export class MenuLateralComponent implements OnInit {
 
   loadMenuItems() {
     const role = this.authService.getRole();
+    
     this.items = [
       { 
         label: 'Usuarios', 
         icon: 'pi pi-users', 
         command: () => this.navigateTo('/recursos-humanos/listaEmpleado'),
-        visible: role === 'recursos-humanos'
+        visible: role === 'rh'
       },
       { 
         label: 'Cursos', 
         icon: 'pi pi-book', 
-        command: () => this.navigateTo(role === 'recursos-humanos' ? '/recursos-humanos/cursos-internos' : '/empleado/cursos-externos-list'),
+        command: () => this.navigateTo(role === 'rh' ? '/recursos-humanos/cursos-internos' : '/empleado/cursos-externos-list'),
         visible: true
       },
       { 
-        label: 'Actividades', 
+        label: 'Gestión de Actividades', 
         icon: 'pi pi-calendar', 
-        command: () => this.navigateTo(role === 'recursos-humanos' ? '/recursos-humanos/actividades' : '/empleado/ver-actividades'),
-        visible: true
+        command: () => this.navigateTo('/recursos-humanos/actividades'),
+        visible: role === 'rh'
+      },
+      { 
+        label: 'Mis Actividades', 
+        icon: 'pi pi-calendar', 
+        command: () => this.navigateTo('/empleado/ver-actividades'),
+        visible: role === 'empleado' || role === 'rh'
       },
       { 
         label: 'Mi perfil', 
         icon: 'pi pi-user', 
         command: () => this.navigateTo('/empleado/perfil'),
-        visible: role === 'empleado'
+        visible: role === 'empleado'|| role === 'rh'
       },
       { 
         label: 'Cerrar sesión', 
