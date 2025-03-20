@@ -18,6 +18,7 @@ import { Actividad,Departamento } from '../../../../models/cargarDatos/cargarDat
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -25,7 +26,7 @@ import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-cursos-internos-list',
   standalone: true,
-  imports: [TableModule, PanelModule,CardModule,FieldsetModule,FloatLabelModule,ButtonModule,AutoCompleteModule,FormsModule,DatePickerModule,CommonModule],
+  imports: [TableModule, PanelModule,CardModule,FieldsetModule,FloatLabelModule,ButtonModule,AutoCompleteModule,FormsModule,DatePickerModule,CommonModule,ToastModule],
   providers: [MessageService],
   templateUrl: './cursos-internos-list.component.html',
   styleUrl: './cursos-internos-list.component.scss'
