@@ -73,6 +73,25 @@ export class EmpleadoService {
     );
   }
   
+  // Nuevos métodos para las actualizaciones
+  actualizarPassword(passwordData: { Password: string, NuevaPassword: string }): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/actualizarPassword`, passwordData, { withCredentials: true });
+  }
 
+  actualizarDomicilio(domicilio: any): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/actualizarEmpleado`, { Domicilio: domicilio }, { withCredentials: true });
+  }
+
+  actualizarTelefonos(telefonos: string[]): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarContactos`, { Telefonos: telefonos }, { withCredentials: true });
+  }
+
+  actualizarCorreos(correos: string[]): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarCorreos`, { Correos: correos }, { withCredentials: true });
+  }
+
+  actualizarReferenciasFamiliares(referencias: any[]): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarTelefonosFamiliar/:referenciaId`, { Referencias: referencias }, { withCredentials: true });
+  }
   
 }

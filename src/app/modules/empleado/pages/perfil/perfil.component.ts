@@ -59,13 +59,17 @@ export class PerfilComponent implements OnInit {
       Ciudad: ''
     }
   };
-  
+  empleadoOriginal!: Empleado; // Para guardar el estado original
+  isEditMode: boolean = false;
+  currentPassword: string = '';
+  newPassword: string = '';
+
   filteredItemsCiudad: any[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.obtenerInformacionPersonal();
@@ -74,20 +78,22 @@ export class PerfilComponent implements OnInit {
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
       next: (data) => {
-        const empleadoData = data.infoPersonalEmpleado?.[0]; // Accede al primer objeto del array
+        const empleadoData = data.infoPersonalEmpleado?.[0];
         if (empleadoData) {
-          this.empleado = { ...this.empleado, ...empleadoData }; // Fusiona los datos
-          
+          this.empleado = { ...this.empleado, ...empleadoData };
+          this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado)); // Copia profunda
+          // Resto del código...
+
           // Asegurarse de que los arrays estén inicializados
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
           if (!this.empleado.CorreoElectronico) this.empleado.CorreoElectronico = [];
           if (!this.empleado.ReferenciaFamiliar) this.empleado.ReferenciaFamiliar = [];
-          
+
           // Asegurarse de que cada referencia familiar tenga un array de teléfonos
           this.empleado.ReferenciaFamiliar.forEach(ref => {
             if (!ref.Telefono) ref.Telefono = [];
           });
-          
+
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -111,14 +117,72 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
-  
+
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+    if (!this.isEditMode) {
+      // Si salimos del modo edición sin guardar, restauramos los valores originales
+      this.empleado = JSON.parse(JSON.stringify(this.empleadoOriginal));
+    }
+  }
+
+  saveChanges() {
+    const updates: Promise<any>[] = [];
+
+    // Actualizar contraseña si cambió
+    if (this.currentPassword && this.newPassword) {
+      updates.push(this.empleadoService.actualizarPassword({
+        Password: this.currentPassword,
+        NuevaPassword: this.newPassword
+      }).toPromise());
+    }
+
+    // Actualizar domicilio si cambió
+    if (JSON.stringify(this.empleado.Domicilio) !== JSON.stringify(this.empleadoOriginal.Domicilio)) {
+      updates.push(this.empleadoService.actualizarDomicilio(this.empleado.Domicilio).toPromise());
+    }
+
+    // Actualizar contactos si cambió
+    if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
+      updates.push(this.empleadoService.actualizarTelefonos(this.empleado.Telefono).toPromise());
+    }
+    if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
+      updates.push(this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).toPromise());
+    }
+
+    // Actualizar referencias familiares si cambió
+    if (JSON.stringify(this.empleado.ReferenciaFamiliar) !== JSON.stringify(this.empleadoOriginal.ReferenciaFamiliar)) {
+      updates.push(this.empleadoService.actualizarReferenciasFamiliares(this.empleado.ReferenciaFamiliar).toPromise());
+    }
+
+    Promise.all(updates)
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Perfil actualizado correctamente'
+        });
+        this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
+        this.isEditMode = false;
+        this.currentPassword = '';
+        this.newPassword = '';
+      })
+      .catch(err => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo actualizar el perfil: ' + err.message
+        });
+      });
+  }
+
   // Métodos para manejar los teléfonos del empleado
   addNewPhone() {
     this.empleado.Telefono.push('');
     // Aquí podrías llamar a un servicio para guardar el nuevo teléfono
     // this.empleadoService.actualizarTelefonos(this.empleado.Telefono).subscribe();
   }
-  
+
   removePhone(index: number) {
     if (this.empleado.Telefono.length <= 1) {
       this.messageService.add({
@@ -134,14 +198,14 @@ export class PerfilComponent implements OnInit {
       // this.empleadoService.actualizarTelefonos(this.empleado.Telefono).subscribe();
     }
   }
-  
+
   // Métodos para manejar los correos del empleado
   addNewEmail() {
     this.empleado.CorreoElectronico.push('');
     // Aquí podrías llamar a un servicio para guardar el nuevo correo
     // this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).subscribe();
   }
-  
+
   removeEmail(index: number) {
     if (this.empleado.CorreoElectronico.length <= 1) {
       this.messageService.add({
@@ -157,7 +221,7 @@ export class PerfilComponent implements OnInit {
       // this.empleadoService.actualizarCorreos(this.empleado.CorreoElectronico).subscribe();
     }
   }
-  
+
   // Métodos para manejar los teléfonos de las referencias familiares
   addNewFamilyPhone(refIndex: number) {
     if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length) {
@@ -166,7 +230,7 @@ export class PerfilComponent implements OnInit {
       // this.empleadoService.actualizarTelefonosFamiliares(this.empleado.ReferenciaFamiliar).subscribe();
     }
   }
-  
+
   removeFamilyPhone(refIndex: number, phoneIndex: number) {
     if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length) {
       const familia = this.empleado.ReferenciaFamiliar[refIndex];

@@ -1,112 +1,132 @@
 <div class="main-container">
   <p-toast></p-toast>
   <p-card header="Mi perfil" subheader="Información personal">
+    <div class="edit-controls">
+      <button pButton [label]="isEditMode ? 'Cancelar' : 'Editar'" 
+              [icon]="isEditMode ? 'pi pi-times' : 'pi pi-pencil'" 
+              (click)="toggleEditMode()"></button>
+      <button pButton label="Guardar" icon="pi pi-save" 
+              *ngIf="isEditMode" 
+              (click)="saveChanges()"></button>
+    </div>
+
     <!-- Bloque para cambiar contraseña -->
-    <p-fieldset legend="Cambiar contraseña">
+    <p-fieldset legend="Cambiar contraseña" *ngIf="isEditMode">
       <div class="label-container">
         <p-floatlabel variant="on">
-          <p-password [toggleMask]="true" placeholder="Contraseña actual" />
-          <label for="Contraseña"></label>
+          <p-password [(ngModel)]="currentPassword" [toggleMask]="true" placeholder="Contraseña actual" />
+          <label>Contraseña actual</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel variant="on">
-          <p-password [toggleMask]="true" placeholder="Nueva contraseña" />
-          <label for="Nueva Contraseña"></label>
+          <p-password [(ngModel)]="newPassword" [toggleMask]="true" placeholder="Nueva contraseña" />
+          <label>Nueva contraseña</label>
         </p-floatlabel>
       </div>
-      <button pButton type="button" label="Cambiar contraseña" class="p-button-success"></button>
     </p-fieldset>
 
     <!-- Bloque de domicilio -->
     <p-fieldset legend="Domicilio" *ngIf="empleado?.Domicilio">
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio.Calle || 'No disponible'" readonly />
+          <input pInputText [(ngModel)]="empleado.Domicilio.Calle" [readonly]="!isEditMode" />
           <label>Calle</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio.NumeroExterior || 'No disponible'" readonly />
+          <input pInputText [(ngModel)]="empleado.Domicilio.NumeroExterior" [readonly]="!isEditMode" />
           <label>Número Exterior</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio.Colonia || 'No disponible'" readonly />
+          <input pInputText [(ngModel)]="empleado.Domicilio.Colonia" [readonly]="!isEditMode" />
           <label>Colonia</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio.CodigoPostal || 'No disponible'" readonly />
+          <input pInputText [(ngModel)]="empleado.Domicilio.CodigoPostal" [readonly]="!isEditMode" />
           <label>Código Postal</label>
         </p-floatlabel>
       </div>
       <div class="label-container">
         <p-floatlabel>
-          <input pInputText [value]="empleado.Domicilio.Ciudad || 'No disponible'" readonly />
+          <input pInputText [(ngModel)]="empleado.Domicilio.Ciudad" [readonly]="!isEditMode" />
           <label>Ciudad</label>
         </p-floatlabel>
       </div>
     </p-fieldset>
 
-<!-- Bloque de contacto -->
-<p-fieldset legend="Contacto" *ngIf="empleado">
-  <div class="contact-section">
-    <div class="contact-header">
-      <span>Correo Electrónico</span>
-      <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewEmail()"></button>
-    </div>
-    <div class="contact-field" *ngFor="let email of empleado.CorreoElectronico; let i = index">
-      <input pInputText [value]="email" readonly />
-      <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removeEmail(i)"></button>
-    </div>
-  </div>
-  
-  <div class="contact-section">
-    <div class="contact-header">
-      <span>Teléfono</span>
-      <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewPhone()"></button>
-    </div>
-    <div class="contact-field" *ngFor="let phone of empleado.Telefono; let i = index">
-      <input pInputText [value]="phone" readonly />
-      <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removePhone(i)"></button>
-    </div>
-  </div>
-</p-fieldset>
-
-<!-- Bloque de referencia familiar -->
-<p-fieldset legend="Referencia Familiar" *ngIf="empleado?.ReferenciaFamiliar">
-  <div *ngFor="let referencia of empleado.ReferenciaFamiliar; let refIndex = index">
-    <p-fieldset [legend]="referencia.NombreFamiliar">
-      <div class="label-container">
-        <p-floatlabel>
-          <input pInputText [value]="referencia.Parentesco || 'No disponible'" readonly />
-          <label>Parentesco</label>
-        </p-floatlabel>
+    <!-- Bloque de contacto -->
+    <p-fieldset legend="Contacto" *ngIf="empleado">
+      <div class="contact-section">
+        <div class="contact-header">
+          <span>Correo Electrónico</span>
+          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" 
+                  (click)="addNewEmail()" *ngIf="isEditMode"></button>
+        </div>
+        <div class="contact-field" *ngFor="let email of empleado.CorreoElectronico; let i = index">
+          <input pInputText [(ngModel)]="empleado.CorreoElectronico[i]" [readonly]="!isEditMode" />
+          <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" 
+                  (click)="removeEmail(i)" *ngIf="isEditMode"></button>
+        </div>
       </div>
       
       <div class="contact-section">
         <div class="contact-header">
           <span>Teléfono</span>
-          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" (click)="addNewFamilyPhone(refIndex)"></button>
+          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" 
+                  (click)="addNewPhone()" *ngIf="isEditMode"></button>
         </div>
-        <div class="contact-field" *ngFor="let phone of referencia.Telefono; let i = index">
-          <input pInputText [value]="phone" readonly />
-          <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="removeFamilyPhone(refIndex, i)"></button>
+        <div class="contact-field" *ngFor="let phone of empleado.Telefono; let i = index">
+          <input pInputText [(ngModel)]="empleado.Telefono[i]" [readonly]="!isEditMode" />
+          <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" 
+                  (click)="removePhone(i)" *ngIf="isEditMode"></button>
         </div>
-      </div>
-      
-      <div class="label-container">
-        <p-floatlabel>
-          <input pInputText [value]="referencia.CorreoElectronico || 'No disponible'" readonly />
-          <label>Correo Electrónico</label>
-        </p-floatlabel>
       </div>
     </p-fieldset>
-  </div>
-</p-fieldset>
+
+    <!-- Bloque de referencia familiar -->
+    <p-fieldset legend="Referencia Familiar" *ngIf="empleado?.ReferenciaFamiliar">
+      <div *ngFor="let referencia of empleado.ReferenciaFamiliar; let refIndex = index">
+        <p-fieldset [legend]="referencia.NombreFamiliar">
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [(ngModel)]="referencia.NombreFamiliar" [readonly]="!isEditMode" />
+              <label>Nombre</label>
+            </p-floatlabel>
+          </div>
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [(ngModel)]="referencia.Parentesco" [readonly]="!isEditMode" />
+              <label>Parentesco</label>
+            </p-floatlabel>
+          </div>
+          
+          <div class="contact-section">
+            <div class="contact-header">
+              <span>Teléfono</span>
+              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text" 
+                      (click)="addNewFamilyPhone(refIndex)" *ngIf="isEditMode"></button>
+            </div>
+            <div class="contact-field" *ngFor="let phone of referencia.Telefono; let i = index">
+              <input pInputText [(ngModel)]="referencia.Telefono[i]" [readonly]="!isEditMode" />
+              <button pButton icon="pi pi-times" class="p-button-rounded p-button-text" 
+                      (click)="removeFamilyPhone(refIndex, i)" *ngIf="isEditMode"></button>
+            </div>
+          </div>
+          
+          <div class="label-container">
+            <p-floatlabel>
+              <input pInputText [(ngModel)]="referencia.CorreoElectronico" [readonly]="!isEditMode" />
+              <label>Correo Electrónico</label>
+            </p-floatlabel>
+          </div>
+        </p-fieldset>
+      </div>
+    </p-fieldset>
   </p-card>
 </div>
