@@ -4,8 +4,10 @@ export interface Empleado {
   ApP: string;
   ApM: string;
   FechaNacimiento: string;
-  RFC: string;
+  RFC: 
+  string;
   Sexo: string;
+  FotoEmpleado?: File | null; 
   Departamento: string;
   Puesto: string;
   Telefono: string[];

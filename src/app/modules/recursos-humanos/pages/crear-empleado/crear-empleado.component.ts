@@ -46,6 +46,7 @@ export class CrearEmpleadoComponent implements OnInit {
     FechaNacimiento: '',
     RFC: '',
     Sexo: '',
+    FotoEmpleado: null,
     Departamento: '',
     Puesto: '',
     Telefono: [''],
@@ -65,6 +66,28 @@ export class CrearEmpleadoComponent implements OnInit {
       Ciudad: ''
     }
   };
+   rfcInvalido: boolean = false;
+
+  formatearRFC() {
+    let valor = this.nuevoEmpleado.RFC.toUpperCase(); // Convierte todo a mayúsculas
+    
+    // Quita cualquier caracter que no sea letra o número
+    valor = valor.replace(/[^A-Z0-9]/g, ""); 
+    
+    // Separa en letras y números (si los hay)
+    let letras = valor.substring(0, 4).replace(/[^A-Z]/g, ""); // Solo letras en los primeros 4 caracteres
+    let numeros = valor.substring(4, 10).replace(/[^0-9]/g, ""); // Solo números en los últimos 6 caracteres
+    
+    // Reconstruye el RFC con el formato correcto
+    this.nuevoEmpleado.RFC = letras + (letras.length === 4 ? "-" : "") + numeros;
+  }
+
+
+  validarRFC(): boolean {
+    const rfcPattern = /^[A-Za-z]{4}-\d{6}$/; // 🔹 4 letras + "-" + 6 números
+    return rfcPattern.test(this.nuevoEmpleado.RFC);
+  }
+
 
   // Propiedades para almacenar referencias familiares
    nuevaReferenciaFamiliar() {
@@ -89,6 +112,7 @@ export class CrearEmpleadoComponent implements OnInit {
   filteredItemsRol: any[] = []; // Lista filtrada
   RolSeleccionado: string = '';
   uploadedFiles: any[] = [];
+  fotoVistaPrevia: string | ArrayBuffer | null = null;
  
 
 
@@ -130,6 +154,7 @@ limpiarFormulario(): void {
     FechaNacimiento: '',
     RFC: '',
     Sexo: '',
+    FotoEmpleado: null,
     Departamento: '',
     Puesto: '',
     Telefono: [],
@@ -291,6 +316,11 @@ onUpload(event: any) {
     this.uploadedFiles.push(file);
   }
 }
-
+onFileSelected(event: any) {
+  const file = event.files[0];
+  if (file) {
+    this.nuevoEmpleado.FotoEmpleado = file; // Asigna el archivo directamente
+  }
+}
 
 }

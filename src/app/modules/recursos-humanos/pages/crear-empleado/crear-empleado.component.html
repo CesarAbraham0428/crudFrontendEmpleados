@@ -32,10 +32,13 @@
 </div>
   
 <div class="label-container">
-    <p-floatlabel variant="on">
-      <input pInputText id="RFC" [(ngModel)]="nuevoEmpleado.RFC" autocomplete="off" apppKeyFilter="alphanum" />
-      <label for="RFC">RFC</label>
-</p-floatlabel>
+  <p-floatlabel variant="on">
+    <input pInputText id="RFC" [(ngModel)]="nuevoEmpleado.RFC" 
+           (input)="formatearRFC()"  (blur)="rfcInvalido = !validarRFC()"  autocomplete="off"  maxlength="11"
+            />
+    <label for="RFC">RFC</label>
+  </p-floatlabel>
+  <small *ngIf="rfcInvalido" class="error-text">RFC inválido. Debe ser "XXXX-######".</small>
 </div>
 
 <div class="label-container">
@@ -102,6 +105,7 @@
   </p-floatlabel>
 </div>
 
+<div class="label-container">
 <p-fieldset legend="Fotografía del Empleado">
   <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
     (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000"
@@ -115,8 +119,8 @@
       </ul>
     </ng-template>
   </p-fileupload>
-
     </p-fieldset>
+</div>
 
 
 
