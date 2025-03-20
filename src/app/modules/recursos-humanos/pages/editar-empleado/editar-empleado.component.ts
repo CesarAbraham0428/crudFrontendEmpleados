@@ -2,8 +2,9 @@ import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { Empleado} from '../../../../models/empleado/empleado';
+import { Empleado, ReferenciaFamiliar, Domicilio } from '../../../../models/empleado/empleado';  // Importa todos los modelos necesarios
 import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { Observable } from 'rxjs';
 import {Departamento,Ciudad,Parentesco,Puesto} from '../../../../models/cargarDatos/cargarDatos';
 
 //Importaciones de PrimeNG
@@ -25,17 +26,17 @@ import { PasswordModule } from 'primeng/password';
 import { FileUploadModule } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
-  selector: 'app-crear-empleado',
+  selector: 'app-editar-empleado',
   standalone: true,
   imports: [InputTextModule,KeyFilterModule,PanelModule,FieldsetModule,DividerModule,CardModule,DatePickerModule,FloatLabelModule,AutoCompleteModule,ButtonModule,FormsModule,TableModule,CommonModule,SkeletonModule,FormsModule,InputMaskModule,PasswordModule,FileUploadModule,ToastModule],
   providers:[MessageService],
-  templateUrl: './crear-empleado.component.html',
-  styleUrl: './crear-empleado.component.scss'
+  templateUrl: './editar-empleado.component.html',
+  styleUrl: './editar-empleado.component.scss'
 })
-export class CrearEmpleadoComponent implements OnInit {
+export class EditarEmpleadoComponent implements OnInit {
 
   nuevoEmpleado: Empleado = {
     ClaveEmpleado: '',  // Se generará en el backend
@@ -52,9 +53,9 @@ export class CrearEmpleadoComponent implements OnInit {
     CorreoElectronico: [''],
     Password: '',  
     Rol: '',
-    CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],
-    ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],
-    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }],
+    CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],  // ✅ Agrega un objeto vacío con estructura
+    ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],  // ✅ Incluye al menos un objeto válido
+    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [''], CorreoElectronico: '' }], // ✅ Estructura correcta
     createdAt: new Date().toISOString(),
     Domicilio: {
       Calle: '',
@@ -65,24 +66,8 @@ export class CrearEmpleadoComponent implements OnInit {
       Ciudad: ''
     }
   };
-  
-  filteredItemsDepartamento: any[] = [];
-  filteredItemsPuesto: any[] = [];
-  filteredItemsCiudad: any[] = [];
-  filteredItemsParentesco: any[] = [];
-
-
-  CPSeleccionado: any; // Valor seleccionado en el autocompletado
-  Seleccionado: any; // Valor seleccionado en el autocompletado
-  filteredItemsSexo: any[] = []; // Lista filtrada
-  sexoSeleccionado: string = '';
-  filteredItemsRol: any[] = []; // Lista filtrada
-  RolSeleccionado: string = '';
-  uploadedFiles: any[] = [];
-  fotoVistaPrevia: string | ArrayBuffer | null = null;
-  isEditMode: boolean = false;
-  rfcInvalido: boolean = false;
-  formInvalid: boolean = false;
+   rfcInvalido: boolean = false;
+   formInvalid: boolean = false;
 
   formatearRFC() {
     let valor = this.nuevoEmpleado.RFC.toUpperCase(); // Convierte todo a mayúsculas
@@ -100,7 +85,7 @@ export class CrearEmpleadoComponent implements OnInit {
 
 
   validarRFC(): boolean {
-    const rfcPattern = /^[A-Za-z]{4}-\d{6}$/; 
+    const rfcPattern = /^[A-Za-z]{4}-\d{6}$/; // 🔹 4 letras + "-" + 6 números
     return rfcPattern.test(this.nuevoEmpleado.RFC);
   }
 
@@ -115,6 +100,21 @@ export class CrearEmpleadoComponent implements OnInit {
     });
   }
 
+  filteredItemsDepartamento: any[] = [];
+  filteredItemsPuesto: any[] = [];
+  filteredItemsCiudad: any[] = [];
+  filteredItemsParentesco: any[] = [];
+
+
+  CPSeleccionado: any; // Valor seleccionado en el autocompletado
+  Seleccionado: any; // Valor seleccionado en el autocompletado
+  filteredItemsSexo: any[] = []; // Lista filtrada
+  sexoSeleccionado: string = '';
+  filteredItemsRol: any[] = []; // Lista filtrada
+  RolSeleccionado: string = '';
+  uploadedFiles: any[] = [];
+  fotoVistaPrevia: string | ArrayBuffer | null = null;
+ 
 
 
 // Agregar otro correo
@@ -127,7 +127,7 @@ agregarTelefonoU() {
   this.nuevoEmpleado.Telefono.push('');
 }
 
- constructor(private router: Router, private empleadoService: EmpleadoService,private cargaDatosService: CargaDatosService, private messageService: MessageService,private route: ActivatedRoute) {}
+ constructor(private router: Router, private empleadoService: EmpleadoService,private cargaDatosService: CargaDatosService, private messageService: MessageService) {}
  validarFormulario(): boolean {
   if (
     !this.nuevoEmpleado.Nombre ||
@@ -195,6 +195,7 @@ agregarTelefonoU() {
     }
   });
 }
+
 
 // Método para limpiar el formulario del empleado
 limpiarFormulario(): void {
@@ -273,30 +274,11 @@ ngOnInit() {
       console.error('La respuesta del backend no tiene la estructura esperada:', data);
     }
   });
-
-
-  //CAMBIE PARA EDITAR 
-  this.route.paramMap.subscribe(params => {
-    const ClaveEmpleado = params.get('ClaveEmpleado'); 
-    if (ClaveEmpleado) {
-      this.isEditMode = true;
-      this.obtenerEmpleadoPorClave(ClaveEmpleado);
-    }
-  });
-
 }
 
 
 eliminarReferencia(index: number): void {
-  if (this.nuevoEmpleado.ReferenciaFamiliar.length > 1) {
-    this.nuevoEmpleado.ReferenciaFamiliar.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos una referencia familiar.'
-    });
-  }
+  this.nuevoEmpleado.ReferenciaFamiliar.splice(index, 1);
 }
 
 agregarTelefono(referencia: any): void {
@@ -309,6 +291,8 @@ eliminarTelefono(referencia: any, indice: number): void {
   }
 }
 
+
+
   allItems = [
     { label: "Masculino", value: "M" },
     { label: "Femenino", value: "F" }
@@ -317,6 +301,8 @@ eliminarTelefono(referencia: any, indice: number): void {
     { label: "Empleado", value: "Empleado" },
     { label: "Recursos Humanos", value: "RH" }
   ];
+
+
 
   filterItemsDepartamento(event: any) {
     const query = event.query.toLowerCase();
@@ -346,6 +332,7 @@ eliminarTelefono(referencia: any, indice: number): void {
     );
   }
 
+
   filterItemssSexo(event: any) {
     const query = event.query.toLowerCase();
     this.filteredItemsSexo = this.allItems.filter(allItems =>
@@ -363,29 +350,15 @@ eliminarTelefono(referencia: any, indice: number): void {
     this.router.navigate(['recursos-humanos/listaEmpleado']);
 }
 
-eliminarCorreo(index: number): void {
-  if (this.nuevoEmpleado.CorreoElectronico.length > 1) {
-    this.nuevoEmpleado.CorreoElectronico.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos un correo electrónico.'
-    });
-  }
+eliminarCorreo(index: number) {
+  // Eliminar el correo en el índice especificado
+  this.nuevoEmpleado.CorreoElectronico.splice(index, 1);
+}
+eliminarTelefonoU(index: number) {
+  // Eliminar el correo en el índice especificado
+  this.nuevoEmpleado.Telefono.splice(index, 1);
 }
 
-eliminarTelefonoU(index: number): void {
-  if (this.nuevoEmpleado.Telefono.length > 1) {
-    this.nuevoEmpleado.Telefono.splice(index, 1);
-  } else {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Debe haber al menos un teléfono.'
-    });
-  }
-}
 
 trackByFn(index: number, item: any): any {
   return index; // o algún identificador único del elemento
@@ -401,45 +374,6 @@ onFileSelected(event: any) {
   if (file) {
     this.nuevoEmpleado.FotoEmpleado = file; // Asigna el archivo directamente
   }
-}
-
-
-//Edición 
-
-// Cargar datos del empleado si se está editando
-obtenerEmpleadoPorClave(claveEmpleado: string) {
-  this.empleadoService.getEmpleadoPorClave(claveEmpleado).subscribe({
-    next: (response) => {
-      if (response) {
-        this.nuevoEmpleado = response;  // Asignar el empleado recibido al objeto nuevoEmpleado
-      }
-    },
-    error: (error) => {
-      console.error('Error al obtener empleado:', error);
-    }
-  });
-}
-
-
-editarEmpleado(): void {
-  if (!this.validarFormulario()) {
-    return;
-  }
-
-  console.log('Datos enviados para actualizar:', this.nuevoEmpleado);
-
-  // Llamar al servicio para actualizar el empleado
-  this.empleadoService.actualizarEmpleado(this.nuevoEmpleado).subscribe({
-    next: (empleado) => {
-      console.log('Empleado actualizado:', empleado);
-      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empleado actualizado correctamente.' });
-      this.router.navigate(['recursos-humanos/listaEmpleado']); // Redirigir a la lista de empleados
-    },
-    error: (error) => {
-      console.error('Error al actualizar el empleado:', error);
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el empleado.' });
-    }
-  });
 }
 
 }

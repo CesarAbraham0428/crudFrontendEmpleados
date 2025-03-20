@@ -6,7 +6,8 @@
   background: white;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: width 0.3s ease-in-out;
-   /* Añade un padding para asegurar el espacio entre el contenido y la parte superior */
+  overflow-y: auto;
+  max-height: 100vh; 
 }
 
 .w-64 {

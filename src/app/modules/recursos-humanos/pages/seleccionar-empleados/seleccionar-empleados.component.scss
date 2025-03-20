@@ -1,0 +1,24 @@
+.contenedor-botones {
+    display: flex;            
+    gap: 10px;               
+    justify-content: flex-end;
+  }
+  
+  .boton {
+    margin: 0;               
+  }
+
+  .botonc {
+    background-color: rgb(214, 43, 43) !important; 
+    border: 2px solid rgb(214, 43, 43) !important; 
+    color: white !important; 
+    transition: all 0.3s ease; 
+    width: 80px;
+    border-radius: 5px;
+  }
+  
+  .botonc:hover {
+    background-color: rgb(255, 77, 77) !important; 
+    border-color: rgb(255, 77, 77) !important; 
+  }
+  
