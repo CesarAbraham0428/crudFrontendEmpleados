@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Curso } from '../../../../models/cargarDatos/cargarDatos';
+import { RecursosHumanosService } from '../../../../core/services/recursos-humanos/recursos-humanos.service';
+import { CommonModule } from '@angular/common';
 
 
 import { TableModule } from 'primeng/table';
@@ -18,22 +20,23 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 
 
+
 @Component({
   selector: 'app-cursos-internos-list',
   standalone: true,
-  imports: [TableModule, PanelModule,CardModule,FieldsetModule,FloatLabelModule,ButtonModule,AutoCompleteModule,FormsModule,DatePickerModule],
+  imports: [TableModule, PanelModule,CardModule,FieldsetModule,FloatLabelModule,ButtonModule,AutoCompleteModule,FormsModule,DatePickerModule,CommonModule],
   templateUrl: './cursos-internos-list.component.html',
   styleUrl: './cursos-internos-list.component.scss'
 })
 export class CursosInternosListComponent {
 
-filteredItemsActividades: any[] = [];
 filteredItemsCursos: any[] = [];
 cursosSeleccionados: any;
 fechaInicio: Date | null = null;
 fechaTermino: Date | null = null;
+cursos: any[] = [];
 
-  constructor(private empleadoService: EmpleadoService, private cargaDatosService: CargaDatosService,private router: Router) {}
+  constructor(private recursoshumanosService: RecursosHumanosService, private cargaDatosService: CargaDatosService,private router: Router) {}
   
   ngOnInit() {
 
@@ -58,16 +61,34 @@ fechaTermino: Date | null = null;
     );
   }
 
+  aplicarFiltros(): void {
+   
+    const nombreCurso = this.cursosSeleccionados?.value || this.cursosSeleccionados;
 
+    // Validar que al menos un filtro esté presente
+    if (!this.cursosSeleccionados && !this.fechaInicio && !this.fechaTermino) {
+      console.warn('Debes aplicar al menos un filtro para cargar los cursos.');
+      return;
+    }
+  
+    // Crear el objeto de filtros
+    const filtros = {
+      nombreCurso: nombreCurso || null,
+      fechaInicio: this.fechaInicio ? this.fechaInicio.toISOString() : null,
+      fechaTermino: this.fechaTermino ? this.fechaTermino.toISOString() : null
+    };
+  
+    
+    this.recursoshumanosService.obtenerCursos(filtros).subscribe(
+      (data) => {
+        this.cursos = data;
+      },
+      (error) => {
+        console.error('Error al obtener los cursos', error);
+      }
+    );
+  }
 
-  products: any[] = [
-    { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-    { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-    { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-   { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-   { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-   { Curso: 'C001', TipoDocumento: 'Curso Angular', FechaInicio: 'Programación', FechaFinalizacion: 10,Certificado: 'documento'},
-]; 
 redirigir() {
   this.router.navigate(['recursos-humanos/crear-curso']);
 }
