@@ -6,7 +6,7 @@
 
 <!-- Contenedor del menú -->
 <div *ngIf="isVisible" [ngClass]="{ 'w-64': !colapsado, 'w-0': colapsado, 'invisible': colapsado }" 
-     class="menu-container fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 overflow-hidden">
+     class="menu-container fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 overflow-y-auto">
   <p-menu *ngIf="!colapsado" [model]="items" styleClass="w-full custom-menu">
     <ng-template pTemplate="start">
         <span class="inline-flex items-center gap-1 px-2 py-2">

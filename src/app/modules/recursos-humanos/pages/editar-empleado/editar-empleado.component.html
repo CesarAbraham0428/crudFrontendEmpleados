@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <div class="main-container">
-  <p-card [header]="isEditMode ? 'Editar Empleado' : 'Registrar Nuevo Empleado'" subheader="Subtítulo">
+<p-card header="Editar Empleado" subheader="Subtítulo" >
     <p-fieldset legend="Información Personal">   
     
      
@@ -253,10 +253,9 @@
       <span pButtonLabel>Cancelar</span>
     </button>
 
-    <button class="boton" pButton pRipple aria-label="Guardar" severity="info" (click)="isEditMode ? editarEmpleado() : registrarEmpleado()">
-      <span pButtonLabel>{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
+    <button class="boton" pButton pRipple aria-label="Guardar" severity="info" (click)="registrarEmpleado()">
+      <span pButtonLabel>Guardar</span>
     </button>
-    
   </div>
   
   

@@ -6,6 +6,7 @@ import { Table, TableModule } from 'primeng/table';
 import { Checkbox } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { Empleado,CargaEmpleadoCursos } from '../../../../models/empleado/empleado';
+import { Router } from '@angular/router';
 
 
 
@@ -24,7 +25,8 @@ export class SeleccionarEmpleadosComponent implements OnInit {
   constructor(
     private empleadoService: EmpleadoService,
     public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig // Usamos config para acceder a los datos pasados al diálogo
+    public config: DynamicDialogConfig,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -54,4 +56,8 @@ export class SeleccionarEmpleadosComponent implements OnInit {
     // Cerramos el diálogo y pasamos los empleados seleccionados
     this.ref.close(this.empleadosSeleccionados);
   }
+
+  redirigir() {
+    this.ref.close();
+}
 }
