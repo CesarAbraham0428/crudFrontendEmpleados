@@ -16,7 +16,6 @@ export interface Empleado {
   ActividadEmpresa: ActividadEmpresa[];
   ReferenciaFamiliar: ReferenciaFamiliar[];
   createdAt: string;
-  updatedAt: string;
   Domicilio: Domicilio; 
 }
 
