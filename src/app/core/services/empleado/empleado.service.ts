@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 import { EmpleadoActividad } from '../../../models/empleado-actividad/empleado-actividad.model';
-import { Empleado } from '../../../models/empleado/empleado';
+import { Empleado, ReferenciaFamiliar } from '../../../models/empleado/empleado';
 import { ActividadEmpresa } from '../../../models/empleado/empleado';
 import { CursoExterno } from '../../../models/empleado/empleado';
 
 
-import { tap, map} from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadoService {
-
 
   private apiUrl = `${environment.baseUrl}/empleado`;
 
@@ -34,7 +33,6 @@ export class EmpleadoService {
     return this.http.post(`${this.baseUrl}/registrar`, empleado);
   }
 
-
   obtenerEmpleadosFiltrados(NombreActividad: string, NombreDepartamento: string): Observable<EmpleadoActividad[]> {
     const url = `${this.apiUrl}/obtenerActividades?NombreActividad=${NombreActividad}&NombreDepartamento=${NombreDepartamento}`;
     return this.http.get<EmpleadoActividad[]>(url);
@@ -50,14 +48,12 @@ export class EmpleadoService {
     return this.http.put(`${this.apiUrl}/actualizarParticipacion`, body); // Hacemos una solicitud PUT al backend
   }
 
-
   getEmpleadoPorClave(ClaveEmpleado: string): Observable<Empleado> {
-    return this.http.get<{empleado: Empleado}>(`${this.apiUrl}/obtenerClave/${ClaveEmpleado}`).pipe(
+    return this.http.get<{ empleado: Empleado }>(`${this.apiUrl}/obtenerClave/${ClaveEmpleado}`).pipe(
       map(response => response.empleado), // Extrae el empleado del objeto de respuesta
       tap(data => console.log('Empleado recibido:', data))  // Agrega este log para depurar
     );
   }
-
 
   actualizarEmpleado(empleado: Empleado): Observable<Empleado> {
     return this.http.patch<Empleado>(`${this.apiUrl}/actualizarEmpleadoT/${empleado.ClaveEmpleado}`, empleado);
@@ -66,8 +62,8 @@ export class EmpleadoService {
   eliminarEmpleado(ClaveEmpleado: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/eliminarEmpleado/${ClaveEmpleado}`);
   }
-  
-  //Abraham
+
+  // Parte de Abraham
 
   obtenerInfoPersonal(): Observable<{ infoPersonalEmpleado: Empleado[] }> {
     return this.http.get<{ infoPersonalEmpleado: Empleado[] }>(
@@ -83,14 +79,12 @@ export class EmpleadoService {
     );
   }
 
-
   obtenerActividadesEmpresa(): Observable<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }> {
     return this.http.get<{ actividadesEmpresa: { ActividadEmpresa: ActividadEmpresa[] }[] }>(
       `${this.apiUrl}/obtenerActividadesEmpleado`,
       { withCredentials: true }
     );
   }
-  
   // Informacion personal
   actualizarPassword(passwordData: { Password: string, NuevaPassword: string }): Observable<any> {
     return this.http.patch(`${this.baseUrl}/actualizarPassword`, passwordData, { withCredentials: true });
@@ -105,26 +99,37 @@ export class EmpleadoService {
   }
 
   //Referencia Familiar
-  
-  actualizarReferenciasFamiliares(referencias: any[]): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizarTelefonosFamiliar/:referenciaId`, { Referencias: referencias }, { withCredentials: true });
+
+  actualizarReferenciaFamiliar(referenciaId: string, datos: any): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/actualizarReferenciaFamiliar/${referenciaId}`,
+      datos,
+      { withCredentials: true }
+    );
+  }
+
+  actualizarTelefonosFamiliar(referenciaId: string, operacion: 'agregar' | 'eliminar', telefonos: string[]): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/actualizarTelefonosFamiliar/${referenciaId}`,
+      { operacion, telefonos },
+      { withCredentials: true }
+    );
   }
 
   agregarReferenciaFamiliar(referenciaData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/agregarReferenciaFamiliar`, referenciaData, { 
-      withCredentials: true 
+    return this.http.post(`${this.apiUrl}/agregarReferenciaFamiliar`, referenciaData, {
+      withCredentials: true
     });
   }
 
   eliminarReferenciaFamiliar(referenciaId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/eliminarReferenciaFamiliar/${referenciaId}`, { 
-      withCredentials: true 
+    return this.http.delete(`${this.apiUrl}/eliminarReferenciaFamiliar/${referenciaId}`, {
+      withCredentials: true
     });
   }
 
   //Cursos Externos
 
-  // empleado.service.ts
   agregarCursoExterno(cursoData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/agregarCursoExterno`, cursoData, { withCredentials: true });
   }

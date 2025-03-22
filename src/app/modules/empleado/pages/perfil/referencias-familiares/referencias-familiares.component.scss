@@ -1,0 +1,72 @@
+
+/* Nueva referencia */
+.nueva-referencia-container {
+    margin-top: 24px;
+    
+    .p-button {
+      margin-top: 16px;
+    }
+  }
+  
+  /* Referencias familiares anidadas */
+  .referencia-item {
+    position: relative;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: var(--border-radius);
+    background-color: var(--secondary-color);
+    
+    .referencia-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+    }
+    
+    .referencia-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .referencia-delete {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+  }
+  
+  /* Input groups */
+  :host ::ng-deep .p-inputgroup {
+    .p-button-icon-only {
+      width: 3rem;
+    }
+  }
+  
+  /* Modo edición */
+  .edit-mode {
+    :host ::ng-deep .p-inputtext {
+      background-color: rgba(33, 150, 243, 0.05);
+      transition: var(--transition);
+      
+      &:focus {
+        background-color: white;
+      }
+    }
+  }
+  
+  /* Animaciones */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .p-fieldset {
+    animation: fadeIn 0.3s ease;
+  }
