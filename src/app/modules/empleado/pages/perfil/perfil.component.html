@@ -91,6 +91,6 @@
 
     <!-- Referencias Familiares -->
     <app-referencias-familiares [referencias]="empleado.ReferenciaFamiliar"
-      (referenciasActualizadas)="empleado.ReferenciaFamiliar = $event"></app-referencias-familiares>
+      (referenciasActualizadas)="onReferenciasActualizadas($event)"></app-referencias-familiares>
   </p-card>
 </div>

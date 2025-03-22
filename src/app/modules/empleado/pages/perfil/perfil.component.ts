@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { Empleado } from '../../../../models/empleado/empleado';
+import { Empleado, ReferenciaFamiliar } from '../../../../models/empleado/empleado';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -92,12 +92,17 @@ export class PerfilComponent implements OnInit {
       next: (data) => {
         const empleadoData = data.infoPersonalEmpleado?.[0];
         if (empleadoData) {
-          this.empleado = { ...this.empleado, ...empleadoData };
+          // Mantener la referencia del array original
+          this.empleado = {
+            ...this.empleado,
+            ...empleadoData,
+            ReferenciaFamiliar: [...empleadoData.ReferenciaFamiliar]
+          };
           this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
 
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
           if (!this.empleado.CorreoElectronico) this.empleado.CorreoElectronico = [];
-          
+
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -151,7 +156,7 @@ export class PerfilComponent implements OnInit {
       if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
         const correosAEliminar = this.empleadoOriginal.CorreoElectronico.filter(c => !this.empleado.CorreoElectronico.includes(c));
         const correosAAgregar = this.empleado.CorreoElectronico.filter(c => !this.empleadoOriginal.CorreoElectronico.includes(c));
-        
+
         if (correosAEliminar.length) operaciones.push({ tipo: "correo", operacion: "eliminar", datos: { correos: correosAEliminar } });
         if (correosAAgregar.length) operaciones.push({ tipo: "correo", operacion: "agregar", datos: { correos: correosAAgregar } });
       }
@@ -159,7 +164,7 @@ export class PerfilComponent implements OnInit {
       if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
         const telefonosAEliminar = this.empleadoOriginal.Telefono.filter(t => !this.empleado.Telefono.includes(t));
         const telefonosAAgregar = this.empleado.Telefono.filter(t => !this.empleadoOriginal.Telefono.includes(t));
-        
+
         if (telefonosAEliminar.length) operaciones.push({ tipo: "telefono", operacion: "eliminar", datos: { telefonos: telefonosAEliminar } });
         if (telefonosAAgregar.length) operaciones.push({ tipo: "telefono", operacion: "agregar", datos: { telefonos: telefonosAAgregar } });
       }
@@ -190,7 +195,7 @@ export class PerfilComponent implements OnInit {
       console.error(err);
     }
   }
-  
+
   addNewPhone() {
     this.empleado.Telefono.push('');
   }
@@ -213,5 +218,14 @@ export class PerfilComponent implements OnInit {
     } else {
       this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Debe mantener al menos un correo' });
     }
+  }
+
+  onReferenciasActualizadas(nuevasReferencias: ReferenciaFamiliar[]) {
+    // Crear nueva referencia para forzar detección de cambios
+    this.empleado = {
+      ...this.empleado,
+      ReferenciaFamiliar: [...nuevasReferencias]
+    };
+    this.empleadoOriginal.ReferenciaFamiliar = [...nuevasReferencias];
   }
 }

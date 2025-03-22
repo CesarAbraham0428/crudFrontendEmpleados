@@ -82,13 +82,19 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
       }
 
       // 3. Actualizar referencias modificadas
+      const updates: Promise<any>[] = [];
+
       for (const referencia of this.referenciasLocales) {
         if (referencia._id) {
           const original = this.originalReferencias.find(r => r._id === referencia._id);
 
-          // Actualizar datos principales
-          if (JSON.stringify(original) !== JSON.stringify(referencia)) {
-            await lastValueFrom(
+          // Detectar cambios en datos principales
+          if (original && (
+            original.NombreFamiliar !== referencia.NombreFamiliar ||
+            original.Parentesco !== referencia.Parentesco ||
+            original.CorreoElectronico !== referencia.CorreoElectronico
+          )) {
+            updates.push(lastValueFrom(
               this.empleadoService.actualizarReferenciaFamiliar(
                 referencia._id,
                 {
@@ -97,23 +103,31 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
                   CorreoElectronico: referencia.CorreoElectronico
                 }
               )
-            );
+            ));
           }
 
-          // Actualizar teléfonos si cambiaron
+          // Detectar cambios en teléfonos
           if (original && JSON.stringify(original.Telefono) !== JSON.stringify(referencia.Telefono)) {
-            await lastValueFrom(
+            updates.push(lastValueFrom(
               this.empleadoService.actualizarTelefonosFamiliar(
                 referencia._id,
                 referencia.Telefono
               )
-            );
+            ));
           }
         }
       }
 
-      // Actualizar lista padre
-      this.referenciasActualizadas.emit(this.referenciasLocales);
+      // Ejecutar todas las actualizaciones en paralelo
+      await Promise.all(updates);
+
+      // Actualizar lista padre con copia fresca del backend
+      const empleadoActualizado = await lastValueFrom(
+        this.empleadoService.obtenerInfoPersonal()
+      );
+      const nuevasReferenciasBackend = empleadoActualizado.infoPersonalEmpleado[0].ReferenciaFamiliar;
+
+      this.referenciasActualizadas.emit([...nuevasReferenciasBackend]);
       this.isEditMode = false;
 
       this.messageService.add({
