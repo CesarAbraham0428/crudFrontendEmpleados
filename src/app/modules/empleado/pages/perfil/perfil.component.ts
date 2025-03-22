@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { Empleado } from '../../../../models/empleado/empleado';
+import { Empleado, ReferenciaFamiliar } from '../../../../models/empleado/empleado';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { FieldsetModule } from 'primeng/fieldset';
@@ -18,6 +18,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { lastValueFrom } from 'rxjs';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { ReferenciasFamiliaresComponent } from './referencias-familiares/referencias-familiares.component';
 
 @Component({
   selector: 'app-perfil',
@@ -26,8 +27,9 @@ import { InputGroupModule } from 'primeng/inputgroup';
     CommonModule,
     PanelModule, CardModule, FieldsetModule, FloatLabelModule, AutoCompleteModule,
     FormsModule, InputMaskModule, DatePickerModule, TableModule, ButtonModule,
-    InputTextModule, PasswordModule, ToastModule, InputGroupModule
-  ],
+    InputTextModule, PasswordModule, ToastModule, InputGroupModule,
+    ReferenciasFamiliaresComponent
+],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
   providers: [MessageService]
@@ -69,91 +71,6 @@ export class PerfilComponent implements OnInit {
     CorreoElectronico: ''
   };
 
-  async agregarReferenciaFamiliar() {
-    try {
-      if (!this.nuevaReferencia.NombreFamiliar || !this.nuevaReferencia.Parentesco || 
-          !this.nuevaReferencia.Telefono[0] || !this.nuevaReferencia.CorreoElectronico) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Atención',
-          detail: 'Todos los campos son requeridos'
-        });
-        return;
-      }
-  
-      const response = await lastValueFrom(
-        this.empleadoService.agregarReferenciaFamiliar(this.nuevaReferencia)
-      );
-      
-      // Agregar la nueva referencia al array local con el _id del backend
-      this.empleado.ReferenciaFamiliar.push({
-        ...this.nuevaReferencia,
-        _id: response.referenciaActualizada._id // Asegúrate de que la respuesta tenga esta estructura
-      });
-  
-      // Resetear el formulario
-      this.resetNuevaReferencia();
-  
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Referencia familiar agregada correctamente'
-      });
-  
-    } catch (error) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo agregar la referencia familiar'
-      });
-      console.error(error);
-    }
-  }
-
-  // Método para eliminar una referencia familiar
-  async eliminarReferenciaFamiliar(referenciaId: string | undefined, index: number) {
-    try {
-      if (!referenciaId) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se encontró ID de la referencia'
-        });
-        return;
-      }
-  
-      await lastValueFrom(
-        this.empleadoService.eliminarReferenciaFamiliar(referenciaId)
-      );
-  
-      this.empleado.ReferenciaFamiliar.splice(index, 1);
-  
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Referencia familiar eliminada correctamente'
-      });
-  
-    } catch (error) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo eliminar la referencia familiar'
-      });
-      console.error(error);
-    }
-  }
-
-  // Método auxiliar para resetear el formulario de nueva referencia
-  private resetNuevaReferencia() {
-    this.nuevaReferencia = {
-      NombreFamiliar: '',
-      Parentesco: '',
-      Telefono: [''],
-      CorreoElectronico: ''
-    };
-  }
-
   empleadoOriginal!: Empleado; // Para guardar el estado original
   isEditMode: boolean = false;
   currentPassword: string = '';
@@ -183,9 +100,6 @@ export class PerfilComponent implements OnInit {
     return labels[field] || field;
   }
 
-  
-
-
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
       next: (data) => {
@@ -193,7 +107,6 @@ export class PerfilComponent implements OnInit {
         if (empleadoData) {
           this.empleado = { ...this.empleado, ...empleadoData };
           this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado)); // Copia profunda
-          // Resto del código...
 
           // Asegurarse de que los arrays estén inicializados
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
@@ -323,7 +236,6 @@ export class PerfilComponent implements OnInit {
     }
   }
   
-
   addNewPhone() {
     this.empleado.Telefono.push('');
   }
@@ -348,33 +260,17 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+  //Referencia Familiar
 
-
-  // Métodos para manejar los teléfonos de las referencias familiares
-  addNewFamilyPhone(refIndex: number) {
-    if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length) {
-      this.empleado.ReferenciaFamiliar[refIndex].Telefono.push('');
-      // Aquí podrías llamar a un servicio para guardar el nuevo teléfono
-      // this.empleadoService.actualizarTelefonosFamiliares(this.empleado.ReferenciaFamiliar).subscribe();
+  onReferenciaAgregada(nuevaReferencia: ReferenciaFamiliar) {
+    this.empleado.ReferenciaFamiliar.push(nuevaReferencia);
+  }
+  
+  onReferenciaEliminada(referenciaId: string) {
+    const index = this.empleado.ReferenciaFamiliar.findIndex(r => r._id === referenciaId);
+    if (index > -1) {
+      this.empleado.ReferenciaFamiliar.splice(index, 1);
     }
   }
 
-  removeFamilyPhone(refIndex: number, phoneIndex: number) {
-    if (refIndex >= 0 && refIndex < this.empleado.ReferenciaFamiliar.length) {
-      const familia = this.empleado.ReferenciaFamiliar[refIndex];
-      if (familia.Telefono.length <= 1) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Atención',
-          detail: `La referencia familiar ${familia.NombreFamiliar} debe tener al menos un teléfono`
-        });
-        return;
-      }
-      if (phoneIndex >= 0 && phoneIndex < familia.Telefono.length) {
-        familia.Telefono.splice(phoneIndex, 1);
-        // Aquí podrías llamar a un servicio para eliminar el teléfono
-        // this.empleadoService.actualizarTelefonosFamiliares(this.empleado.ReferenciaFamiliar).subscribe();
-      }
-    }
-  }
 }
