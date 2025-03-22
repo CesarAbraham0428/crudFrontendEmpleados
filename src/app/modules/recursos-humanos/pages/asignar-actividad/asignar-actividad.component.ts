@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
 import { EmpleadoActividad } from '../../../../models/empleado-actividad/empleado-actividad.model';
 import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
-import { Ciudad,Departamento,Actividad } from '../../../../models/cargarDatos/cargarDatos';
+import {Departamento,Actividad } from '../../../../models/cargarDatos/cargarDatos';
 
 // Importaciones de PrimeNG
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -74,16 +74,31 @@ export class AsignarActividadComponent implements OnInit {
 
  // Llamar al backend para obtener los empleados filtrados
  obtenerEmpleados(): void {
-  if (this.actividadSeleccionada&& this.departamentoSeleccionado) {
+  if (this.actividadSeleccionada && this.departamentoSeleccionado) {
     this.empleadoService
       .obtenerEmpleadosFiltrados(this.actividadSeleccionada, this.departamentoSeleccionado)
       .subscribe((empleados) => {
-        console.log('Empleados filtrados:', empleados);  // Verificar la respuesta
-        this.empleados = empleados;
+        console.log('Empleados filtrados:', empleados);  
+        this.empleados = empleados.map(emp => {
+          const actividad = emp.ActividadEmpresa.find(act => act.NombreActividad === this.actividadSeleccionada);
+          return {
+            ...emp,
+            ActividadEmpresa: actividad ? [actividad] : [{ NombreActividad: this.actividadSeleccionada, Estatus: 0 }]
+          };
+        });
       }, error => {
-        console.error('Error al obtener empleados:', error); // En caso de error
+        console.error('Error al obtener empleados:', error); 
       });
   }
+}
+// Getter para convertir Estatus a booleano
+getParticipacion(emp: EmpleadoActividad): boolean {
+  return emp.ActividadEmpresa[0].Estatus === 1;
+}
+
+// Setter para convertir booleano a Estatus
+setParticipacion(emp: EmpleadoActividad, value: boolean): void {
+  emp.ActividadEmpresa[0].Estatus = value ? 1 : 0;
 }
 
   filterItemsDepartamentos(event: any) {
@@ -108,14 +123,13 @@ export class AsignarActividadComponent implements OnInit {
   }
 
   actualizarParticipacion(emp: EmpleadoActividad): void {
-    // Cambia el valor de 'participacion' a 1 (participa) o 0 (no participa)
-    const participacion = emp.participacion === 1 ? 0 : 1; 
     const actividad = this.actividadSeleccionada;
+    const estatus = emp.ActividadEmpresa[0].Estatus; 
   
     if (actividad) {
-      this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, participacion).subscribe(
+      this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, estatus).subscribe(
         (response) => {
-          console.log(`Participación de ${emp.NombreEmpleado} actualizada a ${participacion}`);
+          console.log(`Participación de ${emp.NombreEmpleado} actualizada a ${estatus}`);
         },
         (error) => {
           console.error('Error al actualizar participación:', error);
@@ -123,17 +137,13 @@ export class AsignarActividadComponent implements OnInit {
       );
     }
   }
-  
-
-
 
   guardarCambios(): void {
     this.empleados.forEach(emp => {
-      const estatus = emp.participacion;  // 0 o 1, dependiendo del estado del checkbox
-      const actividad = this.actividadSeleccionada;  // Asegúrate de tener el valor correcto de la actividad seleccionada
-      
+      const estatus = emp.ActividadEmpresa[0].Estatus; 
+      const actividad = this.actividadSeleccionada;
+  
       if (actividad) {
-        // Asegúrate de que el nombre de la actividad esté presente
         this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, estatus).subscribe(
           (response) => {
             console.log(`Participación de ${emp.NombreEmpleado} actualizada a ${estatus}`);
@@ -146,5 +156,4 @@ export class AsignarActividadComponent implements OnInit {
     });
     this.edicionHabilitada = false;
   }
-  
 }

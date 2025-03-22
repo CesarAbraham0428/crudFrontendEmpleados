@@ -3,6 +3,11 @@ export interface EmpleadoActividad {
     actividad: string;
     ClaveEmpleado: string;
     NombreEmpleado: string;
-    participacion: number;
+    ActividadEmpresa:ActividadEmpresa[];
   }
-  
+ 
+
+ export interface ActividadEmpresa {
+    NombreActividad: string;
+    Estatus: number;
+  }

@@ -7,7 +7,7 @@ export interface Empleado {
   RFC: 
   string;
   Sexo: string;
-  FotoEmpleado?: File | null; 
+  FotoEmpleado?: string | null; 
   Departamento: string;
   Puesto: string;
   Telefono: string[];

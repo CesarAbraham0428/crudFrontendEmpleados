@@ -124,25 +124,20 @@
   <small *ngIf="formInvalid && !nuevoEmpleado.Password" class="error-text">La contraseña es obligatoria.</small>
 </div>
 
-<div class="label-container"  *ngIf="!isEditMode">
-<p-fieldset legend="Fotografía del Empleado">
-  <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
-    (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000"
-    mode="advanced">
-    <ng-template #empty>
-      <div>Arrastra y suelta archivos aquí para subirlos.</div>
-    </ng-template>
-    <ng-template #content>
-      <ul *ngIf="uploadedFiles.length">
-        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
-      </ul>
-    </ng-template>
-  </p-fileupload>
-    </p-fieldset>
+<div class="label-container" *ngIf="!isEditMode">
+  <p-fieldset legend="Fotografía del Empleado">
+    <p-fileupload 
+      name="fotoEmpleado" 
+      (onSelect)="onFileSelected($event)" 
+      [multiple]="false" 
+      accept="image/*" 
+      maxFileSize="1000000"
+      mode="basic"
+      chooseLabel="Seleccionar Foto"
+    >
+    </p-fileupload>
+  </p-fieldset>
 </div>
-
-
-
 
     <p-fieldset legend="Domicilio">   
       
