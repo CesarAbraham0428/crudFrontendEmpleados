@@ -101,10 +101,18 @@ export class EmpleadoService {
 
   //Referencia Familiar
 
-  actualizarReferenciasFamiliares(referencias: ReferenciaFamiliar[]): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/actualizarReferenciasFamiliares`,
-      { Referencias: referencias },
+  actualizarReferenciaFamiliar(referenciaId: string, datos: any): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/actualizarReferenciaFamiliar/${referenciaId}`,
+      datos,
+      { withCredentials: true }
+    );
+  }
+
+  actualizarTelefonosFamiliar(referenciaId: string, telefonos: string[]): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/actualizarTelefonosFamiliar/${referenciaId}`,
+      { Telefono: telefonos },
       { withCredentials: true }
     );
   }

@@ -2,13 +2,14 @@
     <div class="referencias-header">
         <button pButton [label]="isEditMode ? 'Cancelar' : 'Editar'" icon="pi pi-pencil"
             class="p-button-outlined p-button-sm" (click)="toggleEditMode()"></button>
+
         <button pButton label="Guardar" icon="pi pi-save" class="p-button-success p-button-sm"
             (click)="guardarCambios()" *ngIf="isEditMode"></button>
     </div>
 
     <div *ngFor="let ref of referenciasLocales; let i = index" class="referencia-item">
         <div class="referencia-header">
-            <h3>{{ ref.NombreFamiliar || "Nueva Referencia" }}</h3>
+            <h3>{{ref.NombreFamiliar || 'Nueva Referencia'}}</h3>
             <button pButton icon="pi pi-trash" class="p-button-danger p-button-text p-button-sm"
                 (click)="eliminarReferencia(i)" *ngIf="isEditMode"></button>
         </div>
@@ -31,7 +32,7 @@
             <div class="label-container">
                 <p-floatLabel>
                     <input pInputText [(ngModel)]="ref.CorreoElectronico" [readonly]="!isEditMode" />
-                    <label>Correo Electrónico</label>
+                    <label>Correo</label>
                 </p-floatLabel>
             </div>
         </div>
