@@ -190,8 +190,12 @@ agregarTelefonoU() {
       this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empleado registrado correctamente.' });
     },
     error: (error) => {
-      console.error('Error al registrar el empleado:', error);
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el empleado.' });
+      if (error.status === 413) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'La imagen es demasiado grande. El tamaño máximo permitido es 10 MB.' });
+      } else {
+        console.error('Error al registrar el empleado:', error);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el empleado.' });
+      }
     }
   });
 }
@@ -396,10 +400,15 @@ onUpload(event: any) {
     this.uploadedFiles.push(file);
   }
 }
-onFileSelected(event: any) {
-  const file = event.files[0];
+onFileSelected(event: any): void {
+  const file = event.files[0]; // Obtener el archivo seleccionado
   if (file) {
-    this.nuevoEmpleado.FotoEmpleado = file; // Asigna el archivo directamente
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string; // Convertir a base64
+      this.nuevoEmpleado.FotoEmpleado = base64; // Asignar la imagen en base64 al objeto
+    };
+    reader.readAsDataURL(file); // Leer el archivo como base64
   }
 }
 
@@ -441,5 +450,7 @@ editarEmpleado(): void {
     }
   });
 }
+
+
 
 }

@@ -40,15 +40,16 @@
       <ng-template pTemplate="body" let-emp>
         <tr>
           <td>
-            <ng-container *ngFor="let actividad of emp.ActividadEmpresa">
-              {{ actividad.NombreActividad }}
-              
-            </ng-container>
+            {{ actividadSeleccionada }}
           </td>
           <td>{{ emp.Nombre }}</td>
           <td>
-            <p-checkbox [(ngModel)]="emp.participacion" [disabled]="!edicionHabilitada" binary="true" (ngModelChange)="actualizarParticipacion(emp)" ></p-checkbox>
-          </td>
+            <p-checkbox 
+  [ngModel]="getParticipacion(emp)" 
+  (ngModelChange)="setParticipacion(emp, $event)" 
+  [disabled]="!edicionHabilitada" 
+  binary="true">
+</p-checkbox></td>
         </tr>
       </ng-template>
     </p-table>

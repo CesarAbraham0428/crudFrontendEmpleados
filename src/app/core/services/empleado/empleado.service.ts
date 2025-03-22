@@ -85,7 +85,6 @@ export class EmpleadoService {
       { withCredentials: true }
     );
   }
-
   // Informacion personal
   actualizarPassword(passwordData: { Password: string, NuevaPassword: string }): Observable<any> {
     return this.http.patch(`${this.baseUrl}/actualizarPassword`, passwordData, { withCredentials: true });
