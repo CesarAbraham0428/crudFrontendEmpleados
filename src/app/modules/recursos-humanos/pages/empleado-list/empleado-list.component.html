@@ -1,4 +1,4 @@
-
+<p-confirmDialog></p-confirmDialog>
 <div class="main-container">
     <p-card header="Gestión de Empleados" subheader="Subtítulo" >
               
@@ -7,19 +7,17 @@
         [value]="customers"
         dataKey="_id"
         [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        [loading]="loading"
+        [rowsPerPageOptions]="[5, 10, 15,30]"
         [paginator]="true"
-        [globalFilterFields]="['ClaveEmpleado','Nombre','CorreoElectronico', 'RFC', 'Puesto', 'Departamento']"
-    >
+        [globalFilterFields]="['ClaveEmpleado','Nombre','CorreoElectronico', 'RFC', 'Puesto', 'Departamento']">
         <ng-template #caption>
-            <div class="flex">
+            <div class="aflex">
                 <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
                 <p-iconfield iconPosition="left" class="ml-auto">
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
-                    <input pInputText type="text" (input)="filterGlobalValue($event)" placeholder="Search keyword" />
+                    <input pInputText type="text" (input)="filterGlobalValue($event)" placeholder="Buscar por clave empleado" />
                 </p-iconfield>
                 <div class="contenedor-botones">
                     <button pButton pRipple severity="info" (click)="redirigir()">
@@ -110,10 +108,10 @@
                     </div>
                 </td>
                 <td>
-                    <button pButton label="Editar" icon="pi pi-pencil" (click)="editarEmpleado(customer._id)"></button>
+                    <div class="contenedor-botones">
                     <button pButton icon="pi pi-pencil" (click)="editarEmpleado(customer.ClaveEmpleado)"></button>
-
-                    <button pButton label="Eliminar" icon="pi pi-trash" (click)="eliminarEmpleado(customer._id)"></button>
+                    <button class="botonc" pButton icon="pi pi-trash" (click)="eliminarEmpleado(customer.ClaveEmpleado)"></button>
+                    </div>
                 </td>
             </tr>
         </ng-template>

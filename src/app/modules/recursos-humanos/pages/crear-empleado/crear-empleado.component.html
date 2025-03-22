@@ -116,7 +116,7 @@
 </div>
 
 
-<div class="label-container">
+<div class="label-container"  *ngIf="!isEditMode">
   <p-floatlabel variant="on">
     <p-password id="password" [toggleMask]="true" [(ngModel)]="nuevoEmpleado.Password" />
     <label for="password">Contraseña</label>
@@ -124,7 +124,7 @@
   <small *ngIf="formInvalid && !nuevoEmpleado.Password" class="error-text">La contraseña es obligatoria.</small>
 </div>
 
-<div class="label-container">
+<div class="label-container"  *ngIf="!isEditMode">
 <p-fieldset legend="Fotografía del Empleado">
   <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
     (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000"

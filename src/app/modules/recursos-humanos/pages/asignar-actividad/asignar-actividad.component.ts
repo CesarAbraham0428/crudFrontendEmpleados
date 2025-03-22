@@ -109,8 +109,8 @@ export class AsignarActividadComponent implements OnInit {
 
   actualizarParticipacion(emp: EmpleadoActividad): void {
     // Cambia el valor de 'participacion' a 1 (participa) o 0 (no participa)
-    const participacion = emp.participacion === 1 ? 0 : 1; // Convertimos el valor booleano a 1 o 0
-    const actividad = this.actividadSeleccionada; // La actividad seleccionada
+    const participacion = emp.participacion === 1 ? 0 : 1; 
+    const actividad = this.actividadSeleccionada;
   
     if (actividad) {
       this.empleadoService.actualizarParticipacion(emp.ClaveEmpleado, actividad, participacion).subscribe(

@@ -62,6 +62,10 @@ export class EmpleadoService {
   actualizarEmpleado(empleado: Empleado): Observable<Empleado> {
     return this.http.patch<Empleado>(`${this.apiUrl}/actualizarEmpleadoT/${empleado.ClaveEmpleado}`, empleado);
   }
+
+  eliminarEmpleado(ClaveEmpleado: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminarEmpleado/${ClaveEmpleado}`);
+  }
   
   //Abraham
 

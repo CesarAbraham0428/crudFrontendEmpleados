@@ -22,24 +22,32 @@ import { SliderModule } from 'primeng/slider';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { CardModule } from 'primeng/card';
 import { Table } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { ChangeDetectionStrategy } from '@angular/core';
+
 
 
 
 @Component({
   selector: 'app-empleado-list',
   standalone: true,
-  imports: [KeyFilterModule,InputTextModule,PanelModule,CardModule,FieldsetModule,IconFieldModule,InputIconModule,FloatLabelModule,FormsModule,TableModule,ButtonModule,DropdownModule,MultiSelectModule,SliderModule,ProgressBarModule,CommonModule,TagModule],
+  imports: [KeyFilterModule,InputTextModule,PanelModule,CardModule,FieldsetModule,IconFieldModule,InputIconModule,FloatLabelModule,FormsModule,TableModule,ButtonModule,DropdownModule,MultiSelectModule,SliderModule,ProgressBarModule,CommonModule,TagModule,ConfirmDialogModule],
+  providers: [ConfirmationService], 
   templateUrl: './empleado-list.component.html',
   styleUrl: './empleado-list.component.scss'
 })
 export class EmpleadoListComponent implements OnInit {
+constructor(private empleadoService: EmpleadoService, private router: Router, private confirmationService: ConfirmationService,) {
+  this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+}
 
-  @ViewChild('dt1') dt1!: Table; 
-  selectedAgent: any[] = [];
+
+@ViewChild('dt1') dt1!: Table; 
+selectedAgent: any[] = [];
 selectedStatus: string = '';
 customers: Empleado[] = [];
-
-  loading: boolean = false;
+loading: boolean = false;
   
   filterGlobalValue(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
@@ -57,7 +65,6 @@ customers: Empleado[] = [];
   ];
   activityValues: number[] = [0, 100];
 
-  constructor(private empleadoService: EmpleadoService, private router: Router) {}
 
 
   ngOnInit() {
@@ -101,12 +108,30 @@ customers: Empleado[] = [];
 }
 
 
-  // Eliminar empleado
-  eliminarEmpleado(id: string) {
-    // Lógica de eliminación
-  }
-
-
+eliminarEmpleado(ClaveEmpleado: string) {
+  this.confirmationService.confirm({
+    message: '¿Estás seguro de que deseas eliminar este empleado?',
+    header: 'Confirmación de Eliminación',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Sí',
+    rejectLabel: 'No',
+    accept: () => {
+      this.empleadoService.eliminarEmpleado(ClaveEmpleado).subscribe({
+        next: () => {
+          console.log('Empleado eliminado exitosamente');
+          // Opcionalmente, redirigir o actualizar la lista de empleados
+          this.router.navigate(['recursos-humanos/listaEmpleado']);
+        },
+        error: (err) => {
+          console.error('Error al eliminar empleado:', err);
+        }
+      });
+    },
+    reject: () => {
+      console.log('Eliminación cancelada');
+    }
+  });
+}
   //EDITAR EMPLEADO 
   editarEmpleado(ClaveEmpleado: string) {
     this.router.navigate(['recursos-humanos/editar-empleado', ClaveEmpleado]);
