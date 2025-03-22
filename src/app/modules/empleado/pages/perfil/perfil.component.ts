@@ -1,16 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { Empleado, ReferenciaFamiliar } from '../../../../models/empleado/empleado';
+import { Empleado } from '../../../../models/empleado/empleado';
 import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DatePickerModule } from 'primeng/datepicker';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
@@ -25,16 +22,15 @@ import { ReferenciasFamiliaresComponent } from './referencias-familiares/referen
   standalone: true,
   imports: [
     CommonModule,
-    PanelModule, CardModule, FieldsetModule, FloatLabelModule, AutoCompleteModule,
-    FormsModule, InputMaskModule, DatePickerModule, TableModule, ButtonModule,
+    PanelModule, CardModule, FieldsetModule, FloatLabelModule,
+    FormsModule, InputMaskModule, ButtonModule,
     InputTextModule, PasswordModule, ToastModule, InputGroupModule,
     ReferenciasFamiliaresComponent
-],
+  ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
   providers: [MessageService]
 })
-
 export class PerfilComponent implements OnInit {
   empleado: Empleado = {
     ClaveEmpleado: '',
@@ -64,19 +60,10 @@ export class PerfilComponent implements OnInit {
     }
   };
 
-  nuevaReferencia = {
-    NombreFamiliar: '',
-    Parentesco: '',
-    Telefono: [''],
-    CorreoElectronico: ''
-  };
-
-  empleadoOriginal!: Empleado; // Para guardar el estado original
+  empleadoOriginal!: Empleado;
   isEditMode: boolean = false;
   currentPassword: string = '';
   newPassword: string = '';
-
-  filteredItemsCiudad: any[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
@@ -106,18 +93,11 @@ export class PerfilComponent implements OnInit {
         const empleadoData = data.infoPersonalEmpleado?.[0];
         if (empleadoData) {
           this.empleado = { ...this.empleado, ...empleadoData };
-          this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado)); // Copia profunda
+          this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
 
-          // Asegurarse de que los arrays estén inicializados
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
           if (!this.empleado.CorreoElectronico) this.empleado.CorreoElectronico = [];
-          if (!this.empleado.ReferenciaFamiliar) this.empleado.ReferenciaFamiliar = [];
-
-          // Asegurarse de que cada referencia familiar tenga un array de teléfonos
-          this.empleado.ReferenciaFamiliar.forEach(ref => {
-            if (!ref.Telefono) ref.Telefono = [];
-          });
-
+          
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -145,7 +125,6 @@ export class PerfilComponent implements OnInit {
   toggleEditMode() {
     this.isEditMode = !this.isEditMode;
     if (!this.isEditMode) {
-      // Si salimos del modo edición sin guardar, restauramos los valores originales
       this.empleado = JSON.parse(JSON.stringify(this.empleadoOriginal));
     }
   }
@@ -155,7 +134,7 @@ export class PerfilComponent implements OnInit {
       const updates: Promise<any>[] = [];
       const operaciones: any[] = [];
 
-      // Actualizar contraseña si cambió
+      // Actualizar contraseña
       if (this.currentPassword && this.newPassword) {
         updates.push(lastValueFrom(this.empleadoService.actualizarPassword({
           Password: this.currentPassword,
@@ -163,56 +142,32 @@ export class PerfilComponent implements OnInit {
         })));
       }
 
-      // Actualizar domicilio si cambió
+      // Actualizar domicilio
       if (JSON.stringify(this.empleado.Domicilio) !== JSON.stringify(this.empleadoOriginal.Domicilio)) {
         updates.push(lastValueFrom(this.empleadoService.actualizarDomicilio(this.empleado.Domicilio)));
       }
 
-      // Si los correos cambiaron, agregar la operación
+      // Actualizar contactos
       if (JSON.stringify(this.empleado.CorreoElectronico) !== JSON.stringify(this.empleadoOriginal.CorreoElectronico)) {
-        const correosAEliminar = this.empleadoOriginal.CorreoElectronico.filter(correo =>
-          !this.empleado.CorreoElectronico.includes(correo)
-        );
-        const correosAAgregar = this.empleado.CorreoElectronico.filter(correo =>
-          !this.empleadoOriginal.CorreoElectronico.includes(correo)
-        );
-
-        if (correosAEliminar.length) {
-          operaciones.push({ tipo: "correo", operacion: "eliminar", datos: { correos: correosAEliminar } });
-        }
-        if (correosAAgregar.length) {
-          operaciones.push({ tipo: "correo", operacion: "agregar", datos: { correos: correosAAgregar } });
-        }
+        const correosAEliminar = this.empleadoOriginal.CorreoElectronico.filter(c => !this.empleado.CorreoElectronico.includes(c));
+        const correosAAgregar = this.empleado.CorreoElectronico.filter(c => !this.empleadoOriginal.CorreoElectronico.includes(c));
+        
+        if (correosAEliminar.length) operaciones.push({ tipo: "correo", operacion: "eliminar", datos: { correos: correosAEliminar } });
+        if (correosAAgregar.length) operaciones.push({ tipo: "correo", operacion: "agregar", datos: { correos: correosAAgregar } });
       }
 
-      // Si los teléfonos cambiaron, agregar la operación
       if (JSON.stringify(this.empleado.Telefono) !== JSON.stringify(this.empleadoOriginal.Telefono)) {
-        const telefonosAEliminar = this.empleadoOriginal.Telefono.filter(tel =>
-          !this.empleado.Telefono.includes(tel)
-        );
-        const telefonosAAgregar = this.empleado.Telefono.filter(tel =>
-          !this.empleadoOriginal.Telefono.includes(tel)
-        );
-
-        if (telefonosAEliminar.length) {
-          operaciones.push({ tipo: "telefono", operacion: "eliminar", datos: { telefonos: telefonosAEliminar } });
-        }
-        if (telefonosAAgregar.length) {
-          operaciones.push({ tipo: "telefono", operacion: "agregar", datos: { telefonos: telefonosAAgregar } });
-        }
+        const telefonosAEliminar = this.empleadoOriginal.Telefono.filter(t => !this.empleado.Telefono.includes(t));
+        const telefonosAAgregar = this.empleado.Telefono.filter(t => !this.empleadoOriginal.Telefono.includes(t));
+        
+        if (telefonosAEliminar.length) operaciones.push({ tipo: "telefono", operacion: "eliminar", datos: { telefonos: telefonosAEliminar } });
+        if (telefonosAAgregar.length) operaciones.push({ tipo: "telefono", operacion: "agregar", datos: { telefonos: telefonosAAgregar } });
       }
 
-      // Si hay operaciones de contacto, agregarlas al array de actualizaciones
       if (operaciones.length > 0) {
         updates.push(lastValueFrom(this.empleadoService.actualizarContactos(operaciones)));
       }
 
-      // Actualizar referencias familiares si cambió
-      if (JSON.stringify(this.empleado.ReferenciaFamiliar) !== JSON.stringify(this.empleadoOriginal.ReferenciaFamiliar)) {
-        updates.push(lastValueFrom(this.empleadoService.actualizarReferenciasFamiliares(this.empleado.ReferenciaFamiliar)));
-      }
-
-      // Ejecutar todas las actualizaciones
       await Promise.all(updates);
 
       this.messageService.add({
@@ -259,18 +214,4 @@ export class PerfilComponent implements OnInit {
       this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Debe mantener al menos un correo' });
     }
   }
-
-  //Referencia Familiar
-
-  onReferenciaAgregada(nuevaReferencia: ReferenciaFamiliar) {
-    this.empleado.ReferenciaFamiliar.push(nuevaReferencia);
-  }
-  
-  onReferenciaEliminada(referenciaId: string) {
-    const index = this.empleado.ReferenciaFamiliar.findIndex(r => r._id === referenciaId);
-    if (index > -1) {
-      this.empleado.ReferenciaFamiliar.splice(index, 1);
-    }
-  }
-
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -32,119 +32,73 @@ import { lastValueFrom } from 'rxjs';
 })
 export class ReferenciasFamiliaresComponent {
   @Input() referencias: ReferenciaFamiliar[] = [];
-  @Input() isEditMode: boolean = false;
-  @Output() referenciaAgregada = new EventEmitter<ReferenciaFamiliar>();
-  @Output() referenciaEliminada = new EventEmitter<string>();
-
-  nuevaReferencia = {
-    NombreFamiliar: '',
-    Parentesco: '',
-    Telefono: [''],
-    CorreoElectronico: ''
-  };
+  @Output() referenciasActualizadas = new EventEmitter<ReferenciaFamiliar[]>();
+  
+  isEditMode: boolean = false;
+  referenciasLocales: ReferenciaFamiliar[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
     private messageService: MessageService
   ) { }
 
-  async agregarReferenciaFamiliar() {
-    try {
-      if (!this.nuevaReferencia.NombreFamiliar || !this.nuevaReferencia.Parentesco || 
-          !this.nuevaReferencia.Telefono[0] || !this.nuevaReferencia.CorreoElectronico) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Atención',
-          detail: 'Todos los campos son requeridos'
-        });
-        return;
-      }
+  ngOnChanges() {
+    this.referenciasLocales = JSON.parse(JSON.stringify(this.referencias));
+  }
 
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+    if (!this.isEditMode) {
+      this.referenciasLocales = JSON.parse(JSON.stringify(this.referencias));
+    }
+  }
+
+  async guardarCambios() {
+    try {
       const response = await lastValueFrom(
-        this.empleadoService.agregarReferenciaFamiliar(this.nuevaReferencia)
+        this.empleadoService.actualizarReferenciasFamiliares(this.referenciasLocales)
       );
       
-      this.referenciaAgregada.emit(response.referenciaActualizada);
-      this.resetNuevaReferencia();
-
+      this.referenciasActualizadas.emit(this.referenciasLocales);
+      this.isEditMode = false;
+      
       this.messageService.add({
         severity: 'success',
         summary: 'Éxito',
-        detail: 'Referencia familiar agregada correctamente'
+        detail: 'Referencias actualizadas correctamente'
       });
-
+      
     } catch (error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudo agregar la referencia familiar'
+        detail: 'Error al guardar referencias'
       });
       console.error(error);
     }
   }
 
-  async eliminarReferenciaFamiliar(referenciaId: string | undefined, index: number) {
-    try {
-      if (!referenciaId) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se encontró ID de la referencia'
-        });
-        return;
-      }
-
-      await lastValueFrom(
-        this.empleadoService.eliminarReferenciaFamiliar(referenciaId)
-      );
-
-      this.referenciaEliminada.emit(referenciaId);
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Referencia familiar eliminada correctamente'
-      });
-
-    } catch (error) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo eliminar la referencia familiar'
-      });
-      console.error(error);
-    }
-  }
-
-  private resetNuevaReferencia() {
-    this.nuevaReferencia = {
+  agregarReferencia() {
+    this.referenciasLocales.push({
       NombreFamiliar: '',
       Parentesco: '',
       Telefono: [''],
-      CorreoElectronico: ''
-    };
+      CorreoElectronico: '',
+      _id: undefined
+    });
   }
 
-  addNewFamilyPhone(refIndex: number) {
-    if (refIndex >= 0 && refIndex < this.referencias.length) {
-      this.referencias[refIndex].Telefono.push('');
-    }
+  eliminarReferencia(index: number) {
+    this.referenciasLocales.splice(index, 1);
   }
 
-  removeFamilyPhone(refIndex: number, phoneIndex: number) {
-    if (refIndex >= 0 && refIndex < this.referencias.length) {
-      const familia = this.referencias[refIndex];
-      if (familia.Telefono.length <= 1) {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Atención',
-          detail: `La referencia familiar ${familia.NombreFamiliar} debe tener al menos un teléfono`
-        });
-        return;
-      }
-      if (phoneIndex >= 0 && phoneIndex < familia.Telefono.length) {
-        familia.Telefono.splice(phoneIndex, 1);
-      }
+  agregarTelefono(refIndex: number) {
+    this.referenciasLocales[refIndex].Telefono.push('');
+  }
+
+  eliminarTelefono(refIndex: number, telIndex: number) {
+    if (this.referenciasLocales[refIndex].Telefono.length > 1) {
+      this.referenciasLocales[refIndex].Telefono.splice(telIndex, 1);
     }
   }
 }
