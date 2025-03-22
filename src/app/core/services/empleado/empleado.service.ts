@@ -109,10 +109,10 @@ export class EmpleadoService {
     );
   }
 
-  actualizarTelefonosFamiliar(referenciaId: string, telefonos: string[]): Observable<any> {
+  actualizarTelefonosFamiliar(referenciaId: string, operacion: 'agregar' | 'eliminar', telefonos: string[]): Observable<any> {
     return this.http.patch(
       `${this.apiUrl}/actualizarTelefonosFamiliar/${referenciaId}`,
-      { Telefono: telefonos },
+      { operacion, telefonos },
       { withCredentials: true }
     );
   }

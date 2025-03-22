@@ -108,12 +108,33 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
 
           // Detectar cambios en teléfonos
           if (original && JSON.stringify(original.Telefono) !== JSON.stringify(referencia.Telefono)) {
-            updates.push(lastValueFrom(
-              this.empleadoService.actualizarTelefonosFamiliar(
-                referencia._id,
-                referencia.Telefono
-              )
-            ));
+            const telefonosOriginales = original.Telefono;
+            const telefonosActuales = referencia.Telefono;
+
+            // Calcular diferencias
+            const telefonosAAgregar = telefonosActuales.filter(t => !telefonosOriginales.includes(t));
+            const telefonosAEliminar = telefonosOriginales.filter(t => !telefonosActuales.includes(t));
+
+            // Enviar operaciones al backend
+            if (telefonosAAgregar.length > 0) {
+              updates.push(lastValueFrom(
+                this.empleadoService.actualizarTelefonosFamiliar(
+                  referencia._id,
+                  'agregar',
+                  telefonosAAgregar
+                )
+              ));
+            }
+
+            if (telefonosAEliminar.length > 0) {
+              updates.push(lastValueFrom(
+                this.empleadoService.actualizarTelefonosFamiliar(
+                  referencia._id,
+                  'eliminar',
+                  telefonosAEliminar
+                )
+              ));
+            }
           }
         }
       }
@@ -161,12 +182,24 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
   }
 
   agregarTelefono(refIndex: number) {
-    this.referenciasLocales[refIndex].Telefono.push('');
+    // Agregar nuevo teléfono temporal
+    this.referenciasLocales[refIndex].Telefono = [
+      ...this.referenciasLocales[refIndex].Telefono,
+      ''
+    ];
   }
 
   eliminarTelefono(refIndex: number, telIndex: number) {
     if (this.referenciasLocales[refIndex].Telefono.length > 1) {
-      this.referenciasLocales[refIndex].Telefono.splice(telIndex, 1);
+      // Filtrar el teléfono a eliminar manteniendo los demás
+      this.referenciasLocales[refIndex].Telefono = this.referenciasLocales[refIndex].Telefono
+        .filter((_, index) => index !== telIndex);
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Debe mantener al menos un teléfono'
+      });
     }
   }
 }
