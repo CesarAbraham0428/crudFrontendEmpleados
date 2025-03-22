@@ -1,38 +1,39 @@
-<!-- Botón para colapsar o expandir el menú (siempre visible) -->
-<button *ngIf="isVisible" (click)="toggleMenu()" 
-    class="p-2 bg-gray-200 fixed left-4 top-4 z-50 rounded-full shadow-lg cursor-pointer">
-  ☰ 
-</button>
+<div class="menu-wrapper" *ngIf="isVisible">
+    <!-- Botón para colapsar o expandir el menú -->
+    <button (click)="toggleMenu()" 
+        class="menu-toggle-btn" [class.expanded]="!colapsado">
+      <i class="pi" [ngClass]="colapsado ? 'pi-bars' : 'pi-times'"></i>
+    </button>
 
-<!-- Contenedor del menú -->
-<div *ngIf="isVisible" [ngClass]="{ 'w-64': !colapsado, 'w-0': colapsado, 'invisible': colapsado }" 
-     class="menu-container fixed left-0 top-0 h-full bg-white shadow-lg transition-all duration-300 overflow-y-auto">
-  <p-menu *ngIf="!colapsado" [model]="items" styleClass="w-full custom-menu">
-    <ng-template pTemplate="start">
-        <span class="inline-flex items-center gap-1 px-2 py-2">
-            <svg width="33" height="33" viewBox="0 0 33 35" fill="none">
-                <path d="..." fill="var(--primary-color)" />
-            </svg>
-        </span>
-    </ng-template>
-    <ng-template pTemplate="item" let-item let-i="index">
-        <a pRipple *ngIf="item.visible !== false" class="flex items-center p-menu-item-link">
-            <span [class]="item.icon"></span>
-            <span class="ml-2">{{ item.label }}</span>
-            <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge" />
-            <span *ngIf="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">
-                {{ item.shortcut }}
-            </span>
-        </a>
-    </ng-template>
-<!--     <ng-template pTemplate="end">
-        <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-            <p-avatar image="" class="mr-2" shape="circle" />
-            <span class="inline-flex flex-col">
-                <span class="font-bold"></span>
-                <span class="text-sm"></span>
-            </span>
-        </button>
-    </ng-template> -->
-  </p-menu>
+    <!-- Contenedor del menú -->
+    <div [ngClass]="{ 'expanded': !colapsado, 'collapsed': colapsado }" 
+         class="menu-container">
+      <div class="menu-header" *ngIf="!colapsado">
+        <div class="user-info">
+            <p-avatar icon="pi pi-user" styleClass="mr-2" [style]="{'background-color': '#2196F3', 'color': '#ffffff'}"></p-avatar>
+            <div class="user-details">
+              <span class="user-role"><b>Rol:</b> {{userRole | titlecase}}</span>
+            </div>
+        </div>
+      </div>
+    
+      <p-menu [model]="visibleItems" styleClass="w-full custom-menu border-none">
+        <ng-template pTemplate="item" let-item>
+          <a pRipple class="menu-item p-3">
+            <div class="menu-item">        
+                <span [class]="item.icon"></span>
+                <span class="menu-label" *ngIf="!colapsado">{{ item.label }}</span>
+            </div>
+          </a>
+        </ng-template>
+      </p-menu>
+
+        <!-- Botón de Cerrar Sesión, siempre al final -->
+        <div class="logout-container">
+          <a pRipple class="menu-item p-3 logout-item" (click)="logout()">
+            <span [class]="logoutItem.icon"></span>
+            <span class="menu-label" *ngIf="!colapsado">{{ logoutItem.label }}</span>
+          </a>
+        </div>
+    </div>
 </div>
