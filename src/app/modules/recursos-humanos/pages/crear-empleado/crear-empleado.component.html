@@ -3,13 +3,13 @@
   <p-card [header]="isEditMode ? 'Editar Empleado' : 'Registrar Nuevo Empleado'" subheader="Subtítulo">
     <p-fieldset legend="Información Personal">   
     
-     
+    <div class="form-group">
     <p-floatlabel  variant="on">
       <input type="text" pInputText  id="nombre" [(ngModel)]="nuevoEmpleado.Nombre" name="nombre" required autocomplete="off"/>
       <label for="nombre">Nombre</label>
-      
+    </p-floatlabel> 
       <small *ngIf="formInvalid && !nuevoEmpleado.Nombre" class="error-text">El nombre es obligatorio.</small>
-  </p-floatlabel> 
+  </div>
 
   <div class="label-container">
     <p-floatlabel variant="on">
@@ -125,7 +125,6 @@
 </div>
 
 <div class="label-container" *ngIf="!isEditMode">
-  <p-fieldset legend="Fotografía del Empleado">
     <p-fileupload 
       name="fotoEmpleado" 
       (onSelect)="onFileSelected($event)" 
@@ -136,7 +135,6 @@
       chooseLabel="Seleccionar Foto"
     >
     </p-fileupload>
-  </p-fieldset>
 </div>
 
     <p-fieldset legend="Domicilio">   
@@ -196,7 +194,7 @@
   <h3>Familiares</h3>
 
  
-  <button pButton label="Agregar Familiar" (click)="nuevaReferenciaFamiliar()" icon="pi pi-plus"></button>
+  <button pButton class= "pButton" label="Agregar Familiar" (click)="nuevaReferenciaFamiliar()" icon="pi pi-plus"></button>
   <p-table [value]="nuevoEmpleado.ReferenciaFamiliar" responsiveLayout="scroll">
     <ng-template pTemplate="header">
       <tr>
@@ -248,7 +246,7 @@
       <span pButtonLabel>Cancelar</span>
     </button>
 
-    <button class="boton" pButton pRipple aria-label="Guardar" severity="info" (click)="isEditMode ? editarEmpleado() : registrarEmpleado()">
+    <button class="boton" pButton pRipple aria-label="Guardar" severity="success" (click)="isEditMode ? editarEmpleado() : registrarEmpleado()">
       <span pButtonLabel>{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
     </button>
     

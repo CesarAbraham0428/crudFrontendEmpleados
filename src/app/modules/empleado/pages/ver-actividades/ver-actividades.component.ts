@@ -9,11 +9,13 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { MessageModule } from 'primeng/message';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ver-actividades',
   standalone: true,
-  imports: [PanelModule, CardModule, FieldsetModule, FloatLabelModule, TableModule, ButtonModule],
+  imports: [PanelModule, CardModule, FieldsetModule, FloatLabelModule, TableModule, ButtonModule,MessageModule,CommonModule],
   templateUrl: './ver-actividades.component.html',
   styleUrl: './ver-actividades.component.scss'
 })

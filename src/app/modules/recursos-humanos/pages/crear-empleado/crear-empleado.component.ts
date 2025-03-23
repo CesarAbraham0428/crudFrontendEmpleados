@@ -54,7 +54,7 @@ export class CrearEmpleadoComponent implements OnInit {
     Rol: '',
     CursoExterno: [{ Nombre: '', TipoCurso: '', FechaInicio: '', FechaFin: '' }],
     ActividadEmpresa: [{ NombreActividad: '', Estatus: 0 }],
-    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [], CorreoElectronico: '' }],
+    ReferenciaFamiliar: [{ NombreFamiliar: '', Parentesco: '', Telefono: [''], CorreoElectronico: '' }],
     createdAt: new Date().toISOString(),
     Domicilio: {
       Calle: '',

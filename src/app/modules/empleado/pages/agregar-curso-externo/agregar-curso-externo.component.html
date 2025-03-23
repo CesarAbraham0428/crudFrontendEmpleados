@@ -6,34 +6,30 @@
         <!-- Nombre del Curso -->
         <div class="form-field">
           <label for="nombreCurso">Nombre del Curso *</label>
-          <input 
-            pInputText 
+          <input pInputText
             id="nombreCurso" 
             formControlName="nombreCurso"
             [ngClass]="{ 'p-invalid': formulario.get('nombreCurso')?.invalid && formulario.get('nombreCurso')?.touched }"
-            placeholder="Ingrese el nombre del curso"
-          >
+            placeholder="Ingrese el nombre del curso">
           <small *ngIf="formulario.get('nombreCurso')?.touched && formulario.get('nombreCurso')?.errors?.['required']" 
                  class="error-message">El nombre del curso es requerido</small>
           <small *ngIf="formulario.get('nombreCurso')?.touched && formulario.get('nombreCurso')?.errors?.['minlength']" 
                  class="error-message">Mínimo 3 caracteres</small>
         </div>
-  
+
         <!-- Tipo de Curso -->
-        <div class="form-field">
-          <label for="tipoCurso">Tipo de Curso *</label>
-          <p-select 
-            id="tipoCurso" 
-            formControlName="tipoCurso" 
-            [options]="tiposCurso" 
-            placeholder="Seleccione el tipo de curso"
-            [showClear]="true"
-            styleClass="w-full"
-            [ngClass]="{ 'p-invalid': formulario.get('tipoCurso')?.invalid && formulario.get('tipoCurso')?.touched }"
-          ></p-select>
-          <small *ngIf="formulario.get('tipoCurso')?.touched && formulario.get('tipoCurso')?.errors?.['required']" 
-                 class="error-message">El tipo de curso es requerido</small>
-        </div>
+
+
+        <p-floatlabel>  
+          <p-autocomplete  formControlName="tipoCurso" [(ngModel)]="tipoDocumentoSeleccionado" [virtualScroll]="true" [suggestions]="filteredItemsTipoDocumento" [virtualScrollItemSize]="34" (completeMethod)="filterItemsTipoDocumento($event)" 
+          filter="true" optionLabel="label" placeholder="Tipo de documento obtenido" [dropdown]="true" />
+        </p-floatlabel>
+        <small 
+          *ngIf="formulario.get('tipoCurso')?.touched && formulario.get('tipoCurso')?.errors?.['required']" 
+          class="error-message">
+          El tipo de documento es requerido
+        </small>
+ 
   
         <!-- Fecha Inicio -->
         <div class="form-field">
@@ -79,7 +75,7 @@
         ></p-button>
         <p-button 
           [label]="editMode ? 'Actualizar' : 'Guardar'" 
-          styleClass="p-button-primary" 
+          styleClass="p-button-success" 
           type="submit" 
           [disabled]="formulario.invalid"
           [loading]="formulario.disabled"

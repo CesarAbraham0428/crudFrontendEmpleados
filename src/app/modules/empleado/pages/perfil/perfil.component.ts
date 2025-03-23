@@ -16,6 +16,10 @@ import { ToastModule } from 'primeng/toast';
 import { lastValueFrom } from 'rxjs';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ReferenciasFamiliaresComponent } from './referencias-familiares/referencias-familiares.component';
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { Ciudad } from '../../../../models/cargarDatos/cargarDatos';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
 
 @Component({
   selector: 'app-perfil',
@@ -25,7 +29,7 @@ import { ReferenciasFamiliaresComponent } from './referencias-familiares/referen
     PanelModule, CardModule, FieldsetModule, FloatLabelModule,
     FormsModule, InputMaskModule, ButtonModule,
     InputTextModule, PasswordModule, ToastModule, InputGroupModule,
-    ReferenciasFamiliaresComponent
+    ReferenciasFamiliaresComponent, AutoCompleteModule
   ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
@@ -64,13 +68,28 @@ export class PerfilComponent implements OnInit {
   isEditMode: boolean = false;
   currentPassword: string = '';
   newPassword: string = '';
+  filteredItemsCiudad: any[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cargaDatosService: CargaDatosService
   ) { }
 
   ngOnInit() {
+    this.cargaDatosService.getCiudades().subscribe(data => {
+      if (data && data.ciudades) {
+        this.filteredItemsCiudad = data.ciudades.map((item:Ciudad) => ({
+          label: item.nombreCiudad,
+          value: item.nombreCiudad
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
+    });
+
+
+
     this.obtenerInformacionPersonal();
   }
 
@@ -228,4 +247,13 @@ export class PerfilComponent implements OnInit {
     };
     this.empleadoOriginal.ReferenciaFamiliar = [...nuevasReferencias];
   }
+
+  
+  filterItemsCiudad(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsCiudad = this.filteredItemsCiudad.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+
 }

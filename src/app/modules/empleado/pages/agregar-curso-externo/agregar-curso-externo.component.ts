@@ -9,6 +9,11 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+import { Documento } from '../../../../models/cargarDatos/cargarDatos';
+import { FloatLabel } from 'primeng/floatlabel';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-agregar-curso-externo',
@@ -21,6 +26,9 @@ import { DatePickerModule } from 'primeng/datepicker';
     ToastModule,
     SelectModule,
     DatePickerModule,
+    FloatLabel,
+    AutoCompleteModule,
+    FormsModule
   ],
   templateUrl: './agregar-curso-externo.component.html',
   styleUrls: ['./agregar-curso-externo.component.scss'],
@@ -28,10 +36,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 })
 export class AgregarCursoExternoComponent implements OnInit {
   formulario: FormGroup;
-  tiposCurso: any[] = [
-    { label: 'Online', value: 'online' },
-    { label: 'Presencial', value: 'presencial' }
-  ];
+  tipoDocumentoSeleccionado: any;
+  filteredItemsTipoDocumento: any[] = [];
+
   minDate: Date = new Date();
   editMode: boolean = false;
   cursoId: string | null = null;
@@ -40,7 +47,8 @@ export class AgregarCursoExternoComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private empleadoService: EmpleadoService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cargaDatosService: CargaDatosService
   ) {
     this.formulario = this.fb.group({
       nombreCurso: ['', [Validators.required, Validators.minLength(3)]],
@@ -64,7 +72,26 @@ export class AgregarCursoExternoComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+      this.cargaDatosService.getTipoDocumento().subscribe(data => {
+            if (data && data.tipodocumento) {
+              this.filteredItemsTipoDocumento = data.tipodocumento.map((item:Documento) => ({
+                label: item.TipoDocumento,
+                value: item.TipoDocumento
+              }));
+            } else {
+              console.error('La respuesta del backend no tiene la estructura esperada:', data);
+            }
+          });  
+  }
+  
+  filterItemsTipoDocumento(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsTipoDocumento = this.filteredItemsTipoDocumento.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
+  }
+
 
   guardarCurso(): void {
     if (this.formulario.invalid) {

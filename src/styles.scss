@@ -1,2 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+
+
+.p-card {
+    border: 1px solid #cccccc;    
+    box-shadow: 0 4px 6px rgba(36, 35, 35, 0.1); 
+  }
+
+  .p-datatable thead tr th {
+    background-color: #5783c1 !important;
+    color: white !important;
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+  }
+  body {
+    background-color: #e5e5e9; 
+  }
+

@@ -12,6 +12,9 @@ import { ToastModule } from 'primeng/toast';
 import { EmpleadoService } from '../../../../../core/services/empleado/empleado.service';
 import { ReferenciaFamiliar } from '../../../../../models/empleado/empleado';
 import { lastValueFrom } from 'rxjs';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CargaDatosService } from '../../../../../core/services/cargaDatos/carga-datos.service';
+import { Parentesco } from '../../../../../models/cargarDatos/cargarDatos';
 
 @Component({
   selector: 'app-referencias-familiares',
@@ -25,7 +28,8 @@ import { lastValueFrom } from 'rxjs';
     InputTextModule,
     ButtonModule,
     InputGroupModule,
-    ToastModule
+    ToastModule,
+    AutoCompleteModule
   ],
   templateUrl: './referencias-familiares.component.html',
   styleUrls: ['./referencias-familiares.component.scss']
@@ -37,17 +41,34 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
   isEditMode: boolean = false;
   referenciasLocales: ReferenciaFamiliar[] = [];
   originalReferencias: ReferenciaFamiliar[] = [];
+  filteredItemsParentesco: any[] = [];
 
   constructor(
     private empleadoService: EmpleadoService,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    private cargaDatosService:CargaDatosService
+  ) {  this.cargarParentescos(); }
+
+
+  private cargarParentescos() {
+    this.cargaDatosService.getParentescos().subscribe(data => {
+      if (data && data.parentesco) {
+        this.filteredItemsParentesco = data.parentesco.map((item: Parentesco) => ({
+          label: item.Parentesco,
+          value: item.Parentesco
+        }));
+      } else {
+        console.error('La respuesta del backend no tiene la estructura esperada:', data);
+      }
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['referencias']) {
       this.originalReferencias = JSON.parse(JSON.stringify(this.referencias));
       this.referenciasLocales = JSON.parse(JSON.stringify(this.referencias));
     }
+  
   }
 
   toggleEditMode() {
@@ -201,5 +222,12 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
         detail: 'Debe mantener al menos un teléfono'
       });
     }
+  }
+
+  filterItemsParentesco(event: any) {
+    const query = event.query.toLowerCase();
+    this.filteredItemsParentesco = this.filteredItemsParentesco.filter(item =>
+      item.label.toLowerCase().includes(query)
+    );
   }
 }

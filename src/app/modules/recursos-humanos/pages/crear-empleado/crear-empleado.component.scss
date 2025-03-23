@@ -1,14 +1,15 @@
 .p-floatlabel{
-    margin-bottom: 1.4em;
+    margin-bottom: 1em;
 }
 .p-autocomplete{
     margin-bottom: 1.4em;
 }
 .label-container {
     display: inline-block;
-    width: 45%; /* Ajusta el ancho de los labels */
-    margin-right: 10px; /* Espacio entre los campos */
+    width: 43%; /* Ajusta el ancho de los labels */
+    margin-right: 10px; 
 }
+
   .main-container {
     margin-left: 270px;
     padding: 20px; 
@@ -20,7 +21,7 @@
 input,label,p-password,p-inputmask , p-autocomplete, p-datepicker{
     width: 80%; 
     box-sizing: border-box; 
-    margin-left: 35px;
+    margin-left: 15px;
 }
 .contenedor-botones {
   display: flex;            
@@ -43,6 +44,9 @@ input,label,p-password,p-inputmask , p-autocomplete, p-datepicker{
   border-color: rgb(255, 77, 77); /* El contorno también cambia a un rojo más claro */
 }
 
+.pButton {
+  margin-bottom: 16px;  // Espacio de 16px debajo del botón
+}
 
 
 .correo-item {
@@ -81,5 +85,11 @@ input,label,p-password,p-inputmask , p-autocomplete, p-datepicker{
 .error-text {
   color: red;
   font-size: 0.875rem;
-  margin-top: 0.25rem;
+  display: block;  
+   margin-left: 15px;
+}
+
+.form-group {
+  flex-direction: column;
+  margin-right: 10px;
 }
