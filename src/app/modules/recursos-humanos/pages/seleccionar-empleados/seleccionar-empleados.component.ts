@@ -60,4 +60,7 @@ export class SeleccionarEmpleadosComponent implements OnInit {
   redirigir() {
     this.ref.close();
 }
+
+
+
 }

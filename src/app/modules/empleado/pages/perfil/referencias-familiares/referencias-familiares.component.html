@@ -21,13 +21,11 @@
                     <label>Nombre</label>
                 </p-floatLabel>
             </div>
-
-            <div class="label-container">
-                <p-floatLabel>
-                    <input pInputText [(ngModel)]="ref.Parentesco" [readonly]="!isEditMode" />
-                    <label>Parentesco</label>
-                </p-floatLabel>
-            </div>
+            <td>
+                <p-auto-complete [(ngModel)]="ref.Parentesco" [suggestions]="filteredItemsParentesco" 
+                  (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco" [dropdown]="true" [disabled]="!isEditMode"v/>
+              </td>
+    
 
             <div class="label-container">
                 <p-floatLabel>

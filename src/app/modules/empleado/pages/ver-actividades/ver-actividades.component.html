@@ -11,7 +11,14 @@
             <ng-template pTemplate="body" let-product>
                 <tr>
                     <td>{{ product.NombreActividad }}</td>
-                    <td>{{ product.Estatus === 0 ? 'Pendiente' : 'Completada' }}</td>
+                    <td>
+                        <ng-container *ngIf="product.Estatus === 0; else completada">
+                            <p-message severity="error" styleClass="custom-message">Pendiente</p-message>
+                        </ng-container>
+                        <ng-template #completada>
+                            <p-message severity="success" styleClass="custom-message">Completada</p-message>
+                        </ng-template>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>

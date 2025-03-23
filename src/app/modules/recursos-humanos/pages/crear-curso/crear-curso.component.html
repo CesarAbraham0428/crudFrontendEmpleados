@@ -23,9 +23,6 @@
      <label for="FechaTermino">Fecha de Termino</label>
  </p-floatlabel>
  </div>
-
-
-
     
     <h3> <p-divider align="left" type="solid">
       <b>Asignar Empleado</b>
@@ -33,7 +30,7 @@
   
 
         <div class="contenedor-botones">
-        <p-button label="Seleccionar Empleados" icon="pi pi-plus" (click)="abrirDialogo()"></p-button>
+        <p-button class="pButton" severity="secondary" label="Seleccionar Empleados" icon="pi pi-plus" (click)="abrirDialogo()"></p-button>
       </div>
 
         <p-table [value]="empleadosSeleccionados">
@@ -41,13 +38,17 @@
             <tr>
               <th>Clave Empleado</th>
               <th>Nombre Empleado</th>
+              <th>Eliminar</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-emp>
             <tr>
               <td>{{ emp.ClaveEmpleado }}</td>
               <td>{{ emp.Nombre }}</td>
-            </tr>
+            <td>
+            <button pButton icon="pi pi-times" class="p-button-danger" (click)="eliminarEmpleado(emp)"></button>
+          </td>
+        </tr>
           </ng-template>
         </p-table>
         
@@ -58,9 +59,10 @@
         <span pButtonLabel>Cancelar</span>
       </button>
       
-      <button class="boton" pButton pRipple aria-label="Buscar" severity="info" (click)="guardarCurso()">
+      <button class="boton" pButton pRipple aria-label="Buscar" severity="success" (click)="guardarCurso()">
         <span pButtonLabel>Guardar</span>
       </button>
     </div>
 </p-card>
+</div>
 

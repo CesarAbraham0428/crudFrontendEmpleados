@@ -18,7 +18,8 @@
   
       <div class="label-container">
         <p-floatlabel variant="on">
-          <p-datepicker [(ngModel)]="fechaInicio" inputId="FechaInicio" showIcon iconDisplay="input" />
+          <p-datepicker [(ngModel)]="fechaInicio" inputId="FechaInicio" showIcon iconDisplay="input"
+          />
           <label for="FechaInicio">Fecha de Inicio</label>
         </p-floatlabel>
       </div>
@@ -30,10 +31,9 @@
         </p-floatlabel>
       </div>
   
-      <!-- Botones -->
       <div class="contenedor-botones">
-        <button pButton pRipple severity="info" (click)="redirigir()">
-          ➕ <span pButtonLabel>Nuevo Curso</span>
+        <button pButton pRipple severity="secondary" icon="pi pi-plus" (click)="redirigir()">
+        <span pButtonLabel >Nuevo Curso</span>
         </button>
         <button pButton pRipple severity="success" (click)="aplicarFiltros()" style="margin-left: 10px;">
           🔍 <span pButtonLabel>Aplicar Filtros</span>
@@ -52,13 +52,13 @@
             <th>Tipo de documento</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-curso>
+        <ng-template  pTemplate="body" let-curso>
           <tr>
             <td>{{ curso.Nombre }}</td>
             <td>{{ curso.EmpleadoNombre }} {{ curso.EmpleadoApP }} {{ curso.EmpleadoApM }}</td>
             <td>{{ curso.ClaveEmpleado }}</td>
-            <td>{{ curso.FechaInicio }}</td>
-            <td>{{ curso.FechaFin }}</td>
+            <td>{{ curso.FechaInicio | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ curso.FechaFin | date: 'dd/MM/yyyy'}}</td>
             <td>{{ curso.TipoCurso }}</td>
           </tr>
         </ng-template>

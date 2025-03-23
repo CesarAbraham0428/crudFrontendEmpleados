@@ -28,6 +28,7 @@ input,label, p-autocomplete, p-datepicker {
   display: flex;            
   gap: 10px;               
   justify-content: flex-end;
+  margin-top: 1.6em;
 }
 
 .boton {
@@ -43,4 +44,7 @@ input,label, p-autocomplete, p-datepicker {
 .botonc:hover {
   background-color: rgb(255, 77, 77); /* Un rojo más claro al pasar el mouse */
   border-color: rgb(255, 77, 77); /* El contorno también cambia a un rojo más claro */
+}
+.pButton{
+  margin-bottom: 0.5em;
 }

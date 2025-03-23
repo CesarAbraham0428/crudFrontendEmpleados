@@ -7,7 +7,7 @@
   --success-color: #4CAF50;
   --text-color: #333;
   --light-text: #757575;
-  --border-radius: 8px;
+  --border-radius: 15px;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
@@ -18,15 +18,17 @@
   margin-right: 60px;
   padding: 24px;
   transition: margin-left 0.3s ease;
-  background-color: #fafafa;
+  background-color: #dcd6d6;
   min-height: calc(100vh - 48px);
+  border-radius: 0.7em;
 }
 
 /* Estilo para la tarjeta principal */
 :host ::ng-deep .p-card {
-  border-radius: var(--border-radius);
+  border-radius: 0.7em;
   box-shadow: var(--shadow);
-  background-color: white;
+  background-color: rgb(249, 249, 249);
+  
 
   .p-card-header {
     padding: 16px 24px;
@@ -57,6 +59,9 @@
   }
 }
 
+
+
+
 /* Botones de acción */
 .contenedor-botones {
   display: flex;
@@ -77,16 +82,19 @@
 /* Fieldsets */
 :host ::ng-deep .p-fieldset {
   margin-bottom: 24px;
-  border-radius: var(--border-radius);
-  border: 1px solid #e0e0e0;
+  border-radius: 0.5em;
+  border: 13px solid #80a2c2;
 
   .p-fieldset-legend {
     padding: 8px 16px;
     font-size: 1rem;
     font-weight: 500;
-    background-color: white;
-    border: 1px solid #e0e0e0;
-    border-radius: var(--border-radius);
+    width: 79%;
+    position: relative;
+    background-color: #dee0f9;
+    border: 2px solid #f7f7fa;
+    border-radius: 0.4em;
+    margin-bottom: 3em;
   }
 
   .p-fieldset-content {
@@ -98,7 +106,8 @@
 .p-grid {
   display: flex;
   flex-wrap: wrap;
-  margin: -8px;
+  margin-top: -8px;
+  
 
   .p-col-12 {
     width: 100%;
@@ -161,10 +170,12 @@
 /* Sección de contacto */
 .contact-group {
   margin-bottom: 24px;
-
+  
+  
   .p-button-text {
     padding: 8px 16px;
     margin-top: 8px;
+  
   }
 }
 
@@ -205,3 +216,7 @@
     }
   }
 }
+
+
+
+

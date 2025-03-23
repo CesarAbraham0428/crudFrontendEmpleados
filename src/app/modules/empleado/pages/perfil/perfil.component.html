@@ -40,10 +40,26 @@
     <p-fieldset legend="Domicilio" [toggleable]="true" styleClass="address-fieldset">
       <div class="p-grid">
         <div class="label-container" *ngFor="let field of domicilioCampos">
-          <p-floatLabel>
+
+
+          <p-floatLabel *ngIf="field !== 'Ciudad'">
             <input pInputText *ngIf="empleado.Domicilio" [(ngModel)]="empleado.Domicilio[field]"
               [readonly]="!isEditMode" />
             <label>{{ getLabel(field) }}</label>
+          </p-floatLabel>
+
+
+          <!-- Ciudad AutoComplete -->
+          <p-floatLabel *ngIf="field === 'Ciudad'">
+            <p-autoComplete 
+              [(ngModel)]="empleado.Domicilio[field]" 
+              [suggestions]="filteredItemsCiudad" 
+              (completeMethod)="filterItemsCiudad($event)" 
+              [forceSelection]="true" 
+              [disabled]="!isEditMode"
+              field="label" [dropdown]="true">
+            </p-autoComplete>
+            <label *ngIf="!empleado.Domicilio[field]">{{ getLabel(field) }}</label>
           </p-floatLabel>
         </div>
       </div>

@@ -11,3 +11,13 @@
     justify-content: flex-end;
 
   }
+/* Estilos para el componente p-message */
+::ng-deep .custom-message .p-message-wrapper {
+  padding: 0.5rem;
+  font-weight: 700;
+  width: 10px; 
+}
+
+::ng-deep .custom-message .p-message-text {
+  font-size: 1em; 
+}

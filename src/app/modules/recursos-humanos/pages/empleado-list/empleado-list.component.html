@@ -12,7 +12,7 @@
         [globalFilterFields]="['ClaveEmpleado','Nombre','CorreoElectronico', 'RFC', 'Puesto', 'Departamento']">
         <ng-template #caption>
             <div class="aflex">
-                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
                 <p-iconfield iconPosition="left" class="ml-auto">
                     <p-inputicon>
                         <i class="pi pi-search"></i>
@@ -20,8 +20,8 @@
                     <input pInputText type="text" (input)="filterGlobalValue($event)" placeholder="Buscar por clave empleado" />
                 </p-iconfield>
                 <div class="contenedor-botones">
-                    <button pButton pRipple severity="info" (click)="redirigir()">
-                      ➕ <span pButtonLabel>Nuevo Empleado</span>
+                    <button severity="secondary" icon="pi pi-plus" pButton pRipple (click)="redirigir()">
+                     <span pButtonLabel>Nuevo Empleado</span>
                     </button>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                 </td>
                 <td>
                     <div class="contenedor-botones">
-                    <button pButton icon="pi pi-pencil" (click)="editarEmpleado(customer.ClaveEmpleado)"></button>
+                    <button pButton icon="pi pi-pencil" severity="success"  (click)="editarEmpleado(customer.ClaveEmpleado)"></button>
                     <button class="botonc" pButton icon="pi pi-trash" (click)="eliminarEmpleado(customer.ClaveEmpleado)"></button>
                     </div>
                 </td>
