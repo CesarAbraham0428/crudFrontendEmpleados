@@ -2,41 +2,54 @@
 
 <div class="login-container">
   <p-card header="Iniciar Sesión" class="login-card">
-    <form (ngSubmit)="login()" class="p-fluid">
-      <div class="field">
-        <span class="p-float-label">
-          <input
-            pInputText
-            id="correoElectronico"
-            [(ngModel)]="credentials.CorreoElectronico"
-            name="correoElectronico"
-            required
-          />
-          <label for="correoElectronico">Correo Electrónico</label>
+    <div class="main-content">
+      <!-- Lado izquierdo (logo) -->
+      <div class="company__info">
+        <span class="company__logo">
+          <h2><i class="fa fa-android"></i></h2>
         </span>
+        <h4 class="company_title">Tu Empresa</h4>
       </div>
-      <div class="field">
-        <span class="p-float-label">
-          <input
-            pInputText
-            type="password"
-            id="Password"
-            [(ngModel)]="credentials.Password"
-            name="Password"
-            required
-          />
-          <label for="Password">Contraseña</label>
-        </span>
+
+      <!-- Formulario de login -->
+      <div class="login_form">
+        <form (ngSubmit)="login()" class="p-fluid">
+          <div class="field">
+            <span class="p-float-label">
+              <input
+                pInputText
+                id="correoElectronico"
+                [(ngModel)]="credentials.CorreoElectronico"
+                name="correoElectronico"
+                required
+              />
+              <label for="correoElectronico">Correo Electrónico</label>
+            </span>
+          </div>
+          <div class="field">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="password"
+                id="Password"
+                [(ngModel)]="credentials.Password"
+                name="Password"
+                required
+              />
+              <label for="Password">Contraseña</label>
+            </span>
+          </div>
+          <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage" class="error-message"></p-message>
+          <button
+            pButton
+            type="submit"
+            label="Iniciar Sesión"
+            [disabled]="isLoading"
+            [loading]="isLoading"
+            class="login-button"
+          ></button>
+        </form>
       </div>
-      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage" class="error-message"></p-message>
-      <button
-        pButton
-        type="submit"
-        label="Iniciar Sesión"
-        [disabled]="isLoading"
-        [loading]="isLoading"
-        class="login-button"
-      ></button>
-    </form>
+    </div>
   </p-card>
 </div>
