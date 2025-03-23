@@ -1,0 +1,30 @@
+<div class="foto-perfil-container">
+  <div class="foto-wrapper">
+    <div class="foto-preview-container" [class.has-foto]="empleado.FotoEmpleado">
+      <img [src]="fotoUrl" alt="Foto de perfil" class="foto-preview" />
+
+      <div class="overlay" *ngIf="!cargando">
+        <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" style="display: none" />
+
+        <label for="fileInput" class="cambiar-btn">
+          <i class="pi pi-camera"></i>
+          <span class="btn-label">Cambiar foto</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="acciones" *ngIf="!cargando">
+      <button pButton *ngIf="empleado.FotoEmpleado" icon="pi pi-trash" label="Eliminar foto"
+        class="p-button-text p-button-danger p-button-sm" (click)="eliminarFoto()">
+      </button>
+    </div>
+
+    <div class="spinner-container" *ngIf="cargando">
+      <p-progressSpinner styleClass="w-2rem h-2rem" strokeWidth="4" animationDuration=".5s">
+      </p-progressSpinner>
+    </div>
+  </div>
+
+  <p-confirmDialog [style]="{ width: '450px' }" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+  </p-confirmDialog>
+</div>

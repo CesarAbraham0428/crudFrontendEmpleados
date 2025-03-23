@@ -19,6 +19,8 @@ import { ReferenciasFamiliaresComponent } from './referencias-familiares/referen
 import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
 import { Ciudad } from '../../../../models/cargarDatos/cargarDatos';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { FotoPerfilComponent } from './foto-perfil/foto-perfil.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 @Component({
@@ -29,7 +31,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     PanelModule, CardModule, FieldsetModule, FloatLabelModule,
     FormsModule, InputMaskModule, ButtonModule,
     InputTextModule, PasswordModule, ToastModule, InputGroupModule,
-    ReferenciasFamiliaresComponent, AutoCompleteModule
+    ReferenciasFamiliaresComponent, FotoPerfilComponent, FileUploadModule, AutoCompleteModule
   ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
@@ -54,6 +56,7 @@ export class PerfilComponent implements OnInit {
     ActividadEmpresa: [],
     ReferenciaFamiliar: [],
     createdAt: '',
+    FotoEmpleado: null,
     Domicilio: {
       Calle: '',
       NumeroExterior: '',
@@ -109,6 +112,7 @@ export class PerfilComponent implements OnInit {
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
       next: (data) => {
+        console.log('Datos recibidos del servicio obtenerInfoPersonal:', data);
         const empleadoData = data.infoPersonalEmpleado?.[0];
         if (empleadoData) {
           // Mantener la referencia del array original
@@ -117,6 +121,7 @@ export class PerfilComponent implements OnInit {
             ...empleadoData,
             ReferenciaFamiliar: [...empleadoData.ReferenciaFamiliar]
           };
+          console.log('Empleado actualizado:', this.empleado);
           this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
 
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
@@ -128,6 +133,7 @@ export class PerfilComponent implements OnInit {
             detail: 'Información personal cargada'
           });
         } else {
+          console.warn('Advertencia: No se encontró información personal en la respuesta');
           this.messageService.add({
             severity: 'warn',
             summary: 'Atención',
@@ -254,6 +260,14 @@ export class PerfilComponent implements OnInit {
     this.filteredItemsCiudad = this.filteredItemsCiudad.filter(item =>
       item.label.toLowerCase().includes(query)
     );
+  }
+  onFotoActualizada(actualizacion: Partial<Empleado>) {
+    // Forzar actualización de la vista
+    this.empleado = {
+      ...this.empleado,
+      FotoEmpleado: actualizacion.FotoEmpleado
+    };
+    this.empleadoOriginal.FotoEmpleado = actualizacion.FotoEmpleado;
   }
 
 }
