@@ -17,4 +17,9 @@
     <p-progressSpinner *ngIf="cargando" styleClass="w-2rem h-2rem" strokeWidth="4"
       animationDuration=".5s"></p-progressSpinner>
   </div>
+  <p-confirmDialog 
+    [style]="{ width: '450px' }" 
+    [baseZIndex]="10000"
+    rejectButtonStyleClass="p-button-text">
+  </p-confirmDialog>
 </div>
