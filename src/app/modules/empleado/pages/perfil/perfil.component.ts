@@ -16,6 +16,8 @@ import { ToastModule } from 'primeng/toast';
 import { lastValueFrom } from 'rxjs';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ReferenciasFamiliaresComponent } from './referencias-familiares/referencias-familiares.component';
+import { FotoPerfilComponent } from './foto-perfil/foto-perfil.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-perfil',
@@ -25,7 +27,7 @@ import { ReferenciasFamiliaresComponent } from './referencias-familiares/referen
     PanelModule, CardModule, FieldsetModule, FloatLabelModule,
     FormsModule, InputMaskModule, ButtonModule,
     InputTextModule, PasswordModule, ToastModule, InputGroupModule,
-    ReferenciasFamiliaresComponent
+    ReferenciasFamiliaresComponent, FotoPerfilComponent, FileUploadModule
   ],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
@@ -50,6 +52,7 @@ export class PerfilComponent implements OnInit {
     ActividadEmpresa: [],
     ReferenciaFamiliar: [],
     createdAt: '',
+    FotoEmpleado: null,
     Domicilio: {
       Calle: '',
       NumeroExterior: '',
@@ -90,6 +93,7 @@ export class PerfilComponent implements OnInit {
   obtenerInformacionPersonal() {
     this.empleadoService.obtenerInfoPersonal().subscribe({
       next: (data) => {
+        console.log('Datos recibidos del servicio obtenerInfoPersonal:', data);
         const empleadoData = data.infoPersonalEmpleado?.[0];
         if (empleadoData) {
           // Mantener la referencia del array original
@@ -98,6 +102,7 @@ export class PerfilComponent implements OnInit {
             ...empleadoData,
             ReferenciaFamiliar: [...empleadoData.ReferenciaFamiliar]
           };
+          console.log('Empleado actualizado:', this.empleado);
           this.empleadoOriginal = JSON.parse(JSON.stringify(this.empleado));
 
           if (!this.empleado.Telefono) this.empleado.Telefono = [];
@@ -109,6 +114,7 @@ export class PerfilComponent implements OnInit {
             detail: 'Información personal cargada'
           });
         } else {
+          console.warn('Advertencia: No se encontró información personal en la respuesta');
           this.messageService.add({
             severity: 'warn',
             summary: 'Atención',
@@ -227,5 +233,14 @@ export class PerfilComponent implements OnInit {
       ReferenciaFamiliar: [...nuevasReferencias]
     };
     this.empleadoOriginal.ReferenciaFamiliar = [...nuevasReferencias];
+  }
+
+  onFotoActualizada(actualizacion: Partial<Empleado>) {
+    // Forzar actualización de la vista
+    this.empleado = {
+      ...this.empleado,
+      FotoEmpleado: actualizacion.FotoEmpleado
+    };
+    this.empleadoOriginal.FotoEmpleado = actualizacion.FotoEmpleado;
   }
 }

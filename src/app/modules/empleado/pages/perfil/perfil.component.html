@@ -1,8 +1,13 @@
 <div class="main-container" [ngClass]="{'edit-mode': isEditMode}">
   <p-toast></p-toast>
   <p-card>
+
+    <!-- Encabezado con foto -->
     <ng-template pTemplate="header">
-      <div class="header-title">Mi Perfil</div>
+      <div class="header-content">
+        <app-foto-perfil [empleado]="empleado" (fotoActualizada)="onFotoActualizada($event)">
+        </app-foto-perfil>
+      </div>
     </ng-template>
 
     <div class="contenedor-botones">

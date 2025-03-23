@@ -128,6 +128,26 @@ export class EmpleadoService {
     });
   }
 
+  //Foto de perfil
+
+  obtenerFotoPerfil(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerFoto`, {
+      withCredentials: true
+    });
+  }
+
+  subirFotoPerfil(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/agregarFoto`, formData, {
+      withCredentials: true
+    });
+  }
+
+  eliminarFotoPerfil(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/eliminarFoto`, {
+      withCredentials: true
+    });
+  }
+
   //Cursos Externos
 
   agregarCursoExterno(cursoData: any): Observable<any> {

@@ -1,0 +1,20 @@
+<div class="foto-perfil-container">
+  <div class="foto-wrapper">
+    <img [src]="fotoUrl" alt="Foto de perfil" class="foto-preview" />
+
+    <div class="acciones" *ngIf="!cargando">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" style="display: none" />
+
+      <label for="fileInput" class="boton-upload">
+        <i class="pi pi-upload"></i>
+        Cambiar foto
+      </label>
+
+      <button pButton *ngIf="empleado.FotoEmpleado" label="Eliminar foto" icon="pi pi-trash" class="p-button-danger"
+        (click)="eliminarFoto()"></button>
+    </div>
+
+    <p-progressSpinner *ngIf="cargando" styleClass="w-2rem h-2rem" strokeWidth="4"
+      animationDuration=".5s"></p-progressSpinner>
+  </div>
+</div>
