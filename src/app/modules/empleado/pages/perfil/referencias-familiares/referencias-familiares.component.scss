@@ -82,7 +82,7 @@
       /* Aumentado de 16px a 20px */
       font-weight: 700;
       /* Negritas */
-      margin: 0;
+      margin: 0em 0em 0.8em;
     }
 
     .p-button-danger {
@@ -98,7 +98,7 @@
   .referencia-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 30px;
     margin-bottom: 20px;
 
     .label-container {

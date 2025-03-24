@@ -19,24 +19,24 @@
     </div>
 
     <!-- Cambiar contraseña -->
-     <div class="bloque">
-       <p-fieldset legend="Cambiar contraseña" *ngIf="isEditMode" styleClass="password-fieldset">
-         <div class="p-grid">
-           <div class="label-container">
-          <p-floatLabel>
-            <p-password [(ngModel)]="currentPassword" [toggleMask]="true" [feedback]="false" />
-            <label>Contraseña actual</label>
-          </p-floatLabel>
+    <div class="bloque">
+      <p-fieldset legend="Cambiar contraseña" *ngIf="isEditMode" styleClass="password-fieldset">
+        <div class="p-grid">
+          <div class="label-container">
+            <p-floatLabel>
+              <p-password [(ngModel)]="currentPassword" [toggleMask]="true" [feedback]="false" />
+              <label>Contraseña actual</label>
+            </p-floatLabel>
+          </div>
+          <div class="label-container">
+            <p-floatLabel>
+              <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true" />
+              <label>Nueva contraseña</label>
+            </p-floatLabel>
+          </div>
         </div>
-        <div class="label-container">
-          <p-floatLabel>
-            <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="true" />
-            <label>Nueva contraseña</label>
-          </p-floatLabel>
-        </div>
-      </div>
-    </p-fieldset>
-  </div>
+      </p-fieldset>
+    </div>
 
     <!-- Domicilio -->
     <div class="bloque">
@@ -73,12 +73,13 @@
           <div class="contact-header">
             <div class="bloque2">
               <span class="contact-title">Correos electrónicos</span>
-              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewEmail()"
-              *ngIf="isEditMode"></button>
+              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm"
+                (click)="addNewEmail()" *ngIf="isEditMode"></button>
             </div>
           </div>
 
-          <div *ngFor="let correo of empleado.CorreoElectronico; let i = index" class="contact-field">
+          <div *ngFor="let correo of empleado.CorreoElectronico; let i = index; trackBy: trackByIndex"
+            class="contact-field">
             <p-inputGroup>
               <div class="contacto contacto2">
                 <span class="p-inputgroup-addon">
@@ -98,12 +99,12 @@
           <div class="contact-header">
             <div class="bloque2">
               <span class="contact-title">Teléfonos</span>
-              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewPhone()"
-              *ngIf="isEditMode"></button>
+              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm"
+                (click)="addNewPhone()" *ngIf="isEditMode"></button>
             </div>
           </div>
 
-          <div *ngFor="let telefono of empleado.Telefono; let i = index" class="contact-field">
+          <div *ngFor="let telefono of empleado.Telefono; let i = index; trackBy: trackByIndex" class="contact-field">
             <p-inputGroup>
               <div class="contacto">
                 <span class="p-inputgroup-addon">

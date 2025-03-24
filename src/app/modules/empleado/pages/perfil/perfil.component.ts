@@ -96,12 +96,13 @@ export class PerfilComponent implements OnInit {
     this.obtenerInformacionPersonal();
   }
 
-  domicilioCampos = ['Calle', 'NumeroExterior', 'Colonia', 'CodigoPostal', 'Ciudad'];
+  domicilioCampos = ['Calle', 'NumeroExterior', 'Colonia', 'NumeroInterior', 'CodigoPostal', 'Ciudad'];
 
   getLabel(field: string): string {
     const labels: { [key: string]: string } = {
       Calle: 'Calle',
       NumeroExterior: 'Número Exterior',
+      NumeroInterior: 'Número Interior',
       Colonia: 'Colonia',
       CodigoPostal: 'Código Postal',
       Ciudad: 'Ciudad'
@@ -268,6 +269,10 @@ export class PerfilComponent implements OnInit {
       FotoEmpleado: actualizacion.FotoEmpleado
     };
     this.empleadoOriginal.FotoEmpleado = actualizacion.FotoEmpleado;
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index;
   }
 
 }

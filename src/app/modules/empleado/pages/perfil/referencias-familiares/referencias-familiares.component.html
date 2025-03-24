@@ -50,7 +50,7 @@
                     (click)="agregarTelefono(i)" *ngIf="isEditMode"></button>
             </div>
 
-            <div *ngFor="let tel of ref.Telefono; let j = index" class="contact-field">
+            <div *ngFor="let tel of ref.Telefono; let j = index; trackBy: trackByIndex" class="contact-field">
                 <p-inputGroup>
                     <span class="p-inputgroup-addon">
                         <i class="pi pi-phone"></i>
