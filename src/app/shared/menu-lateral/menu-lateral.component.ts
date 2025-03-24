@@ -66,16 +66,22 @@ export class MenuLateralComponent implements OnInit, OnDestroy {
         visible: role === 'rh'
       },
       { 
-        label: 'Cursos', 
+        label: 'Cursos Internos', 
         icon: 'pi pi-book', 
-        command: () => this.navigateTo(role === 'rh' ? '/recursos-humanos/cursos-internos' : '/empleado/cursos-externos-list'),
-        visible: true
+        command: () => this.navigateTo('/recursos-humanos/cursos-internos'),
+         visible: role === 'rh'
       },
       { 
         label: 'Gestión de Actividades', 
         icon: 'pi pi-calendar', 
         command: () => this.navigateTo('/recursos-humanos/actividades'),
         visible: role === 'rh'
+      },
+      { 
+        label: 'Cursos Externos', 
+        icon: 'pi pi-book', 
+        command: () => this.navigateTo('/empleado/cursos-externos-list'),
+         visible: role === 'rh' || role === 'empleado'
       },
       { 
         label: 'Mis Actividades', 
