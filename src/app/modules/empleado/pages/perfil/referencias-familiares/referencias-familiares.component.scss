@@ -23,7 +23,6 @@
 
   .p-fieldset-legend:hover {
     background: #2BBBAD;
-    /* Tono más claro al pasar el mouse */
   }
 }
 
@@ -58,7 +57,6 @@
 
   .p-button-success:hover {
     background: #FF867C;
-    /* Tono más claro de coral */
     transform: scale(1.05);
   }
 }
@@ -80,8 +78,10 @@
 
     h3 {
       color: #333;
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 20px;
+      /* Aumentado de 16px a 20px */
+      font-weight: 700;
+      /* Negritas */
       margin: 0;
     }
 
@@ -98,12 +98,30 @@
   .referencia-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Dos columnas para inputs */
     gap: 15px;
     margin-bottom: 20px;
 
     .label-container {
       .p-float-label {
+        .p-inputgroup {
+          .p-inputgroup-addon {
+            background: #26A69A;
+            color: #FFF;
+            border: none;
+            border-radius: 6px 0 0 6px;
+            padding: 10px 4px 0px;
+            /* Ajustado para que coincida con el estilo de los teléfonos */
+          }
+
+          input {
+            border: 1px solid #26A69A;
+            border-radius: 0 6px 6px 0;
+            padding: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+          }
+        }
+
         input {
           border: 1px solid #26A69A;
           border-radius: 6px;
@@ -119,7 +137,6 @@
 
         input[readonly] {
           background: #F5F5F5;
-          /* Gris claro para modo solo lectura */
           cursor: not-allowed;
         }
 
@@ -148,6 +165,17 @@
       }
     }
   }
+}
+
+.correoFamiliar {
+  display: flex;
+  align-items: center;
+
+  background-color: #eb8179;
+  color: #FFF;
+  border: none;
+  border-radius: 6px 0 0 6px;
+  padding: 0px 4px;
 }
 
 /* Sección de teléfonos */

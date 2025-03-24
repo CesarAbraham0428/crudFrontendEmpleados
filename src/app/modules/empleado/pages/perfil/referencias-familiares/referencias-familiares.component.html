@@ -22,19 +22,22 @@
                 </p-floatLabel>
             </div>
             <td>
-                <p-auto-complete [(ngModel)]="ref.Parentesco" [suggestions]="filteredItemsParentesco" 
-                  (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco" [dropdown]="true" [disabled]="!isEditMode"v/>
-              </td>
-    
+                <p-auto-complete [(ngModel)]="ref.Parentesco" [suggestions]="filteredItemsParentesco"
+                    (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco"
+                    [dropdown]="true" [disabled]="!isEditMode" />
+            </td>
 
+            <!-- Campo de Correo Electrónico con p-inputGroup -->
             <div class="label-container">
                 <p-floatLabel>
-                    <div class="contacto contacto2">
-                        <span class="p-inputgroup-addon">
-                          <i class="pi pi-envelope"></i>
-                        </span>
-                      </div>
-                    <input pInputText [(ngModel)]="ref.CorreoElectronico" [readonly]="!isEditMode" />
+                    <p-inputGroup>
+                        <div class="correoFamiliar">
+                            <span class="p-inputgroup-addon">
+                                <i class="pi pi-envelope"></i>
+                            </span>
+                        </div>
+                        <input pInputText [(ngModel)]="ref.CorreoElectronico" [readonly]="!isEditMode" />
+                    </p-inputGroup>
                     <label>Correo</label>
                 </p-floatLabel>
             </div>
