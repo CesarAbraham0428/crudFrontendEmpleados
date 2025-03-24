@@ -1,222 +1,289 @@
-/* Variables globales */
-:root {
-  --primary-color: #2196F3;
-  --secondary-color: #f5f5f5;
-  --accent-color: #03A9F4;
-  --danger-color: #f44336;
-  --success-color: #4CAF50;
-  --text-color: #333;
-  --light-text: #757575;
-  --border-radius: 15px;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s ease;
+:host {
+  display: block;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Contenedor principal */
 .main-container {
-  margin-left: 270px;
-  margin-right: 60px;
-  padding: 24px;
-  transition: margin-left 0.3s ease;
-  background-color: #dcd6d6;
-  min-height: calc(100vh - 48px);
-  border-radius: 0.7em;
-}
+  max-width: 900px;
+  margin: 0 auto;
 
-/* Estilo para la tarjeta principal */
-:host ::ng-deep .p-card {
-  border-radius: 0.7em;
-  box-shadow: var(--shadow);
-  background-color: rgb(249, 249, 249);
-  
-
-  .p-card-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .p-card-content {
-    padding: 24px;
+  &.edit-mode {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* Parte del encabezado */
+p-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
 
-.header-content {
+  .header-content {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+    background: linear-gradient(135deg, #b6a594, #e0d3bb);
+    border-radius: 12px 12px 0 0;
+
+    app-foto-perfil {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      button {
+        margin-top: 1rem;
+        background-color: #ff6f61;
+        border: none;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #e65a50;
+        }
+      }
+    }
+  }
+}
+
+.bloque{
+  margin: 0em 0em 1.5em;
+}
+
+.contacto{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  width: 100%;
-  background: rgb(154, 87, 87);
-  border-radius: 8px 8px 0 0;
-
-  .header-title {
-    font-size: 1.75rem;
-    font-weight: 500;
-    color: #000;
-    margin-left: 1rem;
-  }
+  background: #26A69A;
+  color: #FFF;
+  border: none;
+  border-radius: 6px 0 0 6px;
+  padding: 0px 4px;
 }
 
+.contacto2{
+  background-color: #eb8179;
+}
 
-
-
-/* Botones de acción */
 .contenedor-botones {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 
-  .p-button {
-    transition: var(--transition);
+  button {
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    &.p-button-outlined {
+      border-color: #00c4b4;
+      color: #00c4b4;
+
+      &:hover {
+        background-color: #00c4b4;
+        color: #fff;
+      }
+    }
+
+    &.p-button-outlined.p-button-danger {
+      border-color: #ff6f61;
+      color: #ff6f61;
+
+      &:hover {
+        background-color: #ff6f61;
+        color: #fff;
+      }
+    }
+
+    &.p-button-success {
+      background-color: #00c4b4;
+      border: none;
+      color: #fff;
+
+      &:hover {
+        background-color: #00a89a;
+      }
     }
   }
 }
 
-/* Fieldsets */
-:host ::ng-deep .p-fieldset {
-  margin-bottom: 24px;
-  border-radius: 0.5em;
-  border: 13px solid #80a2c2;
+p-fieldset {
+  margin-bottom: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   .p-fieldset-legend {
-    padding: 8px 16px;
-    font-size: 1rem;
-    font-weight: 500;
-    width: 79%;
-    position: relative;
-    background-color: #dee0f9;
-    border: 2px solid #f7f7fa;
-    border-radius: 0.4em;
-    margin-bottom: 3em;
+    background: linear-gradient(135deg, #00c4b4, #0288d1);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 1.5em 0em;
   }
 
   .p-fieldset-content {
-    padding: 16px;
-  }
-}
-
-/* Grid y campos de formulario */
-.p-grid {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: -8px;
-  
-
-  .p-col-12 {
-    width: 100%;
-    padding: 8px;
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    border-radius: 0 0 8px 8px;
   }
 
-  .p-md-6 {
-    @media (min-width: 768px) {
-      width: calc(50% - 16px);
-    }
-  }
+  .p-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 3em 0em 0em 0em;
 
-  .p-md-3 {
-    @media (min-width: 768px) {
-      width: calc(25% - 16px);
-    }
-  }
-}
+    .label-container {
+      flex: 1 1 45%;
+      min-width: 200px;
 
-/* Contenedor de etiquetas */
-.label-container {
-  margin-bottom: 20px;
-  width: 100%;
+      p-floatLabel {
 
-  @media (min-width: 768px) {
-    width: 48%;
-    margin-right: 2%;
-    display: inline-block;
-  }
+        input,
+        p-password,
+        p-autoComplete {
+          width: 100%;
+          border: 1px solid #e0e0e0;
+          border-radius: 6px;
+          padding: 0.75rem;
+          font-size: 1rem;
+          transition: border-color 0.3s ease;
 
-  &:nth-child(even) {
-    margin-right: 0;
-  }
-}
+          &:focus {
+            border-color: #00c4b4;
+            box-shadow: 0 0 0 3px rgba(0, 196, 180, 0.1);
+          }
+        }
 
-/* Campos de entrada */
-:host ::ng-deep .p-inputtext,
-:host ::ng-deep .p-password,
-:host ::ng-deep .p-float-label {
-  width: 100%;
-}
-
-:host ::ng-deep .p-float-label {
-  label {
-    font-size: 0.85rem;
-    color: var(--light-text);
-  }
-
-  input:focus~label {
-    color: var(--primary-color);
-  }
-}
-
-:host ::ng-deep .p-float-label input:focus,
-:host ::ng-deep .p-inputtext:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 1px var(--primary-color);
-}
-
-/* Sección de contacto */
-.contact-group {
-  margin-bottom: 24px;
-  
-  
-  .p-button-text {
-    padding: 8px 16px;
-    margin-top: 8px;
-  
-  }
-}
-
-.contact-section {
-  margin-bottom: 20px;
-}
-
-.contact-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid #eee;
-
-  span {
-    font-weight: 500;
-    color: var(--text-color);
-  }
-}
-
-.contact-field {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-
-  :host ::ng-deep .p-inputgroup {
-    width: 100%;
-
-    .p-inputtext {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .p-button {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+        label {
+          font-size: 0.9rem;
+          color: #666;
+        }
+      }
     }
   }
 }
 
+.bloque2{
+  margin: 0.8em;
+}
 
+.contact-fieldset {
+  .contact-group {
+    margin-bottom: 5rem;
 
+    .contact-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
 
+      span {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #333;
+      }
+
+      button {
+        background-color: #ffd54f;
+        border: none;
+        color: #333;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #ffca28;
+        }
+      }
+    }
+
+    .contact-field {
+      margin-bottom: 1rem;
+
+      p-inputGroup {
+        display: flex;
+        align-items: center;
+
+        .p-inputgroup-addon {
+          background-color: #e0e0e0;
+          border: 1px solid #e0e0e0;
+          border-right: none;
+          border-radius: 6px 0 0 6px;
+          padding: 0.75rem;
+          color: #666;
+        }
+
+        input {
+          flex: 1;
+          border: 1px solid #e0e0e0;
+          border-radius: 0 6px 6px 0;
+          padding: 0.75rem;
+          font-size: 1rem;
+          transition: border-color 0.3s ease;
+
+          &:focus {
+            border-color: #00c4b4;
+            box-shadow: 0 0 0 3px rgba(0, 196, 180, 0.1);
+          }
+        }
+
+        button {
+          background-color: #ff6f61;
+          border: none;
+          color: #fff;
+          border-radius: 6px;
+          margin-left: 0.5rem;
+          padding: 0.5rem;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #e65a50;
+          }
+        }
+      }
+    }
+  }
+}
+
+p-toast {
+  .p-toast-message {
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+
+    &.p-toast-message-success {
+      background-color: #00c4b4;
+      color: #fff;
+    }
+
+    &.p-toast-message-error {
+      background-color: #ff6f61;
+      color: #fff;
+    }
+  }
+}

@@ -230,4 +230,8 @@ export class ReferenciasFamiliaresComponent implements OnChanges {
       item.label.toLowerCase().includes(query)
     );
   }
+  
+  trackByIndex(index: number, item: any): number {
+    return index;
+  }
 }

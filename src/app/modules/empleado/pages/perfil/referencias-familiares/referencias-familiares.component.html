@@ -22,14 +22,22 @@
                 </p-floatLabel>
             </div>
             <td>
-                <p-auto-complete [(ngModel)]="ref.Parentesco" [suggestions]="filteredItemsParentesco" 
-                  (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco" [dropdown]="true" [disabled]="!isEditMode"v/>
-              </td>
-    
+                <p-auto-complete [(ngModel)]="ref.Parentesco" [suggestions]="filteredItemsParentesco"
+                    (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco"
+                    [dropdown]="true" [disabled]="!isEditMode" />
+            </td>
 
+            <!-- Campo de Correo Electrónico con p-inputGroup -->
             <div class="label-container">
                 <p-floatLabel>
-                    <input pInputText [(ngModel)]="ref.CorreoElectronico" [readonly]="!isEditMode" />
+                    <p-inputGroup>
+                        <div class="correoFamiliar">
+                            <span class="p-inputgroup-addon">
+                                <i class="pi pi-envelope"></i>
+                            </span>
+                        </div>
+                        <input pInputText [(ngModel)]="ref.CorreoElectronico" [readonly]="!isEditMode" />
+                    </p-inputGroup>
                     <label>Correo</label>
                 </p-floatLabel>
             </div>
@@ -42,7 +50,7 @@
                     (click)="agregarTelefono(i)" *ngIf="isEditMode"></button>
             </div>
 
-            <div *ngFor="let tel of ref.Telefono; let j = index" class="contact-field">
+            <div *ngFor="let tel of ref.Telefono; let j = index; trackBy: trackByIndex" class="contact-field">
                 <p-inputGroup>
                     <span class="p-inputgroup-addon">
                         <i class="pi pi-phone"></i>
