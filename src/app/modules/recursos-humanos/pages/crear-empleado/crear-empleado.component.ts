@@ -140,7 +140,7 @@ agregarTelefonoU() {
     !this.nuevoEmpleado.Telefono ||
     !this.nuevoEmpleado.CorreoElectronico ||
     !this.nuevoEmpleado.Puesto ||
-    !this.nuevoEmpleado.Password ||
+    (!this.isEditMode && !this.nuevoEmpleado.Password) ||
     !this.nuevoEmpleado.Rol ||
     !this.nuevoEmpleado.Domicilio.Calle ||
     !this.nuevoEmpleado.Domicilio.NumeroExterior ||
@@ -176,6 +176,7 @@ agregarTelefonoU() {
   this.formInvalid = false;
   return true;
 }
+
 
  // Método para registrar el empleado
  registrarEmpleado(): void {
@@ -434,6 +435,9 @@ editarEmpleado(): void {
   if (!this.validarFormulario()) {
     return;
   }
+
+  delete this.nuevoEmpleado.FotoEmpleado;
+  delete this.nuevoEmpleado.Password;
 
   console.log('Datos enviados para actualizar:', this.nuevoEmpleado);
 

@@ -12,7 +12,7 @@ export interface Empleado {
   Puesto: string;
   Telefono: string[];
   CorreoElectronico: string[];
-  Password: string;
+  Password?: string;
   Rol: string;
   CursoExterno: CursoExterno[];
   ActividadEmpresa: ActividadEmpresa[];
