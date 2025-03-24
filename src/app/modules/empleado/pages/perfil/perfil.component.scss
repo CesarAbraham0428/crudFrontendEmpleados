@@ -68,6 +68,20 @@ p-card {
   margin: 0em 0em 1.5em;
 }
 
+.contacto{
+  display: flex;
+  align-items: center;
+  background: #26A69A;
+  color: #FFF;
+  border: none;
+  border-radius: 6px 0 0 6px;
+  padding: 0px 4px;
+}
+
+.contacto2{
+  background-color: #eb8179;
+}
+
 .contenedor-botones {
   display: flex;
   justify-content: flex-end;

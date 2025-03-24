@@ -1,72 +1,228 @@
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+}
 
-/* Nueva referencia */
-.nueva-referencia-container {
-    margin-top: 24px;
-    
+/* Estilo del fieldset */
+.family-fieldset {
+  background: linear-gradient(135deg, #E0F7FA, #F3E5F5);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .p-fieldset-legend {
+    background: #26A69A;
+    color: #FFF;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .p-fieldset-legend:hover {
+    background: #2BBBAD;
+    /* Tono más claro al pasar el mouse */
+  }
+}
+
+/* Encabezado con botones Editar/Guardar */
+.referencias-header {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .p-button {
+    border-radius: 8px;
+    font-size: 14px;
+    transition: transform 0.2s ease, background 0.3s ease;
+  }
+
+  .p-button-outlined {
+    border-color: #26A69A;
+    color: #26A69A;
+  }
+
+  .p-button-outlined:hover {
+    background: #26A69A;
+    color: #FFF;
+    transform: scale(1.05);
+  }
+
+  .p-button-success {
+    background: #FF6F61;
+    border-color: #FF6F61;
+  }
+
+  .p-button-success:hover {
+    background: #FF867C;
+    /* Tono más claro de coral */
+    transform: scale(1.05);
+  }
+}
+
+/* Cada referencia familiar como tarjeta */
+.referencia-item {
+  background: #FFF;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+
+  .referencia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    h3 {
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .p-button-danger {
+      color: #FF6F61;
+    }
+
+    .p-button-danger:hover {
+      background: #FF6F61;
+      color: #FFF;
+    }
+  }
+
+  .referencia-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Dos columnas para inputs */
+    gap: 15px;
+    margin-bottom: 20px;
+
+    .label-container {
+      .p-float-label {
+        input {
+          border: 1px solid #26A69A;
+          border-radius: 6px;
+          padding: 10px;
+          font-size: 14px;
+          transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+          border-color: #FF6F61;
+          outline: none;
+        }
+
+        input[readonly] {
+          background: #F5F5F5;
+          /* Gris claro para modo solo lectura */
+          cursor: not-allowed;
+        }
+
+        label {
+          color: #26A69A;
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .p-autocomplete {
+      width: 100%;
+
+      input {
+        border: 1px solid #26A69A;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .p-autocomplete-dropdown {
+        background: #26A69A;
+        color: #FFF;
+        border: none;
+      }
+    }
+  }
+}
+
+/* Sección de teléfonos */
+.contact-section {
+  margin-top: 20px;
+
+  .contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    span {
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
     .p-button {
-      margin-top: 16px;
+      background: #26A69A;
+      color: #FFF;
+      border: none;
+    }
+
+    .p-button:hover {
+      background: #2BBBAD;
+      transform: scale(1.05);
     }
   }
-  
-  /* Referencias familiares anidadas */
-  .referencia-item {
-    position: relative;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: var(--border-radius);
-    background-color: var(--secondary-color);
-    
-    .referencia-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      
-      h3 {
-        margin: 0;
-        font-size: 1rem;
-        font-weight: 500;
+
+  .contact-field {
+    margin-bottom: 10px;
+
+    .p-inputgroup {
+      .p-inputgroup-addon {
+        background: #26A69A;
+        color: #FFF;
+        border: none;
+        border-radius: 6px 0 0 6px;
+        padding: 10px 4px 0px;
       }
-    }
-    
-    .referencia-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    
-    .referencia-delete {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-    }
-  }
-  
-  /* Input groups */
-  :host ::ng-deep .p-inputgroup {
-    .p-button-icon-only {
-      width: 3rem;
-    }
-  }
-  
-  /* Modo edición */
-  .edit-mode {
-    :host ::ng-deep .p-inputtext {
-      background-color: rgba(33, 150, 243, 0.05);
-      transition: var(--transition);
-      
-      &:focus {
-        background-color: white;
+
+      input {
+        border: 1px solid #26A69A;
+        border-radius: 0 6px 6px 0;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .p-button-danger {
+        background: #FF6F61;
+        border: none;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .p-button-danger:hover {
+        background: #FF867C;
       }
     }
   }
-  
-  /* Animaciones */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Botón de agregar referencia */
+button.w-full {
+  background: #26A69A;
+  border-color: #26A69A;
+  color: #FFF;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background: #2BBBAD;
+    transform: scale(1.02);
   }
-  
-  .p-fieldset {
-    animation: fadeIn 0.3s ease;
-  }
+}
