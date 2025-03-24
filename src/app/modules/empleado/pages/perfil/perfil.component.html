@@ -112,7 +112,7 @@
                 </span>
               </div>
               <input pInputText type="text" [(ngModel)]="empleado.Telefono[i]" [readonly]="!isEditMode"
-                placeholder="Teléfono" />
+                placeholder="Teléfono" maxlength="10"/>
               <button pButton icon="pi pi-times" class="p-button-danger" (click)="removePhone(i)"
                 *ngIf="isEditMode"></button>
             </p-inputGroup>
