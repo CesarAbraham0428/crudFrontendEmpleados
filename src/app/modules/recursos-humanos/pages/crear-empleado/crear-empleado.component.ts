@@ -455,6 +455,8 @@ editarEmpleado(): void {
   });
 }
 
-
+trackByIndex(index: number, item: any): number {
+  return index;
+}
 
 }

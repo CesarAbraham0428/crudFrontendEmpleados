@@ -148,13 +148,13 @@
   </div>
   
   <div class="label-container">
-  <p-floatlabel>  
-    <p-autocomplete [(ngModel)]="nuevoEmpleado.Domicilio.CodigoPostal" [virtualScroll]="true" [suggestions]="filteredItemsCiudad" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCiudad($event)" optionLabel="label" placeholder="Código Postal" [dropdown]="true" />
-    </p-floatlabel>
-    <small *ngIf="formInvalid && !nuevoEmpleado.Domicilio.CodigoPostal" class="error-text">El código postal es obligatorio.</small>
+  <p-floatlabel variant="on">
+    <input pInputText id="CodigoPostal" [(ngModel)]="nuevoEmpleado.Domicilio.CodigoPostal" autocomplete="off" apppKeyFilter="num" />
+  <label for="CodigoPostal">Código Postal</label>
+  </p-floatlabel>
+  <small *ngIf="formInvalid && !nuevoEmpleado.Domicilio.CodigoPostal" class="error-text">El código postal es obligatorio.</small>
+</div>
 
-  </div>
-       
   <div class="label-container">
   <p-floatlabel variant="on">
       <input pInputText  id="on_label" [(ngModel)]="nuevoEmpleado.Domicilio.Calle"  autocomplete="off" apppKeyFilter="alpha" />
@@ -220,7 +220,7 @@
         </td>
   
         <td>
-          <div *ngFor="let telefono of referencia.Telefono; let j = index">
+          <div *ngFor="let telefono of referencia.Telefono; let j = index  trackBy: trackByIndex" >
             <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="referencia.Telefono[j]"  placeholder="Teléfono" />
             <button *ngIf="referencia.Telefono.length > 1" pButton label="Eliminar" (click)="eliminarTelefono(referencia, j)" icon="pi pi-minus" class="p-button-text"></button>
             <small *ngIf="formInvalid && !referencia.Telefono[j]" class="error-text">El teléfono es obligatorio.</small>
