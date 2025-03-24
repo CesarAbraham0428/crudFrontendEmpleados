@@ -30,7 +30,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
   archivoSeleccionado: File | null = null;
   cargando = false;
-  defaultFoto = 'img/default-user.png';
+  defaultFoto = 'img/usuario.png';
 
   constructor(
     private empleadoService: EmpleadoService,

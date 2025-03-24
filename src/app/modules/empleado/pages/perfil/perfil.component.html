@@ -19,9 +19,10 @@
     </div>
 
     <!-- Cambiar contraseña -->
-    <p-fieldset legend="Cambiar contraseña" *ngIf="isEditMode" styleClass="password-fieldset">
-      <div class="p-grid">
-        <div class="label-container">
+     <div class="bloque">
+       <p-fieldset legend="Cambiar contraseña" *ngIf="isEditMode" styleClass="password-fieldset">
+         <div class="p-grid">
+           <div class="label-container">
           <p-floatLabel>
             <p-password [(ngModel)]="currentPassword" [toggleMask]="true" [feedback]="false" />
             <label>Contraseña actual</label>
@@ -35,80 +36,85 @@
         </div>
       </div>
     </p-fieldset>
+  </div>
 
     <!-- Domicilio -->
-    <p-fieldset legend="Domicilio" [toggleable]="true" styleClass="address-fieldset">
-      <div class="p-grid">
-        <div class="label-container" *ngFor="let field of domicilioCampos">
+    <div class="bloque">
+      <p-fieldset legend="Domicilio" [toggleable]="true" styleClass="address-fieldset" class="bloque">
+        <div class="p-grid">
+          <div class="label-container" *ngFor="let field of domicilioCampos">
 
 
-          <p-floatLabel *ngIf="field !== 'Ciudad'">
-            <input pInputText *ngIf="empleado.Domicilio" [(ngModel)]="empleado.Domicilio[field]"
-              [readonly]="!isEditMode" />
-            <label>{{ getLabel(field) }}</label>
-          </p-floatLabel>
+            <p-floatLabel *ngIf="field !== 'Ciudad'">
+              <input pInputText *ngIf="empleado.Domicilio" [(ngModel)]="empleado.Domicilio[field]"
+                [readonly]="!isEditMode" />
+              <label>{{ getLabel(field) }}</label>
+            </p-floatLabel>
 
 
-          <!-- Ciudad AutoComplete -->
-          <p-floatLabel *ngIf="field === 'Ciudad'">
-            <p-autoComplete 
-              [(ngModel)]="empleado.Domicilio[field]" 
-              [suggestions]="filteredItemsCiudad" 
-              (completeMethod)="filterItemsCiudad($event)" 
-              [forceSelection]="true" 
-              [disabled]="!isEditMode"
-              field="label" [dropdown]="true">
-            </p-autoComplete>
-            <label *ngIf="!empleado.Domicilio[field]">{{ getLabel(field) }}</label>
-          </p-floatLabel>
+            <!-- Ciudad AutoComplete -->
+            <p-floatLabel *ngIf="field === 'Ciudad'">
+              <p-autoComplete [(ngModel)]="empleado.Domicilio[field]" [suggestions]="filteredItemsCiudad"
+                (completeMethod)="filterItemsCiudad($event)" [forceSelection]="true" [disabled]="!isEditMode"
+                field="label" [dropdown]="true">
+              </p-autoComplete>
+              <label *ngIf="!empleado.Domicilio[field]">{{ getLabel(field) }}</label>
+            </p-floatLabel>
+          </div>
         </div>
-      </div>
-    </p-fieldset>
+      </p-fieldset>
+    </div>
 
     <!-- Contacto -->
-    <p-fieldset legend="Contacto" [toggleable]="true" styleClass="contact-fieldset">
-      <!-- Correos electrónicos -->
-      <div class="contact-group">
-        <div class="contact-header">
-          <span>Correos electrónicos</span>
-          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewEmail()"
-            *ngIf="isEditMode"></button>
-        </div>
-
-        <div *ngFor="let correo of empleado.CorreoElectronico; let i = index" class="contact-field">
-          <p-inputGroup>
-            <span class="p-inputgroup-addon">
-              <i class="pi pi-envelope"></i>
-            </span>
-            <input pInputText type="email" [(ngModel)]="empleado.CorreoElectronico[i]" [readonly]="!isEditMode"
-              placeholder="Correo Electrónico" />
-            <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeEmail(i)"
+    <div class="bloque">
+      <p-fieldset legend="Contacto" [toggleable]="true" styleClass="contact-fieldset">
+        <!-- Correos electrónicos -->
+        <div class="contact-group">
+          <div class="contact-header">
+            <div class="bloque2">
+              <span class="contact-title">Correos electrónicos</span>
+            </div>
+            <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewEmail()"
               *ngIf="isEditMode"></button>
-          </p-inputGroup>
-        </div>
-      </div>
+          </div>
 
-      <!-- Teléfonos -->
-      <div class="contact-group">
-        <div class="contact-header">
-          <span>Teléfonos</span>
-          <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewPhone()"
-            *ngIf="isEditMode"></button>
+          <div *ngFor="let correo of empleado.CorreoElectronico; let i = index" class="contact-field">
+            <p-inputGroup>
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-envelope"></i>
+              </span>
+              <input pInputText type="email" [(ngModel)]="empleado.CorreoElectronico[i]" [readonly]="!isEditMode"
+                placeholder="Correo Electrónico" />
+              <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeEmail(i)"
+                *ngIf="isEditMode"></button>
+            </p-inputGroup>
+          </div>
         </div>
 
-        <div *ngFor="let telefono of empleado.Telefono; let i = index" class="contact-field">
-          <p-inputGroup>
-            <span class="p-inputgroup-addon">
-              <i class="pi pi-phone"></i>
-            </span>
-            <input pInputText type="text" [(ngModel)]="empleado.Telefono[i]" [readonly]="!isEditMode"
-              placeholder="Teléfono" />
-            <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removePhone(i)"
+        <!-- Teléfonos -->
+        <div class="contact-group">
+          <div class="contact-header">
+            <div class="bloque2">
+              <span class="contact-title">Teléfonos</span>
+            </div>
+            <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm" (click)="addNewPhone()"
               *ngIf="isEditMode"></button>
-          </p-inputGroup>
+          </div>
+
+          <div *ngFor="let telefono of empleado.Telefono; let i = index" class="contact-field">
+            <p-inputGroup>
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-phone"></i>
+              </span>
+              <input pInputText type="text" [(ngModel)]="empleado.Telefono[i]" [readonly]="!isEditMode"
+                placeholder="Teléfono" />
+              <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removePhone(i)"
+                *ngIf="isEditMode"></button>
+            </p-inputGroup>
+          </div>
         </div>
-      </div>
-    </p-fieldset>
+      </p-fieldset>
+    </div>
 
     <!-- Referencias Familiares -->
     <app-referencias-familiares [referencias]="empleado.ReferenciaFamiliar"
