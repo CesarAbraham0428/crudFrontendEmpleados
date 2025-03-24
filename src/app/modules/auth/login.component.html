@@ -1,32 +1,33 @@
 <p-toast position="top-right"></p-toast>
 
 <div class="login-container">
-  <p-card header="Iniciar Sesión" class="login-card">
+  <p-card  class="login-card">
     <div class="main-content">
       <!-- Lado izquierdo (logo) -->
       <div class="company__info">
+        <h4 class="company_title">Bienvenido a tu empresa 😊</h4>
         <span class="company__logo">
-          <h2><i class="fa fa-android"></i></h2>
+          <img src="https://www.merca2.es/wp-content/uploads/2023/04/empresa-6-1068x641.jpg" alt="Logo" class="company-logo-image">
         </span>
-        <h4 class="company_title">Tu Empresa</h4>
       </div>
 
       <!-- Formulario de login -->
       <div class="login_form">
+        <h3 class="login-title">Iniciar Sesión</h3>
         <form (ngSubmit)="login()" class="p-fluid">
           <div class="field">
             <span class="p-float-label">
+              <label for="correoElectronico">Correo Electrónico</label>
               <input
                 pInputText
                 id="correoElectronico"
                 [(ngModel)]="credentials.CorreoElectronico"
                 name="correoElectronico"
-                required
-              />
-              <label for="correoElectronico">Correo Electrónico</label>
+                required/>
             </span>
           </div>
           <div class="field">
+            <label for="Password">Contraseña</label>
             <span class="p-float-label">
               <input
                 pInputText
@@ -36,14 +37,14 @@
                 name="Password"
                 required
               />
-              <label for="Password">Contraseña</label>
             </span>
           </div>
           <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage" class="error-message"></p-message>
           <button
-            pButton
+            pButton 
             type="submit"
             label="Iniciar Sesión"
+            severity="info"
             [disabled]="isLoading"
             [loading]="isLoading"
             class="login-button"
