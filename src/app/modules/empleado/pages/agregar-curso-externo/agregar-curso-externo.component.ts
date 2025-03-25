@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Documento } from '../../../../models/cargarDatos/cargarDatos';
 import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { MessageService } from 'primeng/api';
+import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
-import { CargaDatosService } from '../../../../core/services/cargaDatos/carga-datos.service';
-import { Documento } from '../../../../models/cargarDatos/cargarDatos';
 import { FloatLabel } from 'primeng/floatlabel';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-agregar-curso-externo',
@@ -39,7 +41,7 @@ export class AgregarCursoExternoComponent implements OnInit {
   tipoDocumentoSeleccionado: any;
   filteredItemsTipoDocumento: any[] = [];
 
-  minDate: Date = new Date();
+  minDate: Date = new Date(1900, 0, 1);
   editMode: boolean = false;
   cursoId: string | null = null;
 
@@ -53,9 +55,9 @@ export class AgregarCursoExternoComponent implements OnInit {
     this.formulario = this.fb.group({
       nombreCurso: ['', [Validators.required, Validators.minLength(3)]],
       fechaInicio: ['', Validators.required],
-      fechaFinalizacion: ['', Validators.required],
+      fechaFinalizacion: ['', [Validators.required]],
       tipoCurso: ['', Validators.required]
-    });
+    }, { validator: this.validarFechas });
 
     // Verificar si hay datos para edición
     const navigation = this.router.getCurrentNavigation();
@@ -84,6 +86,24 @@ export class AgregarCursoExternoComponent implements OnInit {
             }
           });  
   }
+
+  validarFechas(group: FormGroup): ValidationErrors | null {
+    const inicio = group.get('fechaInicio')?.value;
+    const fin = group.get('fechaFinalizacion')?.value;
+  
+    if (inicio && fin) {
+      const inicioDate = new Date(inicio);
+      const finDate = new Date(fin);
+      
+      if (finDate < inicioDate) {
+        group.get('fechaFinalizacion')?.setErrors({ fechaInvalida: true });
+        return { fechaInvalida: true };
+      }
+    }
+    
+    group.get('fechaFinalizacion')?.setErrors(null);
+    return null;
+  }
   
   filterItemsTipoDocumento(event: any) {
     const query = event.query.toLowerCase();
@@ -91,7 +111,6 @@ export class AgregarCursoExternoComponent implements OnInit {
       item.label.toLowerCase().includes(query)
     );
   }
-
 
   guardarCurso(): void {
     if (this.formulario.invalid) {

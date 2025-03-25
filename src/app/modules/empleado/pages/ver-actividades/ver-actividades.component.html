@@ -1,7 +1,31 @@
 <div class="main-container">
     <p-card header="Mis Actividades" subheader="Lista de actividades asignadas">
+        <!-- Sección de filtros -->
+        <p-fieldset legend="Filtros de Búsqueda">
+            <div class="p-grid filtros">
+                <div class="p-col-12 p-md-6">
+                    <label for="nombre">Nombre de la Actividad</label>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                        <input pInputText id="nombre" type="text" [(ngModel)]="filtroNombre"
+                            (input)="aplicarFiltros()" />
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <label for="estatus">Estatus</label>
+                    <p-dropdown [options]="opcionesEstatus" [(ngModel)]="filtroEstatus" (onChange)="aplicarFiltros()"
+                        [showClear]="true"></p-dropdown>
+                </div>
+            </div>
+            <div class="contenedor-botones">
+                <button pButton pRipple type="button" icon="pi pi-filter-slash"
+                    class="p-button-outlined p-button-help p-mr-2" (click)="limpiarFiltros()"
+                    label="Limpiar Filtros"></button>
+            </div>
+        </p-fieldset>
+
+        <!-- Tabla de actividades -->
         <p-table [value]="products" [style]="{ 'min-width': '50rem' }">
-            
             <ng-template pTemplate="header">
                 <tr>
                     <th>Nombre de Actividad</th>
@@ -21,6 +45,12 @@
                     </td>
                 </tr>
             </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="2">No hay actividades asignadas.</td>
+                </tr>
+            </ng-template>
         </p-table>
+        
     </p-card>
 </div>

@@ -1,16 +1,21 @@
+import { CursoExterno } from '../../../../models/empleado/empleado';
+import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
+import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmDialogModule } from 'primeng/confirmdialog'; // Importar el módulo
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api'; // Importar el servicio
-import { EmpleadoService } from '../../../../core/services/empleado/empleado.service';
-import { CursoExterno } from '../../../../models/empleado/empleado';
-import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
+import { ConfirmationService } from 'primeng/api';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-curso-list',
@@ -21,8 +26,11 @@ import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
     TableModule,
     ButtonModule,
     ToastModule,
-    ConfirmDialogModule, // Agregar el módulo
-    FormatoFechaPipe
+    ConfirmDialogModule,
+    FormatoFechaPipe,
+    InputTextModule,
+    CalendarModule,
+    FormsModule
   ],
   templateUrl: './curso-list.component.html',
   styleUrls: ['./curso-list.component.scss'],
@@ -30,13 +38,16 @@ import { FormatoFechaPipe } from '../../pipes/fecha.pipe';
 })
 export class CursoListComponent implements OnInit {
   cursos: CursoExterno[] = [];
+  cursosOriginal: CursoExterno[] = [];
+  filtroNombre: string = '';
+  filtroRangoFechas: Date[] = [];
 
   constructor(
     private router: Router,
     private empleadoService: EmpleadoService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService // Inyectar el servicio
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.obtenerCursos();
@@ -45,12 +56,10 @@ export class CursoListComponent implements OnInit {
   obtenerCursos(): void {
     this.empleadoService.obtenerCursosExternos().subscribe({
       next: (data) => {
-        console.log('Datos recibidos:', data);
-        this.cursos = data.cursosExternos.flatMap(ce => ce.CursoExterno);
-        console.log('Cursos procesados:', this.cursos);
+        this.cursosOriginal = data.cursosExternos.flatMap(ce => ce.CursoExterno);
+        this.aplicarFiltros(); // Aplicamos filtros iniciales
       },
       error: (error) => {
-        console.error('Error al obtener los cursos:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -58,6 +67,29 @@ export class CursoListComponent implements OnInit {
         });
       }
     });
+  }
+
+  aplicarFiltros(): void {
+    this.cursos = this.cursosOriginal.filter(curso => {
+      const nombreMatch = !this.filtroNombre ||
+        curso.Nombre.toLowerCase().includes(this.filtroNombre.toLowerCase());
+
+      const [fechaInicio, fechaFin] = this.filtroRangoFechas || [];
+      const cursoInicio = new Date(curso.FechaInicio).getTime();
+      const cursoFin = new Date(curso.FechaFin).getTime();
+
+      const fechaInicioMatch = !fechaInicio || cursoInicio >= new Date(fechaInicio).setHours(0, 0, 0, 0);
+      const fechaFinMatch = !fechaFin || cursoFin <= new Date(fechaFin).setHours(23, 59, 59, 999);
+
+      return nombreMatch && fechaInicioMatch && fechaFinMatch;
+    });
+  }
+
+  // Método para limpiar filtros
+  limpiarFiltros(): void {
+    this.filtroNombre = '';
+    this.filtroRangoFechas = [];
+    this.aplicarFiltros();
   }
 
   redirigir() {

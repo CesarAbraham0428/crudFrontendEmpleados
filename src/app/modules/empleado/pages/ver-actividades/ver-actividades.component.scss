@@ -1,23 +1,50 @@
-
 .main-container {
-    margin-left: 270px;
-    padding: 20px; 
-    transition: margin-left 0.3s ease; /* Suaviza el desplazamiento si el menú es dinámico */
-    margin-right: 60px;
-   
-  }
-    .contenedor-botones {
-    display: flex;
-    justify-content: flex-end;
+  margin-left: 270px;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  margin-right: 60px;
+}
 
-  }
+.filtros {
+  gap: 1rem;
+  /* Espacio entre los filtros */
+  margin-bottom: 2rem;
+  /* Espacio debajo de los filtros */
+}
+
+.contenedor-botones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.custom-message {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+/* Estilos para las etiquetas */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* Ajustar el ancho del p-inputgroup y el dropdown */
+.p-inputgroup {
+  width: 100%;
+}
+
+.p-dropdown {
+  width: 100%;
+}
+
 /* Estilos para el componente p-message */
 ::ng-deep .custom-message .p-message-wrapper {
   padding: 0.5rem;
   font-weight: 700;
-  width: 10px; 
 }
 
 ::ng-deep .custom-message .p-message-text {
-  font-size: 1em; 
+  font-size: 1em;
 }
