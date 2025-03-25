@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <div class="main-container">
-  <p-card [header]="isEditMode ? 'Editar Empleado' : 'Registrar Nuevo Empleado'" subheader="Subtítulo">
+  <p-card  [header]="isEditMode ? 'Editar Empleado' : 'Registrar Nuevo Empleado'" subheader="Subtítulo" >
     <p-fieldset legend="Información Personal">   
     
     <div class="form-group">
@@ -73,9 +73,9 @@
   <button pButton label="+" (click)="agregarTelefonoU()" icon="pi pi-plus" class="p-button-text"></button>
  
   <div *ngFor="let telefono of nuevoEmpleado.Telefono; let j = index; trackBy: trackByFn " class="telefono-item">
-    <p-floatlabel variant="on" class="telefono-container">
-      <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="nuevoEmpleado.Telefono[j]"/>
-      <label for="">Teléfono</label>
+    <p-floatlabel variant="on" class="telefono-container" >
+      <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="nuevoEmpleado.Telefono[j]" />
+      <label for="" >Teléfono</label>
     <button pButton *ngIf="nuevoEmpleado.Telefono.length > 1" (click)="eliminarTelefonoU(j)" icon="pi pi-trash" class="p-button-danger p-button-text eliminar-btn" aria-label="Eliminar telefono"></button>
   </p-floatlabel>
   <small *ngIf="formInvalid && !nuevoEmpleado.Telefono[j]" class="error-text">El teléfono es obligatorio.</small>
@@ -201,7 +201,7 @@
         <th>Nombre</th>
         <th>Parentesco</th>
         <th>Teléfonos</th>
-        <th>Correos</th>
+        <th>Correo</th>
         <th>Acciones</th>
       </tr>
     </ng-template>
@@ -209,27 +209,31 @@
     <ng-template pTemplate="body" let-referencia let-i="rowIndex">
       <tr>
         <td>
-          <input pInputText [(ngModel)]="referencia.NombreFamiliar" placeholder="Nombre del familiar" />
+          <input class="familiar" pInputText [(ngModel)]="referencia.NombreFamiliar" placeholder="Nombre familiar" style="width: 135px !important"/>
           <small *ngIf="formInvalid && !referencia.NombreFamiliar" class="error-text">El nombre del familiar es obligatorio.</small>
         </td>
-  
+
         <td>
-          <p-auto-complete [(ngModel)]="referencia.Parentesco" [suggestions]="filteredItemsParentesco" 
+          <p-auto-complete class="familiar" [(ngModel)]="referencia.Parentesco" [suggestions]="filteredItemsParentesco" 
             (completeMethod)="filterItemsParentesco($event)" optionLabel="label" placeholder="Parentesco" [dropdown]="true" />
             <small *ngIf="formInvalid && !referencia.Parentesco" class="error-text">El parentesco es obligatorio.</small>
         </td>
   
         <td>
-          <div *ngFor="let telefono of referencia.Telefono; let j = index  trackBy: trackByIndex" >
-            <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="referencia.Telefono[j]"  placeholder="Teléfono" />
-            <button *ngIf="referencia.Telefono.length > 1" pButton label="Eliminar" (click)="eliminarTelefono(referencia, j)" icon="pi pi-minus" class="p-button-text"></button>
-            <small *ngIf="formInvalid && !referencia.Telefono[j]" class="error-text">El teléfono es obligatorio.</small>
+          <div *ngFor="let telefono of referencia.Telefono; let j = index trackBy: trackByIndex" class="phone-input-container" >
+            <p-inputmask mask="(999) 999-9999" [(ngModel)]="referencia.Telefono[j]" 
+                        placeholder="Teléfono" styleClass="small-input"></p-inputmask>
+            <button *ngIf="referencia.Telefono.length > 1" pButton icon="pi pi-times"
+                   (click)="eliminarTelefono(referencia, j)" 
+                   class="p-button-danger p-button-sm"></button>
+            <small *ngIf="formInvalid && !referencia.Telefono[j]" class="error-text">Requerido</small>
           </div>
-          <button pButton label="+" (click)="agregarTelefono(referencia)" icon="pi pi-plus" class="p-button-text"></button>
+          <button pButton label="+" (click)="agregarTelefono(referencia)"
+                 class="p-button-text p-button-sm"></button>
         </td>
   
         <td>
-          <input  type="email" pInputText [(ngModel)]="referencia.CorreoElectronico" placeholder="Correo Eléctronico"  />
+          <input  type="email" pInputText [(ngModel)]="referencia.CorreoElectronico" placeholder="Correo Eléctronico"  style="width: 120px !important"  />
           <small *ngIf="formInvalid && !referencia.CorreoElectronico" class="error-text">El correo electrónico es obligatorio.</small>
         </td>
   

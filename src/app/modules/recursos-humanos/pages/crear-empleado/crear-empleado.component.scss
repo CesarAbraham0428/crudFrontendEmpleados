@@ -6,14 +6,14 @@
 }
 .label-container {
     display: inline-block;
-    width: 43%; /* Ajusta el ancho de los labels */
+    width: 43%; 
     margin-right: 10px; 
 }
 
   .main-container {
     margin-left: 270px;
     padding: 20px; 
-    transition: margin-left 0.3s ease; /* Suaviza el desplazamiento si el menú es dinámico */
+    transition: margin-left 0.3s ease;
     margin-right: 60px;
    
   }
@@ -21,38 +21,40 @@
 input,label,p-password,p-inputmask , p-autocomplete, p-datepicker{
     width: 80%; 
     box-sizing: border-box; 
-    margin-left: 15px;
+    margin-left: 5px;
 }
 .contenedor-botones {
   display: flex;            
   gap: 10px;               
   justify-content: flex-end;
+  margin-top: 10px;
 }
 
 .boton {
   margin: 0;               
 }
 .botonc {
-  background-color: rgb(214, 43, 43); /* Rojo */
-  border: 2px solid rgb(214, 43, 43); /* Contorno rojo */
-  color: white; /* Color del texto */
-  transition: all 0.3s ease; /* Transición suave al cambiar el estado */
+  background-color: rgb(214, 43, 43); 
+  border: 2px solid rgb(214, 43, 43); 
+  color: white; 
+  transition: all 0.3s ease; 
+ 
 }
 
 .botonc:hover {
-  background-color: rgb(255, 77, 77); /* Un rojo más claro al pasar el mouse */
-  border-color: rgb(255, 77, 77); /* El contorno también cambia a un rojo más claro */
+  background-color: rgb(255, 77, 77); 
+  border-color: rgb(255, 77, 77); 
 }
 
 .pButton {
-  margin-bottom: 16px;  // Espacio de 16px debajo del botón
+  margin-bottom: 16px;  
 }
 
 
 .correo-item {
   display: flex;
   align-items: center;
-  gap: 8px; /* Espacio entre el input y el botón */
+  gap: 8px; 
 }
 
 .telefono-item {
@@ -88,8 +90,38 @@ input,label,p-password,p-inputmask , p-autocomplete, p-datepicker{
   display: block;  
    margin-left: 15px;
 }
+:host ::ng-deep .small-input {
+  width: 155px !important;  
+  max-width: 100% !important;
+}
 
-.form-group {
-  flex-direction: column;
-  margin-right: 10px;
+.phone-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+:host ::ng-deep .small-input .p-inputtext {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.85rem !important;
+}
+
+:host ::ng-deep .telefono-container .p-inputmask {
+  width: 260px !important;  
+  min-width: 200px !important;
+}
+:host ::ng-deep .telefono-container .p-inputtext {
+  font-size: 1rem !important;
+  padding: 0.5rem 0.75rem !important;
+}
+:host ::ng-deep .p-password {
+  width: 260px !important; 
+  min-width: 250px !important;
+}
+
+:host ::ng-deep .p-password .p-inputtext {
+  width: 100% !important;
+  font-size: 1rem !important;
+  padding: 0.5rem 0.75rem !important;
 }
