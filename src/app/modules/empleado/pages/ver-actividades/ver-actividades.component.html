@@ -4,11 +4,10 @@
         <p-fieldset legend="Filtros de Búsqueda">
             <div class="p-grid filtros">
                 <div class="p-col-12 p-md-6">
-                    <label for="nombre">Nombre de la Actividad</label>
                     <div class="p-inputgroup">
                         <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
                         <input pInputText id="nombre" type="text" [(ngModel)]="filtroNombre"
-                            (input)="aplicarFiltros()" />
+                            (input)="aplicarFiltros()" placeholder="Nombre de la Actividad"/>
                     </div>
                 </div>
                 <div class="p-col-12 p-md-6">

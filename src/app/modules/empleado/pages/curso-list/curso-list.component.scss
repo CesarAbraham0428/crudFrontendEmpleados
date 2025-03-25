@@ -44,7 +44,7 @@
 .contenedor-botones {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1rem;
+  gap: 0.5em;
 }
 
 :host ::ng-deep {
