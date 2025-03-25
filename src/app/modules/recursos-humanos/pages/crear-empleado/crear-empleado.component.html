@@ -74,7 +74,9 @@
  
   <div *ngFor="let telefono of nuevoEmpleado.Telefono; let j = index; trackBy: trackByFn " class="telefono-item">
     <p-floatlabel variant="on" class="telefono-container" >
-      <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="nuevoEmpleado.Telefono[j]" />
+<!--       <p-inputmask  mask="(999) 999-9999" type = "num" [(ngModel)]="nuevoEmpleado.Telefono[j]" /> -->
+      <input pInputText type="text" [(ngModel)]="nuevoEmpleado.Telefono[j]"
+               maxlength="10"/>
       <label for="" >Teléfono</label>
     <button pButton *ngIf="nuevoEmpleado.Telefono.length > 1" (click)="eliminarTelefonoU(j)" icon="pi pi-trash" class="p-button-danger p-button-text eliminar-btn" aria-label="Eliminar telefono"></button>
   </p-floatlabel>
@@ -221,8 +223,11 @@
   
         <td>
           <div *ngFor="let telefono of referencia.Telefono; let j = index trackBy: trackByIndex" class="phone-input-container" >
-            <p-inputmask mask="(999) 999-9999" [(ngModel)]="referencia.Telefono[j]" 
-                        placeholder="Teléfono" styleClass="small-input"></p-inputmask>
+            <!-- <p-inputmask mask="(999) 999-9999" [(ngModel)]="referencia.Telefono[j]" 
+                        placeholder="Teléfono" styleClass="small-input"></p-inputmask> -->
+                        <input pInputText type="text" [(ngModel)]="referencia.Telefono[j]"
+                placeholder="Teléfono" maxlength="10"/>
+
             <button *ngIf="referencia.Telefono.length > 1" pButton icon="pi pi-times"
                    (click)="eliminarTelefono(referencia, j)" 
                    class="p-button-danger p-button-sm"></button>
