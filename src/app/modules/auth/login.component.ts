@@ -20,7 +20,7 @@ import { CardModule } from 'primeng/card'; // Nuevo: para la tarjeta
     ButtonModule,
     MessageModule,
     ToastModule,
-    CardModule, // Añadido
+    CardModule,
   ],
   providers: [MessageService],
   templateUrl: './login.component.html',

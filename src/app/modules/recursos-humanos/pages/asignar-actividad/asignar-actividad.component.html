@@ -34,6 +34,7 @@
         <tr>
           <th>Actividad</th>
           <th>Nombre del Empleado</th>
+          <th>Clave de Empleado</th>
           <th>Participación</th>
         </tr>
       </ng-template>
@@ -43,6 +44,7 @@
             {{ actividadSeleccionada }}
           </td>
           <td>{{ emp.Nombre }}</td>
+          <td>{{ emp.ClaveEmpleado }}</td>
           <td>
             <p-checkbox 
   [ngModel]="getParticipacion(emp)" 

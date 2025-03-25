@@ -1,5 +1,5 @@
 <div class="main-container">
-    <p-card header="Crear Nuevo Curso" subheader="Subtítulo" >
+    <p-card header="Asignar Nuevo Curso" subheader="Subtítulo" >
        
         <p-floatlabel  variant="on">
           <p-autocomplete [(ngModel)]="cursosSeleccionados" [virtualScroll]="true" [suggestions]="filteredItemsCursos" [virtualScrollItemSize]="34" (completeMethod)="filterItemsCursos($event)" filter="true" optionLabel="label" placeholder="Nombre del Curso" [dropdown]="true" />
