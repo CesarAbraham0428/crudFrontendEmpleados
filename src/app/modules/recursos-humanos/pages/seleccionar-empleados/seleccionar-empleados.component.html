@@ -1,4 +1,16 @@
-<p-table [value]="empleados" selectionMode="multiple" [(selection)]="empleados">
+<div class="search-container">
+  <input 
+    type="text" 
+    [(ngModel)]="searchTerm" 
+    (input)="filtrarEmpleados()" 
+    placeholder="🔍 Buscar por ClaveEmpleado" 
+    class="search-input"
+  >
+</div>
+
+
+
+<p-table [value]="empleadosFiltrados" selectionMode="multiple" [(selection)]="empleados">
   <ng-template pTemplate="header">
     <tr>
       <th>Clave Empleado</th>
