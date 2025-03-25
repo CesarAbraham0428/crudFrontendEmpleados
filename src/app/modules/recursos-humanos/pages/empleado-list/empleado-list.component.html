@@ -12,7 +12,7 @@
         [globalFilterFields]="['ClaveEmpleado','Nombre','CorreoElectronico', 'RFC', 'Puesto', 'Departamento']">
         <ng-template #caption>
             <div class="aflex">
-                <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+                <!-- <p-button label="Limpiar" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" /> -->
                 <p-iconfield iconPosition="left" class="ml-auto">
                     <p-inputicon>
                         <i class="pi pi-search"></i>
@@ -34,7 +34,7 @@
                    Clave del Empleado
                     <p-columnFilter type="text" field="ClaveEmpleado" display="menu" />
                 </div>
-            </th>
+            </th> 
 
                 <th style="min-width:15rem">
                     <div class="flex items-center">

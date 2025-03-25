@@ -23,4 +23,30 @@
     border-color: rgb(255, 77, 77) !important; 
   }
 
+  .search-container {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 15px;
+  }
+  
+  .search-input {
+    width: 50%;
+    max-width: 400px; 
+    padding: 9px;
+    font-size: 12px;
+    border: 2px solid #908e8e; 
+    border-radius: 8px; 
+    outline: none; 
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .search-input:focus {
+    border-color: #484a4b;
+    box-shadow: 0 0 8px rgba(80, 81, 82, 0.6); /* Brillo alrededor */
+  }
+  
+  .search-input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
   

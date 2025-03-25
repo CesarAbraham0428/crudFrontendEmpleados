@@ -55,7 +55,12 @@
     </p-table>
     <!-- Botones de edición y guardado -->
     <div class="contenedor-botones">
-      <button pButton pRipple severity="success" (click)="activarEdicion()">
+      <button 
+      pButton 
+      pRipple 
+      [ngClass]="edicionHabilitada ? 'p-button-danger' : 'p-button-success'"
+      class="boton-edicion"
+      (click)="activarEdicion()">
         <span *ngIf="!edicionHabilitada">Editar</span>
         <span *ngIf="edicionHabilitada">Cancelar</span>
       </button>

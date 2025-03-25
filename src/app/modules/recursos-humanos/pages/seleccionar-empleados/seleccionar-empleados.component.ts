@@ -21,6 +21,8 @@ import { Router } from '@angular/router';
 export class SeleccionarEmpleadosComponent implements OnInit {
   empleadosSeleccionados: any[] = []; // Empleados seleccionados
   empleados: CargaEmpleadoCursos[] = [];
+  empleadosFiltrados: CargaEmpleadoCursos[] = [];
+  searchTerm: string = '';
 
   constructor(
     private empleadoService: EmpleadoService,
@@ -41,7 +43,19 @@ export class SeleccionarEmpleadosComponent implements OnInit {
         ClaveEmpleado: empleado.ClaveEmpleado,
         Nombre: `${empleado.Nombre} ${empleado.ApP} ${empleado.ApM}`
       }));
+      this.empleadosFiltrados = [...this.empleados];
     });
+  }
+
+
+  filtrarEmpleados() {
+    if (this.searchTerm.trim() === '') {
+      this.empleadosFiltrados = [...this.empleados]; // Restablecer si está vacío
+    } else {
+      this.empleadosFiltrados = this.empleados.filter(emp =>
+        emp.ClaveEmpleado.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
   }
   
 
